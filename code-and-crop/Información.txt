@@ -1,0 +1,5 @@
+"Code & Crop" es un juego incremental de agricultura en la web (cuadrícula isométrica de 8x8) donde el jugador comienza cultivando manualmente con la ayuda de un tierno gatico, 
+gana oro y luego automatiza parcelas resolviendo cuestionarios de programación en Python, SQL y JS. Activar scripts introduce ranitas programadoras, destellos verdes de Matrix, 
+multiplicadores estilo Balatro y sistemas profundos de prestigio (reiniciar la granja para desbloquear lenguajes como SQL/JS con multiplicadores de x10/x100).
+
+Este plan detalla la arquitectura completa usando un servidor Flask de Python, una base de datos SQLite con transacciones seguras y una interfaz Vanilla HTML/CSS/JS moderna, fluida y estética.
