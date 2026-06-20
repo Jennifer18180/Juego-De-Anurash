@@ -1,0 +1,1061 @@
+QUIZ_BANCO = {
+    "Python": {
+        "Principiante": {
+            "Nivel_1": [
+                {
+                    "pregunta": "¿Cuál es la salida correcta de este código?",
+                    "codigo": "print(type(5.0))",
+                    "opciones": ["A) <class 'int'>", "B) <class 'float'>", "C) <class 'str'>", "D) <class 'list'>"],
+                    "correcta": "B",
+                    "pista": "Aunque sea un número entero a la izquierda, el punto decimal define siempre a un flotante."
+                },
+                {
+                    "pregunta": "¿Cómo se declara una variable de texto (string) válida?",
+                    "codigo": "# Elige la opción correcta",
+                    "opciones": ["A) x = 'Hola'", "B) x = Hola", "C) string x = \"Hola\"", "D) x = [Hola]"],
+                    "correcta": "A",
+                    "pista": "En Python, el texto debe ir obligatoriamente entre comillas y no requiere declarar el tipo de dato."
+                },
+                {
+                    "pregunta": "¿Qué operador se utiliza para calcular el residuo de una división?",
+                    "codigo": "residuo = 10 ? 3",
+                    "opciones": ["A) /", "B) //", "C) %", "D) ^"],
+                    "correcta": "C",
+                    "pista": "Este operador se conoce popularmente como el operador de módulo."
+                }
+            ],
+            "Nivel_2": [
+                {
+                    "pregunta": "¿Cuál es el resultado de la siguiente condición?",
+                    "codigo": "x = True\ny = False\nprint(x and not y)",
+                    "opciones": ["A) True", "B) False", "C) None", "D) SyntaxError"],
+                    "correcta": "A",
+                    "pista": "'not y' invierte el valor de False a True. Luego evaluarías True 'and' True."
+                },
+                {
+                    "pregunta": "¿Cómo agregas un elemento al final de una lista existente?",
+                    "codigo": "mi_lista = [1, 2]",
+                    "opciones": ["A) mi_lista.add(3)", "B) mi_lista.append(3)", "C) mi_lista.push(3)", "D) mi_lista.insert(3)"],
+                    "correcta": "B",
+                    "pista": "El método empieza con 'a' y significa 'adjuntar' o 'anexar' en inglés."
+                },
+                {
+                    "pregunta": "¿Cuál es el valor final de la variable 'contador'?",
+                    "codigo": "contador = 5\ncontador += 3",
+                    "opciones": ["A) 5", "B) 3", "C) 8", "D) 15"],
+                    "correcta": "C",
+                    "pista": "El operador `+=` es un atajo para sumar un valor directamente a la variable original."
+                }
+            ],
+            "Nivel_3": [
+                {
+                    "pregunta": "¿Cuántas veces se imprimirá la palabra 'Hola'?",
+                    "codigo": "for i in range(0, 3):\n    print('Hola')",
+                    "opciones": ["A) 2 veces", "B) 3 veces", "C) 4 veces", "D) Infinitas veces"],
+                    "correcta": "B",
+                    "pista": "`range(0, 3)` genera los números 0, 1 y 2. El límite superior nunca se incluye."
+                },
+                {
+                    "pregunta": "¿Qué método se usa para convertir todo un texto a letras mayúsculas?",
+                    "codigo": "texto = 'hola'\nprint(texto.____())",
+                    "opciones": ["A) upper", "B) capitalize", "C) permanent", "D) toUpper"],
+                    "correcta": "A",
+                    "pista": "En inglés, a las mayúsculas se les conoce formalmente como 'uppercase'."
+                },
+                {
+                    "pregunta": "¿Cuál es el resultado de intentar obtener un elemento fuera de rango?",
+                    "codigo": "lista = [10, 20]\nprint(lista[2])",
+                    "opciones": ["A) 20", "B) None", "C) IndexError", "D) ValueError"],
+                    "correcta": "C",
+                    "pista": "Los índices en Python empiezan en 0. Una lista de 2 elementos solo llega hasta el índice 1."
+                }
+            ],
+            "Nivel_4": [
+                {
+                    "pregunta": "¿Cómo se define correctamente una función que recibe un parámetro?",
+                    "codigo": "# Selecciona la sintaxis nativa",
+                    "opciones": ["A) function saludar(nombre):", "B) def saludar[nombre]:", "C) def saludar(nombre):", "D) void saludar(nombre)"],
+                    "correcta": "C",
+                    "pista": "Python utiliza la palabra clave 'def' seguida de paréntesis y dos puntos."
+                },
+                {
+                    "pregunta": "¿Qué devolverá esta función al ser ejecutada?",
+                    "codigo": "def calcular():\n    pass\n\nprint(calcular())",
+                    "opciones": ["A) 0", "B) None", "C) False", "D) Un error de sintaxis"],
+                    "correcta": "B",
+                    "pista": "Si una función no tiene una sentencia `return` explícita, Python devuelve un tipo de dato nulo por defecto."
+                },
+                {
+                    "pregunta": "¿Qué estructura de datos no permite elementos duplicados?",
+                    "codigo": "mi_estructura = {1, 2, 2, 3}",
+                    "opciones": ["A) Listas", "B) Diccionarios", "C) Tuplas", "D) Sets (Conjuntos)"],
+                    "correcta": "D",
+                    "pista": "Se definen con llaves `{}` pero no llevan pares clave-valor. Son ideales para valores únicos."
+                }
+            ],
+            "Nivel_5": [
+                {
+                    "pregunta": "¿Cómo se accede al valor de la clave 'edad' en este diccionario?",
+                    "codigo": "usuario = {'nombre': 'Ana', 'edad': 25}",
+                    "opciones": ["A) usuario(edad)", "B) usuario['edad']", "C) usuario.edad", "D) usuario[1]"],
+                    "correcta": "B",
+                    "pista": "A diferencia de los objetos en otros lenguajes, en Python accedemos a las llaves usando corchetes como si fuera un índice de texto."
+                },
+                {
+                    "pregunta": "¿Qué bloque se ejecuta SIEMPRE en un manejo de excepciones, ocurra o no un error?",
+                    "codigo": "try:\n    # código\nexcept:\n    # manejo\n____:\n    print('Fin')",
+                    "opciones": ["A) else", "B) finally", "C) catch", "D) always"],
+                    "correcta": "B",
+                    "pista": "Su traducción literal al español significa 'finalmente'."
+                },
+                {
+                    "pregunta": "¿Cuál es la forma correcta de abrir un archivo asegurando que se cierre solo al terminar?",
+                    "codigo": "# Elige la mejor práctica",
+                    "opciones": ["A) open('datos.txt')", "B) with open('datos.txt') as f:", "C) file.open('datos.txt')", "D) read('datos.txt')"],
+                    "correcta": "B",
+                    "pista": "Utiliza un administrador de contexto que empieza con la palabra 'with'."
+                }
+            ]
+        },
+        "Intermedio": {
+            "Nivel_1": [
+                {
+                    "pregunta": "¿Cuál es el resultado de la siguiente List Comprehension?",
+                    "codigo": "resultado = [x*2 for x in range(3)]\nprint(resultado)",
+                    "opciones": ["A) [0, 2, 4]", "B) [2, 4, 6]", "C) [0, 1, 2]", "D) [0, 2, 4, 6]"],
+                    "correcta": "A",
+                    "pista": "`range(3)` es 0, 1 y 2. Cada uno se multiplica por 2."
+                },
+                {
+                    "pregunta": "¿Qué valor genera la función `zip` en este escenario?",
+                    "codigo": "letras = ['a', 'b']\nnums = [1, 2]\nprint(list(zip(letras, nums)))",
+                    "opciones": ["A) [['a', 1], ['b', 2]]", "B) [('a', 1), ('b', 2)]", "C) {'a': 1, 'b': 2}", "D) ('a', 1, 'b', 2)"],
+                    "correcta": "B",
+                    "pista": "`zip` combina iterables creando tuplas emparejadas elemento por elemento."
+                },
+                {
+                    "pregunta": "¿Cómo se define un parámetro opcional con un valor por defecto en una función?",
+                    "codigo": "# Elige el encabezado correcto",
+                    "opciones": ["A) def f(x=10):", "B) def f(int x = 10):", "C) def f(optional x):", "D) def f(?x):"],
+                    "correcta": "A",
+                    "pista": "Se asigna el valor usando el operador `=` directo en el argumento de la definición."
+                }
+            ],
+            "Nivel_2": [
+                {
+                    "pregunta": "¿Cuál es la salida de cortar (slice) la siguiente lista?",
+                    "codigo": "num = [10, 20, 30, 40, 50]\nprint(num[1:4])",
+                    "opciones": ["A) [20, 30, 40, 50]", "B) [10, 20, 30]", "C) [20, 30, 40]", "D) [20, 40]"],
+                    "correcta": "C",
+                    "pista": "El rebanado va desde el índice inicial (inclusive) hasta el índice final (exclusivo)."
+                },
+                {
+                    "pregunta": "¿Qué palabra clave convierte una función común en un generador?",
+                    "codigo": "def mi_generador():\n    ____ 1",
+                    "opciones": ["A) return", "B) send", "C) yield", "D) next"],
+                    "correcta": "C",
+                    "pista": "Esta palabra pausa la ejecución de la función y devuelve el valor sin destruir el estado local."
+                },
+                {
+                    "pregunta": "¿Cuál es la forma correcta de heredar de una clase base en Python?",
+                    "codigo": "class Hijo(____):",
+                    "opciones": ["A) Padre", "B) class Padre", "C) extends Padre", "D) implements Padre"],
+                    "correcta": "A",
+                    "pista": "La herencia en Python se especifica simplemente colocando la clase padre entre paréntesis al definir la clase hija."
+                }
+            ],
+            "Nivel_3": [
+                {
+                    "pregunta": "¿Qué método mágico se invoca automáticamente al instanciar un objeto de una clase?",
+                    "codigo": "class Auto:\n    def ____(self):\n        pass",
+                    "opciones": ["A) __start__", "B) __init__", "C) __new__", "D) __construct__"],
+                    "correcta": "B",
+                    "pista": "Es el inicializador/constructor de la clase, rodeado por doble guion bajo."
+                },
+                {
+                    "pregunta": "¿Para qué sirve el parámetro obligatorio `self` en los métodos de una clase?",
+                    "codigo": "def arrancar(self):",
+                    "opciones": ["A) Representa a la clase global", "B) Hace referencia a la instancia específica del objeto", "C) Es una variable del sistema", "D) Evita errores de sintaxis"],
+                    "correcta": "B",
+                    "pista": "Permite acceder a los atributos y otros métodos del objeto concreto que está ejecutando el código."
+                },
+                {
+                    "pregunta": "¿Cuál es la salida al ordenar un diccionario con la función sorted() sin especificar llaves?",
+                    "codigo": "d = {'c': 3, 'a': 1, 'b': 2}\nprint(sorted(d))",
+                    "opciones": ["A) ['a', 'b', 'c']", "B) [1, 2, 3]", "C) [('a', 1), ('b', 2), ('c', 3)]", "D) {'a': 1, 'b': 2, 'c': 3}"],
+                    "correcta": "A",
+                    "pista": "Por defecto, iterar o procesar un diccionario directamente actúa sobre sus claves."
+                }
+            ],
+            "Nivel_4": [
+                {
+                    "pregunta": "¿Qué salida produce este uso de funciones lambda con map()?",
+                    "codigo": "nums = [1, 2, 3]\nprint(list(map(lambda x: x ** 2, nums)))",
+                    "opciones": ["A) [1, 4, 9]", "B) [2, 4, 6]", "C) [1, 2, 3]", "D) [1, 8, 27]"],
+                    "correcta": "A",
+                    "pista": "La función anónima eleva cada número al cuadrado en toda la colección."
+                },
+                {
+                    "pregunta": "¿Qué herramienta del módulo collections provee un diccionario con un valor por defecto automático?",
+                    "codigo": "from collections import ____",
+                    "opciones": ["A) DefaultDict", "B) defaultdict", "C) AutoDict", "D) safe_dict"],
+                    "correcta": "B",
+                    "pista": "Es todo en minúsculas y requiere una fábrica de tipos como `int` o `list` al crearse."
+                },
+                {
+                    "pregunta": "¿Cómo se combinan dos diccionarios en Python 3.5+ usando operadores de desempaquetado?",
+                    "codigo": "d1 = {'a': 1}\nd2 = {'b': 2}\nfusion = {____d1, ____d2}",
+                    "opciones": ["A) *", "B) **", "C) &", "D) +"],
+                    "correcta": "B",
+                    "pista": "El doble asterisco desempaqueta los pares clave-valor de un diccionario dentro de uno nuevo."
+                }
+            ],
+            "Nivel_5": [
+                {
+                    "pregunta": "¿Cuál es la salida del siguiente código de alcance (scope)?",
+                    "codigo": "x = 10\ndef f():\n    global x\n    x = 20\nf()\nprint(x)",
+                    "opciones": ["A) 10", "B) 20", "C) UnboundLocalError", "D) None"],
+                    "correcta": "B",
+                    "pista": "La palabra clave `global` permite que los cambios dentro de la función alteren la variable fuera de ella."
+                },
+                {
+                    "pregunta": "¿Qué hace el operador de asignación flotante `//`?",
+                    "codigo": "print(7 // 2)",
+                    "opciones": ["A) Divide y devuelve un número flotante", "B) Devuelve la parte entera de la división (Truncada)", "C) Eleva el primer número al segundo", "D) Es un comentario"],
+                    "correcta": "B",
+                    "pista": "Quita los decimales del resultado, redondeando hacia abajo al entero más cercano."
+                },
+                {
+                    "pregunta": "¿Qué método permite remover un elemento de un set sin arrojar error si no existe?",
+                    "codigo": "s = {1, 2}\ns.____(3)",
+                    "opciones": ["A) remove", "B) delete", "C) discard", "D) pop"],
+                    "correcta": "C",
+                    "pista": "A diferencia de `remove`, este método es tolerante y no levanta un `KeyError` si el objeto no se encuentra."
+                }
+            ]
+        },
+        "Avanzado": {
+            "Nivel_1": [
+                {
+                    "pregunta": "¿Qué es conceptualmente un decorador en Python?",
+                    "codigo": "@mi_decorador\ndef funcion(): pass",
+                    "opciones": ["A) Una clase gráfica", "B) Una función que toma otra función como argumento y extiende su comportamiento", "C) Un validador de tipos rígido", "D) Una librería del núcleo"],
+                    "correcta": "B",
+                    "pista": "Actúa como un envoltorio (`wrapper`) alrededor de la función decorada."
+                },
+                {
+                    "pregunta": "¿Qué argumentos recibe la función constructora de una Metaclase?",
+                    "codigo": "class MiMeta(type):\n    def __new__(mcs, name, bases, attrs):",
+                    "opciones": ["A) Únicamente self", "B) El nombre de la clase, las clases base (tupla) y los atributos (diccionario)", "C) El código binario de la clase", "D) No recibe argumentos"],
+                    "correcta": "B",
+                    "pista": "Modifica la creación de clases pasando sus metadatos estructurales completos: nombre, bases y atributos."
+                },
+                {
+                    "pregunta": "¿Cuál es el propósito del módulo `asyncio`?",
+                    "codigo": "import asyncio\nasync def principal(): pass",
+                    "opciones": ["A) Manejar multiprocesamiento pesado de CPU", "B) Ejecutar código de forma concurrente usando un bucle de eventos (Event Loop)", "C) Encriptar bases de datos en tiempo real", "D) Compilar Python a código C"],
+                    "correcta": "B",
+                    "pista": "Es ideal para tareas con alta espera de Entrada/Salida (I/O bound) de forma asíncrona."
+                }
+            ],
+            "Nivel_2": [
+                {
+                    "pregunta": "¿Qué expresión se utiliza para delegar operaciones de un generador a otro subgenerador?",
+                    "codigo": "def sub(): yield 1\ndef master():\n    ____ sub()",
+                    "opciones": ["A) yield", "B) yield from", "C) return from", "D) delegate"],
+                    "correcta": "B",
+                    "pista": "Permite encadenar generadores limpiamente sin escribir ciclos `for` intermedios."
+                },
+                {
+                    "pregunta": "¿Qué sucede al intentar modificar un atributo protegido por slots?",
+                    "codigo": "class Nodo:\n    __slots__ = ['id']",
+                    "opciones": ["A) Se crea de manera normal", "B) Lanza un AttributeError si se intenta añadir un atributo no listado", "C) Se borra el objeto entero", "D) Compila más lento"],
+                    "correcta": "B",
+                    "pista": "`__slots__` optimiza la memoria impidiendo la creación del diccionario dinámico `__dict__` por instancia."
+                },
+                {
+                    "pregunta": "¿Qué módulo de la librería estándar expone herramientas para operaciones eficientes de memoria usando búferes binarios compartidos?",
+                    "codigo": "view = memoryview(bytearray('XYZ', 'utf-8'))",
+                    "opciones": ["A) struct", "B) memoryview", "C) ctypes", "D) pickle"],
+                    "correcta": "B",
+                    "pista": "Permite acceder a los datos internos de un objeto que soporta el protocolo de búfer sin necesidad de copiarlos en memoria."
+                }
+            ],
+            "Nivel_3": [
+                {
+                    "pregunta": "¿Cuál es el orden de resolución de métodos (MRO) en Python ante herencia múltiple compleja?",
+                    "codigo": "print(ClaseD.__mro__)",
+                    "opciones": ["A) De abajo hacia arriba estrictamente", "B) Algoritmo de linealización C3", "C) Orden alfabético de clases", "D) No hay orden definido"],
+                    "correcta": "B",
+                    "pista": "Python resuelve la precedencia usando una linealización que preserva el orden local y la monotonicidad."
+                },
+                {
+                    "pregunta": "¿Para qué sirve el gestor de contextos del módulo `contextlib` llamado @contextmanager?",
+                    "codigo": "from contextlib import contextmanager",
+                    "opciones": ["A) Para crear decoradores comunes", "B) Para convertir una función generadora con un `yield` en un bloque `with` válido", "C) Para apagar el servidor de forma segura", "D) Para debuggear código asíncrono"],
+                    "correcta": "B",
+                    "pista": "Evita tener que escribir una clase completa con los métodos engorrosos `__enter__` y `__exit__`."
+                },
+                {
+                    "pregunta": "¿Qué biblioteca del sistema permite crear procesos reales esquivando las restricciones del GIL (Global Interpreter Lock)?",
+                    "codigo": "import multiprocessing",
+                    "opciones": ["A) threading", "B) multiprocessing", "C) concurrent.futures.ThreadPoolExecutor", "D) subprocess"],
+                    "correcta": "B",
+                    "pista": "Utiliza subprocesos en lugar de hilos, asignando cada uno a un núcleo independiente de tu procesador."
+                }
+            ],
+            "Nivel_4": [
+                {
+                    "pregunta": "¿Qué devuelve la función `sys.getrefcount(obj)`?",
+                    "codigo": "import sys\nprint(sys.getrefcount(a))",
+                    "opciones": ["A) El tamaño en bytes del objeto", "B) La cantidad total de referencias activas hacia ese objeto (utilizado por el recolector de basura)", "C) El id numérico de memoria", "D) El tipo primitivo compilado"],
+                    "correcta": "B",
+                    "pista": "El conteo siempre es un número mayor que el real debido a la referencia temporal de la propia función."
+                },
+                {
+                    "pregunta": "¿Qué propiedad define un descriptor de datos completo (Data Descriptor)?",
+                    "codigo": "class Descriptor:",
+                    "opciones": ["A) Solo definir el método __get__", "B) Definir tanto __get__ como __set__ (o __delete__)", "C) Tener métodos estáticos", "D) Ser una subclase de Property"],
+                    "correcta": "B",
+                    "pista": "Al sobreescribir la asignación, tiene prioridad absoluta sobre las entradas del diccionario local de la instancia."
+                },
+                {
+                    "pregunta": "¿Qué función del módulo `functools` se usa para implementar memoización (caché de funciones basada en argumentos)?",
+                    "codigo": "from functools import lru_cache",
+                    "opciones": ["A) partial", "B) wraps", "C) lru_cache", "D) reduce"],
+                    "correcta": "C",
+                    "pista": "Almacena los resultados de llamadas costosas basándose en la política 'Least Recently Used'."
+                }
+            ],
+            "Nivel_5": [
+                {
+                    "pregunta": "¿Qué ocurre si atrapas una excepción y ejecutas `raise` sin pasar ningún objeto?",
+                    "codigo": "except ValueError:\n    raise",
+                    "opciones": ["A) Se limpia el error", "B) Vuelve a lanzar exactamente la misma excepción actual preservando el rastreo original (traceback)", "C) El programa entra en bucle infinito", "D) Genera un RuntimeError"],
+                    "correcta": "B",
+                    "pista": "Es una técnica muy común para auditar o registrar errores sin interrumpir la propagación hacia capas superiores."
+                },
+                {
+                    "pregunta": "¿Cuál es la función del método especial `__getattr__` a diferencia de `__getattribute__`?",
+                    "codigo": "def __getattr__(self, name):",
+                    "opciones": ["A) Se ejecuta para CUALQUIER acceso a atributos", "B) Se ejecuta UNICAMENTE como respaldo si el atributo no fue encontrado por las vías normales", "C) Borra atributos privados", "D) Bloquea el acceso a la clase"],
+                    "correcta": "B",
+                    "pista": "Es un método de rescate seguro, mientras que su contraparte se ejecuta en cada llamada interceptando todo."
+                },
+                {
+                    "pregunta": "¿Qué operador de coincidencia estructural (Structural Pattern Matching) llegó en Python 3.10?",
+                    "codigo": "match dato:\n    case [x, y]: pass",
+                    "opciones": ["A) switch / case", "B) match / case", "C) select / case", "D) check / option"],
+                    "correcta": "B",
+                    "pista": "Permite validar no solo valores literales, sino la forma, tamaño y tipos de datos de estructuras complejas complejas de un solo golpe."
+                }
+            ]
+        }
+    },
+    "JavaScript": {
+        "Principiante": {
+            "Nivel_1": [
+                {
+                    "pregunta": "¿Qué operador compara tanto el valor como el tipo de dato de forma estricta?",
+                    "codigo": "if (x ??? y)",
+                    "opciones": ["A) =", "B) ==", "C) ===", "D) !="],
+                    "correcta": "C",
+                    "pista": "Es el operador de igualdad estricta, ideal para evitar la coerción implícita de tipos."
+                },
+                {
+                    "pregunta": "¿Qué palabra clave se usa para declarar una variable cuyo valor no puede ser reasignado?",
+                    "codigo": "____ PI = 3.1416;",
+                    "opciones": ["A) let", "B) var", "C) const", "D) immutable"],
+                    "correcta": "C",
+                    "pista": "Es la abreviatura de constante."
+                },
+                {
+                    "pregunta": "¿Cuál es el tipo de dato de la siguiente variable?",
+                    "codigo": "let activo = true;",
+                    "opciones": ["A) string", "B) number", "C) boolean", "D) object"],
+                    "correcta": "C",
+                    "pista": "Representa estados binarios: verdadero o falso."
+                }
+            ],
+            "Nivel_2": [
+                {
+                    "pregunta": "¿Cuál es la salida de la siguiente operación de concatenación?",
+                    "codigo": "console.log('5' + 2);",
+                    "opciones": ["A) 7", "B) 52", "C) NaN", "D) TypeError"],
+                    "correcta": "B",
+                    "pista": "Cuando usas el operador `+` y uno de los términos es un String, JavaScript convierte todo a texto."
+                },
+                {
+                    "pregunta": "¿Cómo se define un arreglo (array) en JavaScript?",
+                    "codigo": "let frutas = ____;",
+                    "opciones": ["A) { 'manzana' }", "B) [ 'manzana' ]", "C) ( 'manzana' )", "D) < 'manzana' >"],
+                    "correcta": "B",
+                    "pista": "Utiliza corchetes cuadrados cerrados para delimitar los elementos indexados."
+                },
+                {
+                    "pregunta": "¿Qué método elimina el ÚLTIMO elemento de un array?",
+                    "codigo": "let datos = [1, 2, 3];\ndatos.____();",
+                    "opciones": ["A) shift", "B) pop", "C) push", "D) unshift"],
+                    "correcta": "B",
+                    "pista": "Su nombre hace alusión a un 'estallido' o extracción superior de pila."
+                }
+            ],
+            "Nivel_3": [
+                {
+                    "pregunta": "¿Cómo accedes a la propiedad 'nombre' de este objeto?",
+                    "codigo": "let auto = { nombre: 'Mustang' };",
+                    "opciones": ["A) auto->nombre", "B) auto.nombre", "C) auto(nombre)", "応募) auto[nombre]"],
+                    "correcta": "B",
+                    "pista": "Se utiliza la sintaxis clásica de punto (`.`) para navegar propiedades."
+                },
+                {
+                    "pregunta": "¿Cuál es el resultado de la siguiente expresión condicional?",
+                    "codigo": "console.log(typeof NaN);",
+                    "opciones": ["A) 'string'", "B) 'number'", "C) 'NaN'", "D) 'undefined'"],
+                    "correcta": "B",
+                    "pista": "Aunque signifique 'Not a Number' (No es un Número), técnicamente pertenece al dominio numérico del sistema."
+                },
+                {
+                    "pregunta": "¿Qué ciclo asegura que el bloque de código se ejecute al menos una vez?",
+                    "codigo": "____ {\n  // código\n} while (condicion);",
+                    "opciones": ["A) for", "B) while", "C) do", "D) foreach"],
+                    "correcta": "C",
+                    "pista": "La instrucción ordena 'hacer' (`do`) la acción antes de evaluar la condición de salida."
+                }
+            ],
+            "Nivel_4": [
+                {
+                    "pregunta": "¿Cómo se escribe una función de flecha (Arrow Function) válida?",
+                    "codigo": "# Elige la sintaxis correcta",
+                    "opciones": ["A) const f = () => {}", "B) const f = function() => {}", "C) const f = -> {}", "D) function f() => {}"],
+                    "correcta": "A",
+                    "pista": "Combina los paréntesis de argumentos con el signo igual y mayor que `=>`."
+                },
+                {
+                    "pregunta": "¿Qué método del DOM selecciona un elemento mediante su clase CSS?",
+                    "codigo": "document.____('mi-clase');",
+                    "opciones": ["A) getElementById", "B) getElementsByClassName", "C) querySelectorId", "D) selectClass"],
+                    "correcta": "B",
+                    "pista": "Devuelve una colección de elementos que comparten dicho nombre de clase."
+                },
+                {
+                    "pregunta": "¿Cuál es la función del operador lógico OR (`||`)?",
+                    "codigo": "let x = a || b;",
+                    "opciones": ["A) Devuelve verdadero solo si ambos términos son verdaderos", "B) Devuelve el primer valor verdadero (truthy) que encuentre", "C) Invierte el valor de una variable", "D) Multiplica bytes"],
+                    "correcta": "B",
+                    "pista": "Evalúa de izquierda a derecha buscando la primera condición que sea equivalente a verdadero."
+                }
+            ],
+            "Nivel_5": [
+                {
+                    "pregunta": "¿Qué significa que una variable sea `undefined`?",
+                    "codigo": "let x;\nconsole.log(x);",
+                    "opciones": ["A) Que causó un error fatal", "B) Que fue declarada pero aún no se le ha asignado un valor", "C) Que vale null", "D) Que es un objeto vacío"],
+                    "correcta": "B",
+                    "pista": "Es el estado por defecto que JavaScript le asigna a los contenedores vacíos."
+                },
+                {
+                    "pregunta": "¿Qué método transforma un objeto JS en una cadena de texto JSON?",
+                    "codigo": "JSON.____({ id: 1 });",
+                    "opciones": ["A) parse", "B) stringify", "C) toText", "D) objectify"],
+                    "correcta": "B",
+                    "pista": "Su traducción alude a 'convertir en hilo o cadena'."
+                },
+                {
+                    "pregunta": "¿Cómo detienes la propagación de un evento hacia los elementos padres en el DOM?",
+                    "codigo": "evento.____();",
+                    "opciones": ["A) preventDefault", "B) stopPropagation", "C) cancelBubbleOnly", "D) haltEvent"],
+                    "correcta": "B",
+                    "pista": "Su nombre detiene la burbuja o propagación expansiva del evento."
+                }
+            ]
+        },
+        "Intermedio": {
+            "Nivel_1": [
+                {
+                    "pregunta": "¿Qué método crea un nuevo array aplicando una función a cada elemento de la colección original?",
+                    "codigo": "let dobles = nums.____(x => x * 2);",
+                    "opciones": ["A) forEach", "B) filter", "C) map", "D) reduce"],
+                    "correcta": "C",
+                    "pista": "Mapea los elementos transformándolos uno a uno en una nueva lista del mismo tamaño."
+                },
+                {
+                    "pregunta": "¿Cuál es el resultado de la siguiente desestructuración (Destructuring)?",
+                    "codigo": "const [a, b] = [10, 20, 30];\nconsole.log(b);",
+                    "opciones": ["A) 10", "B) 20", "C) [20, 30]", "D) undefined"],
+                    "correcta": "B",
+                    "pista": "Asigna las posiciones en orden secuencial directas. La segunda variable toma la segunda posición."
+                },
+                {
+                    "pregunta": "¿Qué valor imprimirá este código debido al comportamiento de `var` y el hoisting?",
+                    "codigo": "console.log(edad);\nvar edad = 20;",
+                    "opciones": ["A) ReferenceError", "B) undefined", "C) 20", "D) null"],
+                    "correcta": "B",
+                    "pista": "La declaración se eleva al inicio del archivo, pero no su asignación de valor."
+                }
+            ],
+            "Nivel_2": [
+                {
+                    "pregunta": "¿Qué es un Closure (Clausura) en JavaScript?",
+                    "codigo": "function ext() {\n  let x = 1;\n  return function int() { console.log(x); }\n}",
+                    "opciones": ["A) Una función que se cierra sola", "B) Una función interna que recuerda el entorno y las variables de su función externa", "C) Un método de encriptación nativo", "D) Una etiqueta HTML"],
+                    "correcta": "B",
+                    "pista": "Conserva el acceso al alcance (`scope`) de su creador incluso después de que este haya terminado de ejecutarse."
+                },
+                {
+                    "pregunta": "¿Cómo capturas errores dentro de una función asíncrona que usa `await`?",
+                    "codigo": "async function peticion() { ____ }",
+                    "opciones": ["A) .catch() al final de la línea", "B) Con un bloque try / catch envolvente", "C) Con un callback de error", "D) No se pueden capturar"],
+                    "correcta": "B",
+                    "pista": "Permite estructurar el manejo de errores asíncronos igual que el código síncrono."
+                },
+                {
+                    "pregunta": "¿Qué operador se usa para copiar rápidamente todas las propiedades de un objeto dentro de otro (Spread Operator)?",
+                    "codigo": "const clon = { ____original };",
+                    "opciones": ["A) ...", "B) ***", "C) &&&", "D) +++"],
+                    "correcta": "A",
+                    "pista": "Son tres puntos seguidos que 'esparcen' los elementos."
+                }
+            ],
+            "Nivel_3": [
+                {
+                    "pregunta": "¿Cuál es la función del operador de encadenamiento opcional (`?.`)?",
+                    "codigo": "console.log(user?.perfil?.edad);",
+                    "opciones": ["A) Hacer una pregunta condicional", "B) Evitar un error fatal si una propiedad intermedia en la cadena es null o undefined", "C) Buscar un elemento en la red", "D) Comentar una línea"],
+                    "correcta": "B",
+                    "pista": "Corta la evaluación inmediatamente devolviendo `undefined` si encuentra un eslabón roto."
+                },
+                {
+                    "pregunta": "¿Qué método cambia permanentemente el contexto `this` de una función pasándole argumentos fijos y devolviendo una nueva función?",
+                    "codigo": "const nuevaF = f.____(objeto);",
+                    "opciones": ["A) call", "B) apply", "C) bind", "D) setContext"],
+                    "correcta": "C",
+                    "pista": "Su traducción al español significa 'enlazar' o 'vincular'."
+                },
+                {
+                    "pregunta": "¿Cuál es la salida de filtrar la siguiente colección?",
+                    "codigo": "const r = [1, 2, 3].filter(x => x > 5);\nconsole.log(r);",
+                    "opciones": ["A) null", "B) undefined", "C) []", "D) false"],
+                    "correcta": "C",
+                    "pista": "Si ningún elemento cumple la condición del filtro, el método devuelve un arreglo completamente vacío."
+                }
+            ],
+            "Nivel_4": [
+                {
+                    "pregunta": "¿Qué tipo de objeto especializado permite almacenar valores ÚNICOS sin duplicados?",
+                    "codigo": "const coleccion = new ____([1, 2, 2]);",
+                    "opciones": ["A) Map", "B) Set", "C) UniqueArray", "D) Dictionary"],
+                    "correcta": "B",
+                    "pista": "Es una estructura de conjunto nativa de ES6."
+                },
+                {
+                    "pregunta": "¿Qué estados posibles puede tener una Promesa en JavaScript?",
+                    "codigo": "new Promise((res, rej) => {})",
+                    "opciones": ["A) start, stop, pause", "B) pending, fulfilled, rejected", "C) working, done, error", "D) open, close"],
+                    "correcta": "B",
+                    "pista": "Pasa de estar pendiente a estar resuelta con éxito o rechazada por un fallo."
+                },
+                {
+                    "pregunta": "¿Qué método de cadenas remueve los espacios en blanco sobrantes al inicio y al final del texto?",
+                    "codigo": "let correo = '  a@a.com  ';\ncorreo = correo.____();",
+                    "opciones": ["A) clean", "B) strip", "C) trim", "D) sliceSpace"],
+                    "correcta": "C",
+                    "pista": "Su nombre significa recortar o podar el sobrante periférico."
+                }
+            ],
+            "Nivel_5": [
+                {
+                    "pregunta": "¿Cuál es el resultado de usar el operador de fusión nula (`??`) en este escenario?",
+                    "codigo": "let cuenta = 0;\nlet total = cuenta ?? 10;\nconsole.log(total);",
+                    "opciones": ["A) 10", "B) 0", "C) null", "D) undefined"],
+                    "correcta": "B",
+                    "pista": "A diferencia de `||`, este operador solo salta al valor de respaldo si la variable es estrictamente `null` o `undefined`. El número 0 es un valor válido."
+                },
+                {
+                    "pregunta": "¿Cómo creas una copia profunda (Deep Copy) e independiente de un objeto sin librerías externas en navegadores modernos?",
+                    "codigo": "const copia = ____(objeto);",
+                    "opciones": ["A) Object.assign({}, objeto)", "B) structuredClone(objeto)", "C) objeto.clone()", "D) JSON.clone(objeto)"],
+                    "correcta": "B",
+                    "pista": "Es la API nativa e ideal lanzada recientemente para clonación profunda estructural."
+                },
+                {
+                    "pregunta": "¿Qué método reduce todo un array a un único valor acumulado mediante una función de reducción?",
+                    "codigo": "let suma = [1, 2].____((acc, cur) => acc + cur, 0);",
+                    "opciones": ["A) collapse", "B) total", "C) reduce", "D) gather"],
+                    "correcta": "C",
+                    "pista": "Recorre el array reduciendo las dimensiones a un resultado atómico."
+                }
+            ]
+        },
+        "Avanzado": {
+            "Nivel_1": [
+                {
+                    "pregunta": "¿Qué es el Event Loop (Bucle de Eventos) en el motor V8 de JavaScript?",
+                    "codigo": "setTimeout(() => console.log('Fin'), 0);",
+                    "opciones": ["A) Un ciclo que multiplica hilos de ejecución", "B) El mecanismo encargado de coordinar la ejecución del código, la recolección de eventos y las subtareas de la cola de mensajes (Callback Queue)", "C) Una extensión gráfica del navegador", "D) Un detector de bugs térmicos"],
+                    "correcta": "B",
+                    "pista": "Permite que JavaScript realice operaciones no bloqueantes de Entrada/Salida a pesar de tener un solo hilo."
+                },
+                {
+                    "pregunta": "¿Cuál es la diferencia de ejecución entre una Microtarea (ej. Promesa) y una Macrotarea (ej. setTimeout)?",
+                    "codigo": "Promise.resolve().then(...);",
+                    "opciones": ["A) Las macrotareas van primero sempre", "B) Las microtareas tienen prioridad absoluta y vacían su cola por completo antes de ceder el control al siguiente ciclo del Event Loop", "C) Se corren de forma paralela en dos CPUs", "D) Las microtareas solo funcionan en servidores Node.js"],
+                    "correcta": "B",
+                    "pista": "La cola de promesas (`job queue`) se procesa inmediatamente después del código síncrono actual, antes del renderizado."
+                },
+                {
+                    "pregunta": "¿Qué objeto nativo permite interceptar y personalizar operaciones fundamentales sobre otros objetos (como la lectura o asignación de propiedades)?",
+                    "codigo": "const interceptor = new ____(objetivo, manejador);",
+                    "opciones": ["A) Reflect", "B) Proxy", "C) Observer", "D) Interceptor"],
+                    "correcta": "B",
+                    "pista": "Actúa como un intermediario o 'delegado apoderado' del objeto real."
+                }
+            ],
+            "Nivel_2": [
+                {
+                    "pregunta": "¿Cuál es el resultado de la siguiente evaluación de contexto global?",
+                    "codigo": "const obj = {\n  num: 42,\n  getF: () => console.log(this.num)\n};\nobj.getF();",
+                    "opciones": ["A) 42", "B) undefined", "C) TypeError", "D) null"],
+                    "correcta": "B",
+                    "pista": "Las funciones de flecha (`=>`) no tienen su propio enlace a `this`; heredan el contexto léxico que las rodea (en este caso, el objeto global window)."
+                },
+                {
+                    "pregunta": "¿Qué API especializada permite medir con precisión de microsegundos el rendimiento y tiempo de ejecución de bloques de código?",
+                    "codigo": "____.now();",
+                    "opciones": ["A) Date", "B) Performance", "C) performance", "D) Chrono"],
+                    "correcta": "C",
+                    "pista": "Es un objeto global del navegador todo en minúsculas enfocado en métricas de alta precisión."
+                },
+                {
+                    "pregunta": "¿Cómo defines una propiedad de objeto que sea completamente inmutable, impidiendo que sea borrada o sobreescrita?",
+                    "codigo": "Object.____(obj, 'prop', { writable: false, configurable: false });",
+                    "opciones": ["A) setProperty", "B) defineProperty", "C) freezeProperty", "D) protect"],
+                    "correcta": "B",
+                    "pista": "Permite configurar los descriptores internos finos de una propiedad directamente."
+                }
+            ],
+            "Nivel_3": [
+                {
+                    "pregunta": "¿Qué estructura avanzada de mapa retiene llaves de objetos de forma 'débil', permitiendo que el recolector de basura los elimine si no hay otras referencias?",
+                    "codigo": "const mapaDebil = new ____();",
+                    "opciones": ["A) WeakSet", "B) WeakMap", "C) GarbageMap", "D) FlexMap"],
+                    "correcta": "B",
+                    "pista": "Evita fugas de memoria ligando el ciclo de vida de los datos al ciclo de vida de los objetos clave."
+                },
+                {
+                    "pregunta": "¿Para qué sirve el método `Reflect.ownKeys(objeto)` a diferencia de `Object.keys()`?",
+                    "codigo": "const llaves = Reflect.ownKeys(miObjeto);",
+                    "opciones": ["A) Devuelve solo las llaves de texto", "B) Devuelve TODAS las llaves de propiedades propias, incluyendo aquellas no enumerables y los elementos de tipo Symbol", "C) Clona la estructura binaria", "D) Cuenta las propiedades del prototipo"],
+                    "correcta": "B",
+                    "pista": "Es una herramienta de introspección total que ignora las restricciones de enumeración."
+                },
+                {
+                    "pregunta": "¿Qué palabra clave detiene la ejecución de una función generadora asíncrona devolviendo el control al llamador?",
+                    "codigo": "async function* generador() {\n  ____ 'dato';\n}",
+                    "opciones": ["A) yield", "B) await yield", "C) yield*", "D) emit"],
+                    "correcta": "A",
+                    "pista": "Sigue siendo la misma palabra base de los generadores comunes, combinada con el flujo de iteración asíncrona."
+                }
+            ],
+            "Nivel_4": [
+                {
+                    "pregunta": "¿Qué es el mecanismo de 'Prototype Pollution' (Contaminación de Prototipos)?",
+                    "codigo": "obj.__proto__.hack = true;",
+                    "opciones": ["A) Una falla donde se inyectan propiedades maliciosas directamente en Object.prototype alterando el comportamiento de todos los objetos del sistema", "B) Un virus de red de bases de datos", "C) Un error de desbordamiento de memoria ram", "D) Una extensión corrupta de CSS"],
+                    "correcta": "A",
+                    "pista": "Ocurre frecuentemente al procesar fusiones de objetos recursivas no sanitizadas."
+                },
+                {
+                    "pregunta": "¿Cuál es la salida de evaluar la cadena de prototipos base?",
+                    "codigo": "console.log(Object.prototype.__proto__);",
+                    "opciones": ["A) Object", "B) null", "C) undefined", "D) TypeError"],
+                    "correcta": "B",
+                    "pista": "Es el final definitivo de la cadena de herencia prototípica de JavaScript."
+                },
+                {
+                    "pregunta": "¿Qué método permite ejecutar múltiples promesas en paralelo devolviendo los resultados individuales solo si TODAS se cumplen con éxito?",
+                    "codigo": "Promise.____([p1, p2]);",
+                    "opciones": ["A) race", "B) any", "C) all", "D) allSettled"],
+                    "correcta": "C",
+                    "pista": "Falla inmediatamente si tan solo una promesa del grupo es rechazada."
+                }
+            ],
+            "Nivel_5": [
+                {
+                    "pregunta": "¿Qué componente de Node.js / V8 se encarga de delegar operaciones asíncronas del sistema de archivos al grupo de subprocesos del sistema operativo (Thread Pool)?",
+                    "codigo": "# Arquitectura interna",
+                    "opciones": ["A) Libuv", "B) Kestrel", "C) NpmCore", "D) SpiderMonkey"],
+                    "correcta": "A",
+                    "pista": "Es la biblioteca multiplataforma escrita en C que le da el poder asíncrono a Node."
+                },
+                {
+                    "pregunta": "¿Qué bandera del constructor de expresiones regulares permite realizar búsquedas globales reteniendo el índice exacto de la última coincidencia (`lastIndex`)?",
+                    "codigo": "const regex = /patron/____;",
+                    "opciones": ["A) g", "B) gy", "C) y", "D) i"],
+                    "correcta": "C",
+                    "pista": "Conocida como la bandera 'sticky' o pegajosa, obliga a buscar solo desde la posición exacta indicada."
+                },
+                {
+                    "pregunta": "¿Cuál es el resultado de la siguiente comparación de símbolos globales?",
+                    "codigo": "const s1 = Symbol.for('id');\nconst s2 = Symbol.for('id');\nconsole.log(s1 === s2);",
+                    "opciones": ["A) false", "B) true", "C) TypeError", "D) undefined"],
+                    "correcta": "B",
+                    "pista": "El método `.for()` busca en el registro de símbolos globales compartido; al usar la misma clave, recupera exactamente la misma instancia."
+                }
+            ]
+        }
+    },
+    "SQL": {
+        "Principiante": {
+            "Nivel_1": [
+                {
+                    "pregunta": "¿Qué comando se utiliza para extraer o consultar datos de una tabla?",
+                    "codigo": "____ nombre FROM usuarios;",
+                    "opciones": ["A) EXTRACT", "B) GET", "C) SELECT", "D) FETCH"],
+                    "correcta": "C",
+                    "pista": "Es el comando principal de lectura en bases de datos relacionales."
+                },
+                {
+                    "pregunta": "¿Qué cláusula se utiliza para filtrar los registros de una consulta bajo una condición?",
+                    "codigo": "SELECT * FROM cultivos ____ estado = 'listo';",
+                    "opciones": ["A) HAVING", "B) WHERE", "C) IF", "D) FILTER"],
+                    "correcta": "B",
+                    "pista": "Su traducción al español equivale a 'donde'."
+                },
+                {
+                    "pregunta": "¿Cómo se seleccionan todas las columnas de una tabla sin escribir sus nombres?",
+                    "codigo": "SELECT ____ FROM parcelas;",
+                    "opciones": ["A) #", "B) ALL", "C) *", "D) @"],
+                    "correcta": "C",
+                    "pista": "Se utiliza el caracter comodín del asterisco."
+                }
+            ],
+            "Nivel_2": [
+                {
+                    "pregunta": "¿Qué comando añade nuevos registros a una base de datos?",
+                    "codigo": "____ INTO usuarios (nombre) VALUES ('Juan');",
+                    "opciones": ["A) ADD", "B) UPDATE", "C) INSERT", "D) PUSH"],
+                    "correcta": "C",
+                    "pista": "Su nombre alude a insertar o introducir datos."
+                },
+                {
+                    "pregunta": "¿Cómo ordenas los resultados de una consulta de forma descendente (de mayor a menor)?",
+                    "codigo": "SELECT * FROM usuarios ORDER BY oro ____;",
+                    "opciones": ["A) ASC", "B) DESC", "C) DOWN", "D) HIGH"],
+                    "correcta": "B",
+                    "pista": "Es la abreviatura de la palabra 'descending'."
+                },
+                {
+                    "pregunta": "¿Qué palabra clave se usa para evitar filas repetidas en el resultado de una consulta?",
+                    "codigo": "SELECT ____ lenguaje FROM quizes;",
+                    "opciones": ["A) UNIQUE", "B) DISTINCT", "C) SINGLE", "D) DIFFERENT"],
+                    "correcta": "B",
+                    "pista": "Filtra el set trayendo únicamente valores distintos."
+                }
+            ],
+            "Nivel_3": [
+                {
+                    "pregunta": "¿Cómo modificas los valores de registros existentes dentro de una tabla?",
+                    "codigo": "____ usuarios SET oro = 500 WHERE id = 1;",
+                    "opciones": ["A) MODIFY", "B) CHANGE", "C) UPDATE", "D) RENEW"],
+                    "correcta": "C",
+                    "pista": "Actualiza la información en fila."
+                },
+                {
+                    "pregunta": "¿Qué operador busca coincidencias basadas en patrones de texto usando comodines?",
+                    "codigo": "SELECT * FROM usuarios WHERE nombre ____ 'Ana%';",
+                    "opciones": ["A) EQUAL", "B) LIKE", "C) MATCH", "D) CONTAINS"],
+                    "correcta": "B",
+                    "pista": "Significa 'como' o 'similar a' en inglés."
+                },
+                {
+                    "pregunta": "¿Qué significa el signo `%` al usar el operador LIKE?",
+                    "codigo": "WHERE nombre LIKE 'A%'",
+                    "opciones": ["A) Que el nombre mide 10 letras", "B) Representa cualquier cantidad de caracteres secundarios (cero o más)", "C) Que contiene un porcentaje numérico", "D) Es un error de sintaxis"],
+                    "correcta": "B",
+                    "pista": "Es un comodín expansivo de texto hacia la derecha o izquierda."
+                }
+            ],
+            "Nivel_4": [
+                {
+                    "pregunta": "¿Qué función de agregación cuenta el número total de filas devuelvas por una consulta?",
+                    "codigo": "SELECT ____(*) FROM parcelas;",
+                    "opciones": ["A) SUM", "B) TOTAL", "C) COUNT", "D) NUMBER"],
+                    "correcta": "C",
+                    "pista": "Significa 'contar' en inglés."
+                },
+                {
+                    "pregunta": "¿Cómo se eliminan registros específicos de una tabla?",
+                    "codigo": "____ FROM usuarios WHERE id = 5;",
+                    "opciones": ["A) REMOVE", "B) DELETE", "C) DROP", "D) ERASE"],
+                    "correcta": "B",
+                    "pista": "Borra el contenido de las filas respetando la estructura de la tabla."
+                },
+                {
+                    "pregunta": "¿Qué operador filtra valores dentro de un rango inclusivo?",
+                    "codigo": "WHERE oro ____ 100 AND 500;",
+                    "opciones": ["A) IN", "B) BETWEEN", "C) RANGE", "D) INSIDE"],
+                    "correcta": "B",
+                    "pista": "Su traducción literal al español significa 'entre'."
+                }
+            ],
+            "Nivel_5": [
+                {
+                    "pregunta": "¿Qué restricción (constraint) asegura que una columna no acepte valores vacíos?",
+                    "codigo": "id_usuario INT ____ NULL",
+                    "opciones": ["A) NEVER", "B) NOT", "C) FORBID", "D) WITHOUT"],
+                    "correcta": "B",
+                    "pista": "Indica explícitamente que la celda de la fila 'NO' puede ser nula."
+                },
+                {
+                    "pregunta": "¿Qué cláusula limita la cantidad máxima de filas que regresará una consulta?",
+                    "codigo": "SELECT * FROM productos ____ 5;",
+                    "opciones": ["A) STOP", "B) TOP", "C) LIMIT", "D) MAX"],
+                    "correcta": "C",
+                    "pista": "Pone un límite estricto al tamaño del set devuelto."
+                },
+                {
+                    "pregunta": "¿Cómo se le asigna un alias temporal a una columna para el reporte de resultados?",
+                    "codigo": "SELECT nombre ____ alias_nombre FROM usuarios;",
+                    "opciones": ["A) AS", "B) LIKE", "C) TO", "D) IS"],
+                    "correcta": "A",
+                    "pista": "Proviene de la palabra inglesa 'as' (como)."
+                }
+            ]
+        },
+        "Intermedio": {
+            "Nivel_1": [
+                {
+                    "pregunta": "¿Qué tipo de JOIN devuelve únicamente las filas que tienen coincidencias exactas en ambas tablas?",
+                    "codigo": "SELECT * FROM t1 ____ JOIN t2 ON t1.id = t2.id;",
+                    "opciones": ["A) OUTER", "B) LEFT", "C) INNER", "D) FULL"],
+                    "correcta": "C",
+                    "pista": "Realiza una intersección interna perfecta de registros emparejados."
+                },
+                {
+                    "pregunta": "¿Qué cláusula agrupa filas que tienen los mismos valores en columnas especificadas?",
+                    "codigo": "SELECT tipo, COUNT(*) FROM cultivos ____ tipo;",
+                    "opciones": ["A) ORDER BY", "B) GROUP BY", "C) SORT BY", "D) MERGE BY"],
+                    "correcta": "B",
+                    "pista": "Ordena agrupar por campos comunes para usar funciones de agregación."
+                },
+                {
+                    "pregunta": "¿Qué cláusula filtra grupos creados por GROUP BY bajo una condición de agregación?",
+                    "codigo": "GROUP BY tipo ____ SUM(oro) > 1000;",
+                    "opciones": ["A) WHERE", "B) HAVING", "C) IF", "D) WITH"],
+                    "correcta": "B",
+                    "pista": "Actúa como el WHERE, pero se ejecuta exclusivamente sobre los bloques calculados de la agregación."
+                }
+            ],
+            "Nivel_2": [
+                {
+                    "pregunta": "¿Qué JOIN devuelve todas las filas de la tabla izquierda, más las filas coincidentes de la derecha?",
+                    "codigo": "SELECT * FROM usuarios ____ JOIN parcelas ON u.id = p.u_id;",
+                    "opciones": ["A) RIGHT", "B) LEFT", "C) INNER", "D) CROSS"],
+                    "correcta": "B",
+                    "pista": "Prioriza por completo la integridad de la tabla declarada a la izquierda del comando."
+                },
+                {
+                    "pregunta": "¿Qué función calcula el valor promedio numérico de una columna?",
+                    "codigo": "SELECT ____(oro) FROM usuarios;",
+                    "opciones": ["A) MED", "B) SUM", "C) AVG", "D) MEAN"],
+                    "correcta": "C",
+                    "pista": "Es la abreviatura de 'average'."
+                },
+                {
+                    "pregunta": "¿Qué operador comprueba si un valor coincide con cualquiera de los elementos de una lista explícita?",
+                    "codigo": "WHERE pais ____ ('CO', 'MX', 'AR');",
+                    "opciones": ["A) IN", "B) LIKE", "C) WITHIN", "D) EQUAL_ANY"],
+                    "correcta": "A",
+                    "pista": "Evalúa si el registro está contenido 'dentro' del set de opciones."
+                }
+            ],
+            "Nivel_3": [
+                {
+                    "pregunta": "¿Qué comando elimina por completo una tabla y toda su estructura del catálogo físico?",
+                    "codigo": "____ TABLE registros;",
+                    "opciones": ["A) DELETE", "B) TRUNCATE", "C) DROP", "D) REMOVE_ALL"],
+                    "correcta": "C",
+                    "pista": "Tira o descarta el objeto entero de la base de datos de manera irreversible."
+                },
+                {
+                    "pregunta": "¿Cuál es la diferencia principal entre el comando DROP y TRUNCATE?",
+                    "codigo": "# Modificadores de bases de datos",
+                    "opciones": ["A) DROP borra filas, TRUNCATE la tabla", "B) DROP elimina la tabla y su estructura; TRUNCATE borra el contenido de las filas pero mantiene la estructura intacta", "C) Hacen exactamente lo mismo", "D) TRUNCATE es solo para bases Access"],
+                    "correcta": "B",
+                    "pista": "TRUNCATE es un vaciado veloz de filas optimizado que preserva el cascarón estructural de la tabla."
+                },
+                {
+                    "pregunta": "¿Qué comando altera la estructura de una tabla existente adicionando por ejemplo una columna?",
+                    "codigo": "____ TABLE usuarios ADD edad INT;",
+                    "opciones": ["A) UPDATE", "B) MODIFY", "C) ALTER", "D) RENEW"],
+                    "correcta": "C",
+                    "pista": "Modifica o 'altera' la definición DDL original del objeto."
+                }
+            ],
+            "Nivel_4": [
+                {
+                    "pregunta": "¿Qué restricción identifica de forma única a cada registro de una tabla y no permite nulos?",
+                    "codigo": "id INT ____ KEY",
+                    "opciones": ["A) UNIQUE", "B) FOREIGN", "C) PRIMARY", "D) MASTER"],
+                    "correcta": "C",
+                    "pista": "Es la clave primaria de la entidad relacional."
+                },
+                {
+                    "pregunta": "¿Qué campo establece un enlace de integridad referencial con la clave primaria de otra tabla?",
+                    "codigo": "usuario_id INT ____ KEY REFERENCES usuarios(id)",
+                    "opciones": ["A) FORWARD", "B) PRIMARY", "C) FOREIGN", "D) EXTERNAL"],
+                    "correcta": "C",
+                    "pista": "Conocida como clave foránea o externa."
+                },
+                {
+                    "pregunta": "¿Cómo se verifica si una celda contiene un valor nulo en una condición WHERE?",
+                    "codigo": "WHERE correo ____;",
+                    "opciones": ["A) = NULL", "B) IS NULL", "C) EQUALS NULL", "D) IS_EMPTY"],
+                    "correcta": "B",
+                    "pista": "Dado que el nulo representa ausencia de valor, no se puede usar el signo `=`, sino la validación de estado `IS`."
+                }
+            ],
+            "Nivel_5": [
+                {
+                    "pregunta": "¿Qué operador lógico combina dos condiciones exigiendo que AMBAS se cumplan estrictamente?",
+                    "codigo": "WHERE oro > 100 ____ nivel = 5;",
+                    "opciones": ["A) OR", "B) AND", "C) &&", "D) PLUS"],
+                    "correcta": "B",
+                    "pista": "Multiplica las restricciones de filtrado."
+                },
+                {
+                    "pregunta": "¿Qué función de texto une dos o más cadenas de caracteres en una sola?",
+                    "codigo": "SELECT ____(nombre, apellido) FROM usuarios;",
+                    "opciones": ["A) JOIN", "B) CONCAT", "C) MERGE", "D) BIND"],
+                    "correcta": "B",
+                    "pista": "Abreviatura de concatenar."
+                },
+                {
+                    "pregunta": "¿Cómo seleccionas filas cuyos valores de texto ignoran mayúsculas y minúsculas en bases como PostgreSQL?",
+                    "codigo": "WHERE nombre ____ 'juan';",
+                    "opciones": ["A) LIKE", "B) ILIKE", "C) MATCH_CASE", "D) SIMILAR"],
+                    "correcta": "B",
+                    "pista": "Es la variante del LIKE que añade la 'I' de Insensitive."
+                }
+            ]
+        },
+        "Avanzado": {
+            "Nivel_1": [
+                {
+                    "pregunta": "¿Qué es una subconsulta correlacionada en SQL?",
+                    "codigo": "SELECT * FROM u WHERE EXISTS (SELECT 1 FROM p WHERE p.u_id = u.id);",
+                    "opciones": ["A) Una consulta que corre en paralelo en otro nodo", "B) Una subconsulta interna que depende y hace referencia directa a una columna de la consulta externa, ejecutándose fila por fila", "C) Un comando de encriptación", "D) Una vista materializada"],
+                    "correcta": "B",
+                    "pista": "Requiere los datos del bucle exterior para poder evaluar su filtro interno."
+                },
+                {
+                    "pregunta": "¿Qué estructura lógica permite implementar lógica condicional tipo if-else directo en un SELECT?",
+                    "codigo": "SELECT ____ WHEN oro > 100 THEN 'Rico' ELSE 'Pobre' END FROM u;",
+                    "opciones": ["A) IF-ELSE", "B) SWITCH", "C) CASE", "D) DECODE"],
+                    "correcta": "C",
+                    "pista": "Abre un bloque evaluador que concluye con la palabra clave `END`."
+                },
+                {
+                    "pregunta": "¿Qué comando de CTE (Common Table Expression) permite crear tablas temporales nombradas dentro del alcance de una sola consulta?",
+                    "codigo": "____ TablaTemporal AS (SELECT id FROM usuarios)",
+                    "opciones": ["A) USING", "B) WITH", "C) CTE", "D) DEFINE"],
+                    "correcta": "B",
+                    "pista": "Sintaxis estándar de expresiones de tabla comunes."
+                }
+            ],
+            "Nivel_2": [
+                {
+                    "pregunta": "¿Qué es una función de ventana (Window Function)?",
+                    "codigo": "SELECT oro, ROW_NUMBER() OVER(ORDER BY oro DESC) FROM usuarios;",
+                    "opciones": ["A) Una función que abre interfaces gráficas", "B) Una función analítica que realiza cálculos a través de un conjunto de filas de la tabla correlacionadas con la fila actual, sin colapsar las filas en un único grupo", "C) Una vista volátil", "D) Un desencadenador automático"],
+                    "correcta": "B",
+                    "pista": "Se identifica por el uso mandatorio de la cláusula analítica `OVER`."
+                },
+                {
+                    "pregunta": "¿Qué comando crea una estructura física aceleradora para optimizar drásticamente la velocidad de las consultas de lectura sobre una columna indexada?",
+                    "codigo": "CREATE ____ idx_usuarios_oro ON usuarios(oro);",
+                    "opciones": ["A) SPEED", "B) INDICE", "C) INDEX", "D) KEYMAP"],
+                    "correcta": "C",
+                    "pista": "Estructura de árbol balanceado (B-Tree) para búsquedas directas en disco."
+                },
+                {
+                    "pregunta": "¿Qué propiedad ACID asegura que una transacción se complete en su totalidad o no aplique ningún cambio en absoluto (Todo o Nada)?",
+                    "codigo": "# Propiedades transaccionales",
+                    "opciones": ["A) Consistencia", "B) Aislamiento", "C) Atomicidad", "D) Durabilidad"],
+                    "correcta": "C",
+                    "pista": "Proviene de átomo, la unidad indivisible de procesamiento transaccional."
+                }
+            ],
+            "Nivel_3": [
+                {
+                    "pregunta": "¿Qué nivel de aislamiento transaccional (Isolation Level) previene por completo las lecturas fantasmas (Phantom Reads) bloqueando el rango de datos?",
+                    "codigo": "SET TRANSACTION ISOLATION LEVEL ____;",
+                    "opciones": ["A) READ COMMITTED", "B) REPEATABLE READ", "C) SERIALIZABLE", "D) SNAPSHOT"],
+                    "correcta": "C",
+                    "pista": "Es el nivel de aislamiento más estricto y seguro del estándar SQL, simulando ejecución en serie."
+                },
+                {
+                    "pregunta": "¿Qué comando consolida de manera definitiva todas las operaciones pendientes de una transacción abierta en el almacenamiento físico?",
+                    "codigo": "BEGIN TRANSACTION;\n-- código\n____;",
+                    "opciones": ["A) ROLLBACK", "B) SAVEPOINT", "C) COMMIT", "D) END"],
+                    "correcta": "C",
+                    "pista": "Valida los cambios en disco bloqueando la persistencia de datos."
+                },
+                {
+                    "pregunta": "¿Qué objeto de base de datos se ejecuta de forma automática ante eventos DML como INSERT o UPDATE sobre una tabla?",
+                    "codigo": "CREATE ____ auditoria_usuarios AFTER INSERT ON usuarios...",
+                    "opciones": ["A) PROCEDURE", "B) TRIGGER", "C) VIEW", "D) CONSTRAINT"],
+                    "correcta": "B",
+                    "pista": "Conocidos como disparadores o desencadenadores de eventos de datos."
+                }
+            ],
+            "Nivel_4": [
+                {
+                    "pregunta": "¿Qué operador de conjuntos combina los resultados de dos consultas reteniendo únicamente las filas que aparecen en AMBOS listados?",
+                    "codigo": "SELECT id FROM t1 ____ SELECT id FROM t2;",
+                    "opciones": ["A) UNION", "B) INTERSECT", "C) EXCEPT", "D) MINUS"],
+                    "correcta": "B",
+                    "pista": "Calcula matemáticamente la intersección rigurosa de dos conjuntos de filas."
+                },
+                {
+                    "pregunta": "¿Qué tipo de vista guarda físicamente los datos calculados en disco para acelerar reportes complejos y requiere refresco periódico?",
+                    "codigo": "CREATE ____ VIEW reporte_ventas AS...",
+                    "opciones": ["A) DYNAMIC", "B) MATERIALIZED", "C) PERSISTENT", "D) CACHED"],
+                    "correcta": "B",
+                    "pista": "Es una vista materializada, ideal para almacenes de datos (Data Warehouses)."
+                },
+                {
+                    "pregunta": "¿Cuál es la función del comando ROLLBACK?",
+                    "codigo": "IF @@ERROR > 0 ____;",
+                    "opciones": ["A) Guardar los datos actuales", "B) Abortar la transacción actual deshaciendo todos los cambios realizados desde el inicio del bloque transaccional", "C) Crear una copia de respaldo externa", "D) Reiniciar el motor de base de datos"],
+                    "correcta": "B",
+                    "pista": "Rebobina el estado de la base de datos limpiando la memoria intermedia de trabajo."
+                }
+            ],
+            "Nivel_5": [
+                {
+                    "pregunta": "¿Qué cláusula de ventana divide las filas en particiones para realizar cálculos analíticos independientes por categoría?",
+                    "codigo": "SUM(oro) OVER(____ BY tipo)",
+                    "opciones": ["A) GROUP", "B) PARTITION", "C) SEGMENT", "D) DIVIDE"],
+                    "correcta": "B",
+                    "pista": "Segmenta el set analítico usando la palabra clave de partición."
+                },
+                {
+                    "pregunta": "¿Qué comando DUAL rompe recursividades permitiendo escribir una CTE que se llame a sí misma?",
+                    "codigo": "WITH ____ CTE_Recursiva AS (...)",
+                    "opciones": ["A) LOOP", "B) RECURSIVE", "C) SELF", "D) ITERATE"],
+                    "correcta": "B",
+                    "pista": "Obligatorio en motores estándar para calcular estructuras jerárquicas o de árbol en SQL."
+                },
+                {
+                    "pregunta": "¿Qué comando elimina físicamente todos los datos de una tabla reiniciando sus contadores autoincrementales (IDENTITY/AUTO_INCREMENT) a cero de forma instantánea?",
+                    "codigo": "____ TABLE registro_logs;",
+                    "opciones": ["A) DROP", "B) TRUNCATE", "C) SHRED", "D) FLUSH"],
+                    "correcta": "B",
+                    "pista": "Libera las páginas de datos asignadas a la tabla de golpe sin registrar transacciones fila por fila en el log de operaciones."
+                }
+            ]
+        }
+    }
+}
