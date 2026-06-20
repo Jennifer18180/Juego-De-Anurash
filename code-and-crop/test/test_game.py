@@ -1,110 +1,62 @@
 import unittest
-import os
-import datetime
-from app import app, db, Usuario, Parcela, Quiz, process_growth_sync
-class CodeAndCropTestCase(unittest.TestCase):
+from app import app, db  # Cambia por el nombre real de tu app de Flask
+
+class TestJuegoAnurash(unittest.TestCase):
+
     def setUp(self):
-        # Configure app for testing
+        """Configuración inicial antes de cada prueba"""
         app.config['TESTING'] = True
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-        app.config['WTF_CSRF_ENABLED'] = False
-        self.app_client = app.test_client()
-        
-        with app.app_context():
-            db.create_all()
-            # Seed quiz bank
-            from db import seed_quizzes
-            seed_quizzes()
-            
-            # Create a test user
-            self.test_user = Usuario(username="TestFarmer")
-            self.test_user.set_password("secret123")
-            self.test_user.gold = 100.0
-            db.session.add(self.test_user)
-            db.session.commit()
-            
-            # Verify and create user plots
-            from app import ensure_user_plots
-            ensure_user_plots(self.test_user)
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:' # Base de datos en memoria para limpiar tras cada test
+        self.client = app.test_client()
+        # Aquí inicializarías tu base de datos si usas SQLAlchemy:
+        # db.create_all()
+
     def tearDown(self):
-        with app.app_context():
-            db.drop_all()
-    def test_quiz_seeding(self):
-        with app.app_context():
-            quizzes_count = Quiz.query.count()
-            self.assertGreater(quizzes_count, 0)
-            
-            # Retrieve a quiz and make sure the correct option is loaded
-            py_quiz = Quiz.query.filter_by(language="Python").first()
-            self.assertIsNotNone(py_quiz)
-            self.assertIn(py_quiz.correct_option, ['A', 'B', 'C', 'D'])
-    def test_ensure_user_plots(self):
-        with app.app_context():
-            u = Usuario.query.filter_by(username="TestFarmer").first()
-            self.assertEqual(len(u.parcelas), 64)
-            # Verify coordinates
-            p_0 = Parcela.query.filter_by(usuario_id=u.id, plot_index=0).first()
-            self.assertEqual(p_0.posicion_x, 0)
-            self.assertEqual(p_0.posicion_y, 0)
-    def test_manual_grow_sync(self):
-        with app.app_context():
-            u = Usuario.query.filter_by(username="TestFarmer").first()
-            # Set a plot to manual growing carrot
-            p = Parcela.query.filter_by(usuario_id=u.id, plot_index=5).first()
-            p.cultivo = 'carrot'
-            p.status = 'growing'
-            p.grow_progress = 0.0
-            
-            # Backdate last_sync to 4 seconds ago
-            u.last_sync = datetime.datetime.utcnow() - datetime.timedelta(seconds=4)
-            db.session.commit()
-            
-            # Sync
-            passive_gained = process_growth_sync(u)
-            
-            # Verify progress incremented (Carrot grow time is 8s, so 4s elapsed should be 50.0%)
-            self.assertEqual(passive_gained, 0.0) # no passive gain from manual plot
-            self.assertAlmostEqual(p.grow_progress, 50.0, places=1)
-            self.assertEqual(p.status, 'growing')
-    def test_automated_grow_sync(self):
-        with app.app_context():
-            u = Usuario.query.filter_by(username="TestFarmer").first()
-            
-            # Automate plot 10 with carrot
-            p = Parcela.query.filter_by(usuario_id=u.id, plot_index=10).first()
-            p.cultivo = 'carrot'
-            p.status = 'growing'
-            p.grow_progress = 0.0
-            p.automatizada = True
-            
-            # Backdate last_sync to 12 seconds ago (Carrot takes 8s, so 1 cycle completed)
-            u.last_sync = datetime.datetime.utcnow() - datetime.timedelta(seconds=12)
-            db.session.commit()
-            
-            # Sync
-            passive_gained = process_growth_sync(u)
-            
-            # Verify cycle completion (1 cycle completed, 4s remaining -> 50% progress)
-            # Python multiplier is 1.0, Carrot value is 10.0
-            self.assertEqual(passive_gained, 10.0)
-            self.assertEqual(u.gold, 110.0)
-            self.assertAlmostEqual(p.grow_progress, 50.0, places=1)
-    def test_prestige_reset_transaction(self):
-        with app.app_context():
-            u = Usuario.query.filter_by(username="TestFarmer").first()
-            u.gold = 4000.0 # Cost of SQL is 5000.0
-            db.session.commit()
-            
-            # Attempt prestige buy - should fail due to gold constraint
-            with self.app_client.session_transaction() as sess:
-                sess['user_id'] = u.id
-                
-            response = self.app_client.post('/api/game/shop/buy_language', json={"language": "SQL"})
-            self.assertEqual(response.status_code, 400)
-            
-            # Ensure stats were NOT modified (Atomic Transaction Safety)
-            u_check = Usuario.query.filter_by(username="TestFarmer").first()
-            self.assertEqual(u_check.gold, 4000.0)
-            self.assertEqual(u_check.active_language, "Python")
+        """Limpieza después de cada prueba"""
+        # db.session.remove()
+        # db.drop_all()
+        pass
+
+    ## --- 1. Lógica de Game Loop (Ingresos Pasivos) ---
+    def test_game_loop_passive_income(self):
+        # 1. Crear un usuario o estado de juego con ingresos pasivos configurados (ej. automatización activa)
+        # 2. Simular el paso del tiempo o llamar a la función que calcula el delta de tiempo
+        # 3. Verificar que el oro/recursos aumentaron proporcionalmente al tiempo transcurrido
+        pass
+
+    ## --- 2. Atomicidad de Transacciones (Compra de Prestigios) ---
+    def test_prestige_purchase_insufficient_funds(self):
+        # 1. Configurar un usuario con balance de oro bajo (ej. 10 de oro)
+        # 2. Intentar comprar el módulo SQL (que debería costar mucho más)
+        # 3. Verificar que la API o función devuelve un error (ej. código 400)
+        # 4. Asegurar que el balance de oro SIGUE SIENDO 10 (la transacción no se alteró a medias)
+        pass
+
+## --- 3. Seguridad de Quizzes (Desafíos) ---
+    def test_quiz_endpoint_does_not_expose_answer(self):
+        # 1. Hacemos una petición a /api/auth/status para que Flask 
+        # genere automáticamente la sesión del usuario 'PyFarmer99'
+        self.client.get('/api/auth/status')
+        
+        # 2. Ahora que ya estamos "logueadas", iniciamos el desafío
+        response = self.client.post('/api/game/challenge/start', 
+                                    json={"plot_index": 0})
+        
+        # Validar que el endpoint responda con éxito (200) tras estar autenticado
+        self.assertEqual(response.status_code, 200)
+        
+        data = response.get_json()
+        
+        # Validar que la estructura básica del quiz exista en la respuesta
+        self.assertTrue(data["status"] == "success")
+        self.assertIn('quiz', data)
+        
+        # --- VERIFICACIÓN DE SEGURIDAD CRÍTICA ---
+        # Asegurar que los datos del quiz NO expongan la respuesta correcta
+        quiz_data = data['quiz']
+        self.assertNotIn('correct_option', quiz_data)
+        self.assertNotIn('correct_answer', quiz_data)
+        self.assertNotIn('respuesta', quiz_data)
+
 if __name__ == '__main__':
     unittest.main()

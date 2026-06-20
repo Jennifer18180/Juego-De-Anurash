@@ -10,10 +10,32 @@ app.secret_key = os.urandom(24)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///code_and_crop.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
+_db_initialized = False
 # Seed database on first request
 @app.before_request
 def initialize_db():
+    global _db_initialized
+    if _db_initialized:
+        return
+    _db_initialized = True
     db.create_all()
+    # Migrate: add plot_index column if it doesn't exist (for existing DBs)
+    try:
+        with db.engine.connect() as conn:
+            conn.execute(db.text("ALTER TABLE parcelas ADD COLUMN plot_index INTEGER NOT NULL DEFAULT 0"))
+            conn.commit()
+    except Exception:
+        pass  # Column already exists — ignore
+    # Repair: recompute plot_index from grid position for rows where it's still 0
+    try:
+        with db.engine.connect() as conn:
+            conn.execute(db.text(
+                "UPDATE parcelas SET plot_index = (posicion_x * 8 + posicion_y) "
+                "WHERE plot_index = 0 AND NOT (posicion_x = 0 AND posicion_y = 0)"
+            ))
+            conn.commit()
+    except Exception:
+        pass
     seed_quizzes()
 # Simulated AI players for a live competitive leaderboard
 AI_PLAYERS = [
@@ -289,16 +311,22 @@ def click_plot():
     mult = multipliers.get(user.active_language, 1.0)
     try:
         if action == 'click':
-            # Plowing grass to soil
+            # Plowing grass to soil (first click on empty plot)
             if p.cultivo == 'vacio' and p.status == 'empty':
                 p.cultivo = 'dirt'
                 gold_gained = 1.0 * mult
                 user.gold += gold_gained
                 user.total_gold_earned += gold_gained
                 p.last_updated = now
-            # Click on growing crop
+            # Click on growing crop (manual gold tapping)
             elif p.status == 'growing' and not p.automatizada:
                 gold_gained = 1.0 * mult
+                user.gold += gold_gained
+                user.total_gold_earned += gold_gained
+                p.last_updated = now
+            # Click on dirt (also give a coin)
+            elif p.cultivo == 'dirt':
+                gold_gained = 0.5 * mult
                 user.gold += gold_gained
                 user.total_gold_earned += gold_gained
                 p.last_updated = now
@@ -342,7 +370,7 @@ def click_plot():
             "plot_index": p.plot_index,
             "cultivo": p.cultivo,
             "status": p.status,
-            "grow_progress": p.grow_progress,
+            "grow_progress": round(p.grow_progress, 1),
             "automatizada": p.automatizada
         }
     })

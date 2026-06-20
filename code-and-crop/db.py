@@ -23,9 +23,10 @@ class Parcela(db.Model):
     __tablename__ = 'parcelas'
     id = db.Column(db.Integer, primary_key=True)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
+    plot_index = db.Column(db.Integer, nullable=False, default=0)  # 0..63 grid index
     posicion_x = db.Column(db.Integer, nullable=False)
     posicion_y = db.Column(db.Integer, nullable=False)
-    cultivo = db.Column(db.String(20), default='vacio') # 'vacio', 'zanahoria', 'trigo', 'calabaza'
+    cultivo = db.Column(db.String(20), default='vacio') # 'vacio', 'dirt', 'carrot', 'wheat', 'pumpkin'
     status = db.Column(db.String(20), default='empty') # 'empty', 'growing', 'ready'
     grow_progress = db.Column(db.Float, default=0.0) # 0.0 to 100.0
     automatizada = db.Column(db.Boolean, default=False)
