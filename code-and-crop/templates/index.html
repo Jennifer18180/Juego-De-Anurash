@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anurash - Code & Crop</title>
+    <!-- Tailwind CSS for robust structural grids and layouts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Animate.css for micro-interactions and transitions -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- Game styles (Custom isometric transforms, pixel layouts, glowing effects) -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-[#1e1b18] text-[#f3f4f6] min-h-screen p-4 md:p-6">
+    <!-- 🌟 TOP HEADER PANEL -->
+    <header class="max-w-7xl mx-auto mb-6 flex flex-col md:flex-row items-center justify-between bg-[#2d2621] p-4 rounded-2xl border-4 border-[#4a3e36] shadow-2xl gap-4">
+        <div class="flex items-center gap-4">
+            <span class="text-4xl animate__animated animate__bounceIn">🐸</span>
+            <div>
+                <h1 class="text-xl md:text-2xl font-black tracking-wider text-[#ea580c] pixel-font uppercase">ANURASH</h1>
+                <p class="text-xs text-[#a8a29e] tracking-widest uppercase">Code &amp; Crop Incremental Farm</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="text-right">
+                <span id="farm-name" class="font-bold text-stone-300 block">Mi Granja: Cargando...</span>
+                <span id="prestige-mult" class="text-xs font-semibold px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">x1 Multiplicador</span>
+            </div>
+            <!-- Auth buttons -->
+            <!-- Dev Button for invoking balloon -->
+            <button onclick="spawnBalloonDev()" class="px-4 py-2 bg-amber-600 hover:bg-amber-500 border-b-4 border-amber-800 text-xs font-bold rounded-lg uppercase transition-all tracking-wider">
+                🎈 Invocar Globo
+            </button>
+            <button onclick="document.getElementById('modal-auth').classList.remove('hidden')" class="px-4 py-2 bg-[#4a3e36] hover:bg-[#5c4d43] border-b-4 border-[#352c26] text-xs font-bold rounded-lg uppercase transition-all tracking-wider">
+                👤 Cambiar Cuenta
+            </button>
+        </div>
+    </header>
+    <!-- 🚜 MAIN GAME LAYOUT -->
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        <!-- LEFT & CENTRAL GRID: THE FARM & SHOP INTERACTIVE FIELD -->
+        <main class="lg:col-span-3 flex flex-col gap-6">
+            
+            <!-- Isometric Farm Card -->
+            <div class="bg-[#2d2621] p-4 md:p-6 rounded-2xl border-4 border-[#4a3e36] shadow-2xl flex flex-col items-center justify-center relative overflow-hidden">
+                <div class="absolute top-4 left-4 z-10 flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-stone-900/60 rounded-full text-xs font-mono border border-stone-800 text-stone-300">
+                        🚜 Clic Manual: +$1 Oro
+                    </span>
+                    <span class="px-3 py-1 bg-emerald-950/60 rounded-full text-xs font-mono border border-emerald-800 text-emerald-400">
+                        🐸 Automático: Riego &amp; Cosecha Pasiva
+                    </span>
+                </div>
+                
+                <!-- Isometric Field container -->
+                <div class="perspective-container mt-8">
+                    <div id="granja" class="granja-isometrica grid grid-cols-8 grid-rows-8 gap-1 p-2">
+                        <!-- Instantiated by game.js -->
+                    </div>
+                </div>
+            </div>
+            <!-- Crops and Automate Control Panel -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Crop Selector Card -->
+                <div class="bg-[#2d2621] p-5 rounded-2xl border-4 border-[#4a3e36] shadow-xl">
+                    <h2 class="font-bold text-lg text-amber-500 mb-4 pixel-font text-xs uppercase tracking-wider">🌾 Almacén de Semillas</h2>
+                    <div class="grid grid-cols-3 gap-3">
+                        <!-- Carrot -->
+                        <button id="btn-seed-carrot" onclick="selectSeed('carrot')" class="seed-btn p-3 rounded-xl border-2 border-amber-400 bg-amber-950/20 text-center flex flex-col items-center justify-center gap-1 transition-all hover:scale-105">
+                            <span class="text-2xl">🥕</span>
+                            <span class="font-bold text-xs">Zanahoria</span>
+                            <span class="text-[10px] text-amber-400 font-mono">$5 | 8s</span>
+                        </button>
+                        <!-- Wheat -->
+                        <button id="btn-seed-wheat" onclick="selectSeed('wheat')" class="seed-btn p-3 rounded-xl border-2 border-stone-700 bg-stone-900/40 text-center flex flex-col items-center justify-center gap-1 transition-all hover:scale-105">
+                            <span class="text-2xl">🌾</span>
+                            <span class="font-bold text-xs">Trigo</span>
+                            <span class="text-[10px] text-amber-400 font-mono">$15 | 20s</span>
+                        </button>
+                        <!-- Pumpkin -->
+                        <button id="btn-seed-pumpkin" onclick="selectSeed('pumpkin')" class="seed-btn p-3 rounded-xl border-2 border-stone-700 bg-stone-900/40 text-center flex flex-col items-center justify-center gap-1 transition-all hover:scale-105">
+                            <span class="text-2xl">🎃</span>
+                            <span class="font-bold text-xs">Calabaza</span>
+                            <span class="text-[10px] text-amber-400 font-mono">$50 | 50s</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Automation scripts triggers -->
+                <div class="bg-[#2d2621] p-5 rounded-2xl border-4 border-[#4a3e36] shadow-xl flex flex-col justify-between">
+                    <div>
+                        <h2 class="font-bold text-lg text-emerald-400 mb-2 pixel-font text-xs uppercase tracking-wider">🎈 Gatito Viajero y Globos</h2>
+                        <p class="text-xs text-[#a8a29e] mb-4">El Gatito Viajero desciende en un globo aerostático cada 3 minutos sobre una parcela. Al hacer clic sobre el globo, se te enseñará un tip de programación y podrás iniciar el <strong>Desafío de 3 Preguntas</strong> para automatizar el riego con una ranita.</p>
+                    </div>
+                    <button onclick="spawnBalloonDev()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 border-b-4 border-emerald-800 text-sm font-black rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-2">
+                        <span>🎈</span> Llamar Globo del Gatito (Test)
+                    </button>
+                </div>
+            </div>
+        </main>
+        <!-- RIGHT COLUMN: STATS, SCRIPT LOG, LEADERBOARD, SHOP -->
+        <aside class="flex flex-col gap-6">
+            
+            <!-- STATS BOARD -->
+            <section class="bg-[#2d2621] p-5 rounded-2xl border-4 border-[#4a3e36] shadow-2xl">
+                <h2 class="font-bold text-stone-400 uppercase tracking-wider text-xs mb-3">Estadísticas</h2>
+                <div class="mb-4">
+                    <span class="text-xs text-stone-400 block mb-1">Oro acumulado:</span>
+                    <span id="txt-oro" class="text-3xl font-black text-amber-400 font-mono block">$0.00</span>
+                </div>
+                <div class="w-full bg-stone-900 border border-[#4a3e36] rounded-full h-4 relative overflow-hidden mb-2">
+                    <div id="barra-auto" class="bg-emerald-500 h-full rounded-full transition-all duration-500 progress-bar-glow" style="width: 0%"></div>
+                </div>
+                <div class="flex justify-between items-center text-xs">
+                    <span class="text-stone-400">Progreso Automatización</span>
+                    <span id="txt-auto" class="font-bold text-emerald-400 font-mono">0% Automatizado</span>
+                </div>
+            </section>
+            <!-- PYTHON ACTIVE SCRIPTS STATUS -->
+            <section class="bg-[#2d2621] p-5 rounded-2xl border-4 border-[#4a3e36] shadow-2xl">
+                <h2 class="font-bold text-stone-400 uppercase tracking-wider text-xs mb-3">Mis Scripts activos</h2>
+                <div class="bg-stone-900/60 p-3 rounded-xl border border-stone-800 flex items-center justify-between gap-3 hover:bg-stone-900 transition-all cursor-help" title="Un script básico en Python que simula riego automático">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🐍</span>
+                        <div>
+                            <span class="font-bold text-stone-200 block text-xs font-mono">Riego_Auto.py</span>
+                            <span class="text-[10px] text-emerald-400 font-mono">Activo - Nivel Básico</span>
+                        </div>
+                    </div>
+                    <span class="text-emerald-400 text-xs">▶</span>
+                </div>
+            </section>
+            <!-- LIVE MULTIPLAYER RANKING -->
+            <section class="bg-[#2d2621] p-5 rounded-2xl border-4 border-[#4a3e36] shadow-2xl flex-1 flex flex-col">
+                <h2 class="font-bold text-stone-400 uppercase tracking-wider text-xs mb-3">Ranking Mundial (Live)</h2>
+                <div class="overflow-x-auto rounded-xl border border-[#4a3e36] bg-stone-900/50 flex-1">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-stone-900 text-stone-400 font-bold border-b border-[#4a3e36]">
+                            <tr>
+                                <th class="p-3">Jugador</th>
+                                <th class="p-3 text-center">% Auto</th>
+                                <th class="p-3 text-right">Oro</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-ranking" class="divide-y divide-[#4a3e36] font-medium text-stone-200">
+                            <!-- Populated dynamically via game.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <!-- LANGUAGE MODULE SHOP -->
+            <section class="bg-[#2d2621] p-5 rounded-2xl border-4 border-[#4a3e36] shadow-2xl">
+                <h2 class="font-bold text-stone-400 uppercase tracking-wider text-xs mb-3">Tienda de Lenguajes</h2>
+                <div class="flex flex-col gap-3">
+                    
+                    <!-- SQL License Card -->
+                    <div class="relative bg-stone-900/80 p-4 rounded-xl border border-[#4a3e36] hover:border-blue-500/50 transition-all flex items-center justify-between">
+                        <!-- Lock overlay -->
+                        <div id="sql-locked" class="locked-overlay hidden">
+                            <svg class="padlock" viewBox="0 0 24 24">
+                                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/>
+                            </svg>
+                            <span class="text-[9px] font-bold text-stone-400 uppercase mt-1">Prestigio SQL</span>
+                        </div>
+                        <div>
+                            <span class="font-bold text-stone-200 block text-xs">Módulo SQL (Prestigio)</span>
+                            <span class="text-[10px] text-blue-400 font-bold uppercase tracking-wider block mt-0.5">Multiplicador x10</span>
+                            <span class="text-[10px] text-amber-400 font-mono mt-1 block">Costo: $5,000 Oro</span>
+                        </div>
+                        <button onclick="buyLanguageLicense('SQL')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-[10px] font-black rounded uppercase tracking-widest transition-all">
+                            Comprar
+                        </button>
+                    </div>
+                    <!-- JS License Card -->
+                    <div class="relative bg-stone-900/80 p-4 rounded-xl border border-[#4a3e36] hover:border-cyan-500/50 transition-all flex items-center justify-between">
+                        <!-- Lock overlay -->
+                        <div id="js-locked" class="locked-overlay">
+                            <svg class="padlock" viewBox="0 0 24 24">
+                                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/>
+                            </svg>
+                            <span class="text-[9px] font-bold text-stone-400 uppercase mt-1">Prestigio JS</span>
+                        </div>
+                        <div>
+                            <span class="font-bold text-stone-200 block text-xs">Módulo JavaScript (Final)</span>
+                            <span class="text-[10px] text-cyan-400 font-bold uppercase tracking-wider block mt-0.5">Multiplicador x100</span>
+                            <span class="text-[10px] text-amber-400 font-mono mt-1 block">Costo: $10,000 Oro</span>
+                        </div>
+                        <button onclick="buyLanguageLicense('JavaScript')" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-[10px] font-black rounded uppercase tracking-widest transition-all">
+                            Comprar
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </aside>
+    </div>
+    <!-- 🦉 DUOLINGO STYLE QUIZ MODAL -->
+    <div id="modal-duolingo" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 z-50">
+        <div class="bg-[#2d2621] rounded-3xl max-w-lg w-full p-6 shadow-2xl border-4 border-emerald-500 animate__animated animate__zoomIn">
+            <div class="flex items-center justify-between mb-4 border-b border-stone-700 pb-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl">🦉</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-stone-100">Desafío de la Ranita</h3>
+                        <p class="text-[10px] text-emerald-400 font-mono uppercase tracking-widest">Validación de automatización</p>
+                    </div>
+                </div>
+                <button onclick="document.getElementById('modal-duolingo').classList.add('hidden')" class="text-stone-400 hover:text-stone-200 text-xl font-bold font-mono">×</button>
+            </div>
+            
+            <p id="quiz-pregunta" class="text-stone-200 font-medium mb-4 text-sm"></p>
+            
+            <div class="bg-stone-950 text-emerald-400 p-4 rounded-2xl font-mono text-xs mb-6 border border-stone-800 shadow-inner overflow-x-auto whitespace-pre-wrap">
+                <code id="quiz-codigo" class="code-font"></code>
+            </div>
+            
+            <!-- Duolingo blocks container -->
+            <div id="quiz-opciones" class="grid grid-cols-1 gap-3 mb-6">
+                <!-- Populated dynamically via game.js -->
+            </div>
+            
+            <!-- Tips and Help -->
+            <div class="flex justify-between items-center pt-3 border-t border-stone-800">
+                <button onclick="getQuizHint()" class="text-xs font-bold text-amber-500 hover:underline uppercase tracking-wide flex items-center gap-1">
+                    💡 Pedir Pista al Gatito
+                </button>
+                <button onclick="document.getElementById('modal-duolingo').classList.add('hidden')" class="text-xs font-bold text-stone-500 hover:text-stone-300 uppercase tracking-wide">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- 🎈 GATITO VIAJERO BALLOON MODAL -->
+    <div id="modal-balloon" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 z-50">
+        <div class="bg-[#2d2621] rounded-3xl max-w-md w-full p-6 shadow-2xl border-4 border-amber-500 animate__animated animate__zoomIn">
+            <div class="flex items-center justify-between mb-4 border-b border-stone-700 pb-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-4xl">🎈</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-stone-100">¡Gatito Viajero llegó!</h3>
+                        <p class="text-[10px] text-amber-400 font-mono uppercase tracking-widest">Información para automatización</p>
+                    </div>
+                </div>
+                <button onclick="document.getElementById('modal-balloon').classList.add('hidden')" class="text-stone-400 hover:text-stone-200 text-xl font-bold font-mono">×</button>
+            </div>
+            
+            <div class="mb-6">
+                <h4 id="balloon-tema" class="font-bold text-amber-400 text-sm pixel-font uppercase tracking-wider mb-2">Tema</h4>
+                <p id="balloon-consejo" class="text-stone-300 text-sm leading-relaxed mb-4"></p>
+                <div class="p-3 bg-amber-950/20 border border-amber-500/30 rounded-xl text-xs text-amber-200/90 leading-normal">
+                    <strong>Desafío de 3 Preguntas:</strong> Para entregar el control del riego a la ranita en esta parcela, debes responder 3 preguntas lógicas del tema anterior sin equivocarte. ¿Estás listo?
+                </div>
+            </div>
+            
+            <div class="flex flex-col gap-2">
+                <button onclick="startChallengeFromBalloon()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 border-b-4 border-emerald-800 text-xs font-black rounded-xl uppercase tracking-widest transition-all">
+                    Iniciar Desafío (3 Preguntas)
+                </button>
+                <button onclick="document.getElementById('modal-balloon').classList.add('hidden')" class="w-full py-2 text-stone-500 hover:text-stone-300 text-xs font-bold uppercase tracking-wider mt-2">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- 👤 USER AUTHENTICATION MODAL -->
+    <div id="modal-auth" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
+        <div class="bg-[#2d2621] rounded-3xl max-w-sm w-full p-6 shadow-2xl border-4 border-[#4a3e36] animate__animated animate__zoomIn">
+            <h3 class="text-xl font-bold text-stone-100 mb-4 pixel-font text-xs uppercase tracking-wider text-center text-[#ea580c]">
+                👤 Conectar Cuenta
+            </h3>
+            
+            <div class="mb-4">
+                <label class="block text-xs font-bold text-stone-400 mb-1">Nombre de Usuario</label>
+                <input type="text" id="auth-username" class="w-full p-3 rounded-xl bg-stone-900 border border-[#4a3e36] text-stone-100 text-sm focus:outline-none focus:border-amber-500">
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-xs font-bold text-stone-400 mb-1">Contraseña</label>
+                <input type="password" id="auth-password" class="w-full p-3 rounded-xl bg-stone-900 border border-[#4a3e36] text-stone-100 text-sm focus:outline-none focus:border-amber-500">
+            </div>
+            
+            <div class="flex flex-col gap-2">
+                <button onclick="handleAuthAction('login')" class="w-full py-3 bg-amber-600 hover:bg-amber-500 border-b-4 border-amber-800 text-xs font-black rounded-xl uppercase tracking-widest transition-all">
+                    Iniciar Sesión
+                </button>
+                <button onclick="handleAuthAction('register')" class="w-full py-3 bg-stone-800 hover:bg-stone-700 border-b-4 border-stone-950 text-xs font-black rounded-xl uppercase tracking-widest transition-all">
+                    Registrar Nuevo
+                </button>
+                <button onclick="document.getElementById('modal-auth').classList.add('hidden')" class="w-full py-2 text-stone-500 hover:text-stone-300 text-xs font-bold uppercase tracking-wider mt-2">
+                    Continuar como Invitado
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- 🐱 FLOATING TIP NOTIFICATION BOX -->
+    <div id="notificacion-gatito" class="hidden fixed bottom-6 right-6 bg-[#2d2621] border-4 border-amber-500 p-4 rounded-2xl shadow-2xl max-w-xs animate__animated z-40">
+        <div class="flex gap-3">
+            <span class="text-3xl animate__animated animate__pulse animate__infinite">🐱</span>
+            <div>
+                <h4 id="gatito-tema" class="font-bold text-amber-400 text-xs pixel-font uppercase tracking-wider"></h4>
+                <p id="gatito-consejo" class="text-xs text-stone-300 mt-2 leading-relaxed"></p>
+                <button onclick="cerrarGatito()" class="text-[9px] mt-3 font-bold text-amber-500 uppercase tracking-widest hover:underline block">
+                    ¡Entendido!
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Connect local Auth handlers to APIs -->
+    <script>
+        function handleAuthAction(type) {
+            const u = document.getElementById('auth-username').value;
+            const p = document.getElementById('auth-password').value;
+            if (!u || !p) {
+                alert("Completa todos los campos");
+                return;
+            }
+            fetch(`/api/auth/${type}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ username: u, password: p })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.message);
+                    document.getElementById('modal-auth').classList.add('hidden');
+                    // Reset field values
+                    document.getElementById('auth-username').value = '';
+                    document.getElementById('auth-password').value = '';
+                    syncState();
+                    syncLeaderboard();
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+    </script>
+    <!-- Core Game Controller -->
+    <script src="/static/js/game.js"></script>
+</body>
+</html>
