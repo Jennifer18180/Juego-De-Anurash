@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anurash - Code & Crop</title>
+    <!-- Tailwind CSS para diseño rápido y responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Animate.css para los efectos visuales fluidos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        /* Estilo pixelado para que los assets no se vean borrosos */
+        .pixel-art { image-rendering: pixelated; }
+        /* Efecto de inclinación isométrica sutil para la granja */
+        .granja-isometrica {
+            transform: rotateX(50deg) rotateZ(-45deg);
+            transform-style: preserve-3d;
+        }
+    </style>
+</head>
+<body class="bg-[#f4ebe1] text-stone-800 font-sans min-h-screen p-6">
+
+    <!-- 🌟 CONTENEDOR PRINCIPAL INTERFAZ -->
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        <!-- 🚜 SECCIÓN IZQUIERDA Y CENTRAL: LA GRANJA -->
+        <div class="lg:col-span-3 bg-[#e6d5c3] p-6 rounded-2xl shadow-xl border-4 border-[#c8b195] flex flex-col items-center justify-center relative overflow-hidden">
+            <h1 class="text-3xl font-black tracking-wider text-[#5c4a37] mb-6">ANURASH: DIGITAL HARVEST</h1>
+            
+            <!-- Zona de la Gráfica / Terreno -->
+            <div class="w-full h-[500px] flex items-center justify-center perspective-1000">
+                <!-- Cuadrícula 8x8 Eficiente con CSS Grid -->
+                <div id="granja" class="granja-isometrica grid grid-cols-8 grid-rows-8 gap-2 bg-[#8b7355] p-3 rounded-lg shadow-2xl">
+                    <!-- Las 64 parcelas se generarán dinámicamente con JavaScript para no saturar el HTML -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 📊 SECCIÓN DERECHA: PANELES DE CONTROL (PROGRESO Y RANKING) -->
+        <div class="flex flex-col gap-6">
+            
+            <!-- PANEL ESTADÍSTICAS -->
+            <div class="bg-white p-5 rounded-2xl shadow-lg border-2 border-stone-200">
+                <h2 class="font-bold text-lg text-stone-500 uppercase tracking-wider mb-3">Mi Granja</h2>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-medium text-stone-600">Oro acumulado:</span>
+                    <span id="txt-oro" class="text-2xl font-black text-amber-500 animate__animated">$0</span>
+                </div>
+                <div class="w-full bg-stone-200 rounded-full h-4 mt-2">
+                    <div id="barra-auto" class="bg-emerald-500 h-4 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <p id="txt-auto" class="text-xs text-stone-500 mt-1 text-right">0% Automatizado</p>
+            </div>
+
+            <!-- PANEL MULTIJUGADOR (RANKING SQL LIVE) -->
+            <div class="bg-white p-5 rounded-2xl shadow-lg border-2 border-stone-200 flex-1">
+                <h2 class="font-bold text-lg text-stone-500 uppercase tracking-wider mb-3">Ranking Mundial</h2>
+                <div class="overflow-hidden rounded-xl border border-stone-100">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-stone-50 text-stone-500 font-bold">
+                            <tr>
+                                <th class="p-2">Jugador</th>
+                                <th class="p-2 text-right">% Auto</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-ranking" class="divide-y divide-stone-100 font-medium text-stone-700">
+                            <!-- Datos inyectados desde el backend de SQL -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 🦉 MODAL DEL QUIZ ESTILO DUOLINGO (Oculto por defecto) -->
+    <div id="modal-duolingo" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border-4 border-emerald-500 animate__animated animate__zoomIn">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="text-3xl">🦉</span>
+                <h3 class="text-xl font-bold text-stone-800">Desafío de la Ranita</h3>
+            </div>
+            <p id="quiz-pregunta" class="text-stone-600 font-medium mb-3"></p>
+            <div class="bg-stone-900 text-emerald-400 p-4 rounded-xl font-mono text-sm mb-4 border border-stone-700">
+                <p id="quiz-codigo"></p>
+            </div>
+            <!-- Botones/Bloques de Duolingo -->
+            <div id="quiz-opciones" class="grid grid-cols-1 gap-2 mb-6">
+                <!-- Opciones de botones dinámicos -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 🐱 NOTIFICACIÓN DEL GATITO VIAJERO -->
+    <div id="notificacion-gatito" class="hidden fixed bottom-6 right-6 bg-amber-100 border-4 border-amber-500 p-4 rounded-2xl shadow-xl max-w-xs animate__animated z-40">
+        <div class="flex gap-3">
+            <span class="text-3xl pixel-art">🐱</span>
+            <div>
+                <h4 id="gatito-tema" class="font-bold text-amber-900 text-sm"></h4>
+                <p id="gatito-consejo" class="text-xs text-amber-800 mt-1"></p>
+                <button onclick="cerrarGatito()" class="text-[10px] mt-2 font-bold text-amber-600 uppercase tracking-wider hover:underline">¡Entendido!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ⚙️ LÓGICA DE JUEGO OPTIMIZADA (JAVASCRIPT) -->
+    <script>
+        // Datos locales de simulación inicial
+        let usuarioId = 1; 
+        let parcelaSeleccionada = null;
+
+        // 1. Inicializar la cuadrícula de 8x8 de forma ultra-eficiente
+        function inicializarGranja() {
+            const granja = document.getElementById('granja');
+            granja.innerHTML = '';
+            
+            // Cambiamos el fondo del contenedor principal a verde pasto como tu imagen
+            granja.className = "granja-isometrica grid grid-cols-8 grid-rows-8 gap-1 bg-[#5c8b47] p-2 rounded-xl shadow-2xl border-b-8 border-[#3d5e2e]";
+        
+            for (let x = 0; x < 8; x++) {
+                for (let y = 0; y < 8; y++) {
+                    const celda = document.createElement('div');
+                    // Celda base con estilo de tierra/pasto indie
+                    celda.className = "w-12 h-12 bg-[#7ca655] border border-[#6b9346] hover:bg-[#8cb764] rounded transition-all cursor-pointer relative flex items-center justify-center overflow-hidden shadow-inner group";
+                    celda.id = `p-${x}-${y}`;
+                    
+                    // 🧱 CAPA 1: Efecto Matrix oculto por defecto (Solo se activa con la Ranita)
+                    const capaMatrix = document.createElement('div');
+                    capaMatrix.className = "absolute inset-0 bg-stone-950/80 hidden items-center justify-center font-mono text-[6px] text-emerald-400 opacity-40 select-none pointer-events-none tracking-tighter leading-none p-1 text-center";
+                    capaMatrix.id = `matrix-${x}-${y}`;
+                    capaMatrix.innerText = "01101\n10010\n01011\n11100";
+                    
+                    // 🌱 CAPA 2: El Cultivo Dinámico (Zanahoria, trigo, etc.)
+                    const capaCultivo = document.createElement('span');
+                    capaCultivo.className = "absolute text-xs bottom-1 left-1 animate__animated";
+                    capaCultivo.id = `cultivo-${x}-${y}`;
+                    capaCultivo.innerText = Math.random() > 0.5 ? "🌾" : "🥕"; // Vegetales iniciales de adorno
+                
+                    // 🐱 CAPA 3: El Personaje / Trabajador principal
+                    const capaAvatar = document.createElement('span');
+                    capaAvatar.className = "absolute text-xl z-10 filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)] transition-all group-hover:scale-110";
+                    capaAvatar.id = `avatar-${x}-${y}`;
+                    capaAvatar.innerText = "🤠"; // Un tierno gatico granjero inicial
+                
+                    // Armamos la celda compleja apilando las capas
+                    celda.appendChild(capaMatrix);
+                    celda.appendChild(capaCultivo);
+                    celda.appendChild(capaAvatar);
+                    
+                    celda.onclick = () => manejarClicParcela(x, y);
+                    granja.appendChild(celda);
+                }
+            }
+        }
+
+        // 2. Clic Manual: Suma +1 de Oro de forma inmediata e inicia efectos visuales
+        function manejarClicParcela(x, y) {
+            const celda = document.getElementById(`p-${x}-${y}`);
+            
+            // Si ya está automatizada, no hace nada manual
+            if (celda.classList.contains('border-emerald-400')) return;
+
+            // Si el jugador hace clic manual, puede saltar la oportunidad de automatizar con Duolingo
+            if (Math.random() > 0.7) {
+                abrirQuizDuolingo(x, y);
+                return;
+            }
+
+            // Efecto Balatro: El contador rebota cuando sumas oro
+            fetch('/game/turno', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ usuario_id: usuarioId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                actualizarInterfaz(data);
+                // Animación sutil de rebote en la celda clickeada
+                celda.classList.add('animate__animated', 'animate__rubberBand');
+                celda.addEventListener('animationend', () => celda.classList.remove('animate__animated', 'animate__rubberBand'));
+            });
+        }
+
+        // 3. Abrir el Quiz estilo Duolingo
+        function abrirQuizDuolingo(x, y) {
+            parcelaSeleccionada = {x, y};
+            // Llamamos a la API estática simulando los datos del backend
+            document.getElementById('quiz-pregunta').innerText = "Completa el código para que la ranita repita el riego 5 veces:";
+            document.getElementById('quiz-codigo').innerText = "for i in ______(5):";
+            
+            const opcionesZone = document.getElementById('quiz-opciones');
+            opcionesZone.innerHTML = '';
+            
+            const opciones = ["loop", "range", "list"];
+            opciones.forEach(opc => {
+                const btn = document.createElement('button');
+                btn.className = "w-full py-3 bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold rounded-xl border-2 border-stone-300 transition-all text-center";
+                btn.innerText = opc;
+                btn.onclick = () => enviarRespuestaQuiz(opc);
+                opcionesZone.appendChild(btn);
+            });
+
+            document.getElementById('modal-duolingo').classList.remove('hidden');
+        }
+
+        // 4. Validar respuesta con el Backend
+        function enviarRespuestaQuiz(opcion) {
+            fetch('/game/quiz/validar', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    usuario_id: usuarioId,
+                    quiz_id: 'bucle_for',
+                    opcion_seleccionada: opcion,
+                    p_x: parcelaSeleccionada.x,
+                    p_y: parcelaSeleccionada.y
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('modal-duolingo').classList.add('hidden');
+                
+                if (data.status === 'correcto') {
+                    const celda = document.getElementById(`p-${parcelaSeleccionada.x}-${parcelaSeleccionada.y}`);
+                    const avatar = document.getElementById(`avatar-${parcelaSeleccionada.x}-${parcelaSeleccionada.y}`);
+                    const matrix = document.getElementById(`matrix-${parcelaSeleccionada.x}-${parcelaSeleccionada.y}`);
+                    
+                    // 1. Desactivamos el gatico manual y traemos a la Ranita programadora con un salto
+                    avatar.innerText = "🐸"; 
+                    avatar.classList.add('animate__animated', 'animate__bounceIn');
+                    
+                    // 2. Encendemos el fondo digital estilo Matrix
+                    matrix.classList.remove('hidden');
+                    matrix.classList.add('flex', 'animate__animated', 'animate__fadeIn');
+                    
+                    // 3. Le añadimos un borde de neón brillante a la parcela automatizada
+                    celda.className = "w-12 h-12 bg-emerald-950 border-2 border-emerald-400 rounded relative flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(52,211,153,0.5)]";
+                    
+                    // Actualizamos los contadores globales en la interfaz
+                    document.getElementById('barra-auto').style.width = `${data.porcentaje_auto}%`;
+                    document.getElementById('txt-auto').innerText = `${data.porcentaje_auto}% Automatizado`;
+                    document.getElementById('row-tu-auto').innerText = `${data.porcentaje_auto}%`;
+                }
+            });
+        }
+
+        // 5. El Game Loop automático: Cada 4 segundos las ranitas generan dinero en segundo plano
+        setInterval(() => {
+            fetch('/game/turno', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ usuario_id: usuarioId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                actualizarInterfaz(data);
+            });
+        }, 4000);
+
+        // 6. Evento del Gatito Viajero (Cada 20 segundos aparece un tip didáctico)
+        setInterval(() => {
+            fetch('/game/gatito')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('gatito-tema').innerText = `🐱 Tip: ${data.tema}`;
+                document.getElementById('gatito-consejo').innerText = data.consejo;
+                const notif = document.getElementById('notificacion-gatito');
+                notif.classList.remove('hidden', 'animate__fadeOutDown');
+                notif.classList.add('animate__fadeInUp');
+            });
+        }, 20000);
+
+        function cerrarGatito() {
+            const notif = document.getElementById('notificacion-gatito');
+            notif.classList.add('animate__fadeOutDown');
+        }
+
+        function actualizarInterfaz(data) {
+            const txtOro = document.getElementById('txt-oro');
+            txtOro.innerText = `$${data.oro_total}`;
+            // Si las ranitas ganaron dinero pasivo, el marcador brilla estilo Balatro
+            if (data.oro_ganado_pasivo > 0) {
+                txtOro.classList.add('text-emerald-500', 'animate__pulse');
+                setTimeout(() => txtOro.classList.remove('text-emerald-500', 'animate__pulse'), 1000);
+            }
+        }
+
+        // Arrancar el juego al cargar la página
+        window.onload = () => {
+            inicializarGranja();
+            // Simulación de carga inicial de ranking
+            const tabla = document.getElementById('tabla-ranking');
+            tabla.innerHTML = `
+                <tr class="bg-emerald-50"><td class="p-2 font-bold text-emerald-700">🥇 MasterCoder</td><td class="p-2 text-right font-bold text-emerald-700">92%</td></tr>
+                <tr><td class="p-2">🥈 CodeNinja</td><td class="p-2 text-right">78%</td></tr>
+                <tr class="bg-stone-50"><td class="p-2 font-bold">✨ Tú (PyFarmer)</td><td class="p-2 text-right" id="row-tu-auto">0%</td></tr>
+            `;
+        };
+    </script>
+</body>
+</html>
