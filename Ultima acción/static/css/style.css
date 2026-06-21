@@ -1,0 +1,126 @@
+/* ============================================================================
+   CODE & CROP - HOJA DE ESTILOS PERSONALIZADA (EDICIÓN ANURASH)
+   ============================================================================ */
+
+/* Importación de fuentes pixeladas / retro para la identidad de Anurash */
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap');
+
+:root {
+    --color-bg-dark: #14110f;
+    --color-panel-brown: #221a14;
+    --color-border-primary: #3d3025;
+    --color-orange-anurash: #ea580c;
+    --color-gold-coin: #f59e0b;
+}
+
+/* Clases de tipografía global */
+.pixel-font {
+    font-family: 'VT323', monospace;
+    font-size: 1.45rem;
+    letter-spacing: 0.05em;
+}
+
+.mono-font {
+    font-family: 'Share Tech Mono', monospace;
+}
+
+body {
+    background-color: var(--color-bg-dark);
+    color: #f3f4f6;
+    overflow-x: hidden;
+}
+
+/* Custom Scrollbar estilo retro para los paneles laterales */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--color-bg-dark);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--color-border-primary);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-orange-anurash);
+}
+
+/* ============================================================================
+   CONTENEDORES PRINCIPALES Y AJUSTES DE DISEÑO ANTERIOR
+   ============================================================================ */
+.main-container {
+    border: 4px solid var(--color-border-primary);
+    background-color: var(--color-panel-brown);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7);
+}
+
+/* Título de Anurash con efecto neón/retro opcional */
+.anurash-title {
+    font-family: 'VT323', monospace;
+    color: var(--color-orange-anurash);
+    text-shadow: 2px 2px 0px #000;
+}
+
+/* ============================================================================
+   EFECTO DINÁMICO DE ORO FLOTANTE (FLOATING GOLD)
+   ============================================================================ */
+#plots-grid {
+    position: relative; /* Obligatorio para el cálculo tridimensional del JS */
+}
+
+.floating-gold {
+    position: absolute;
+    pointer-events: none;
+    font-family: 'VT323', monospace;
+    font-size: 1.75rem;
+    color: #fcd34d; /* Amarillo brillante */
+    text-shadow: 2px 2px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;
+    z-index: 50;
+    animation: floatUpAndFade 1s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+}
+
+@keyframes floatUpAndFade {
+    0% {
+        transform: translateY(0) scale(0.6);
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+        transform: translateY(-10px) scale(1.2);
+    }
+    100% {
+        transform: translateY(-45px) scale(1);
+        opacity: 0;
+    }
+}
+
+/* ============================================================================
+   ESTILOS ADICIONALES PARA BOTONES Y SELECTORES FORMATEADOS
+   ============================================================================ */
+select, button, input {
+    outline: none !important;
+}
+
+/* Transición suave global para el hover en las parcelas */
+#plots-grid div {
+    transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+#plots-grid div:hover {
+    transform: scale(1.03);
+    z-index: 10;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* Animaciones personalizadas de UI para elementos bloqueados */
+.plot-locked {
+    background: repeating-linear-gradient(
+        45deg,
+        #1c1917,
+        #1c1917 10px,
+        #262626 10px,
+        #262626 20px
+    );
+    opacity: 0.6;
+    cursor: not-allowed !important;
+}
