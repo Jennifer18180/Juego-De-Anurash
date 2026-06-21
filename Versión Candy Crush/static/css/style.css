@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Press+Start+2P&family=Fira+Code:wght@400;600&display=swap');
+
+/* ============================================================================
+   CODE & CROP - SISTEMA DE ESTILOS CENTRALIZADO (PYTHON-ONLY EDITION)
+   ============================================================================ */
+
+:root {
+    --bg-main: #14110f;       /* Fondo ultra oscuro acogedor */
+    --panel-bg: #221a14;      /* Marrón profundo para contenedores y paneles */
+    --border-color: #3d3025;  /* Borde rústico de madera */
+    --accent-gold: #f59e0b;   /* Color para monedas y oro */
+    --accent-emerald: #10b981;/* Color para éxitos, niveles y completados */
+    --accent-orange: #ea580c; /* Color de énfasis principal del juego */
+    --text-primary: #f3f4f6;
+    --text-secondary: #9ca3af;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: 'Outfit', sans-serif;
+    margin: 0;
+    padding: 0;
+    image-rendering: pixelated;
+    overflow-x: hidden;
+}
+
+/* Fuentes específicas de la interfaz */
+.pixel-font {
+    font-family: 'Press Start 2P', cursive;
+}
+
+.code-font {
+    font-family: 'Fira Code', monospace;
+}
+
+/* ============================================================================
+   PERSONALIZACIÓN DE BARRAS DE DESPLAZAMIENTO (SCROLLBARS)
+   ============================================================================ */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-main);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-orange);
+}
+
+/* ============================================================================
+   ESTRUCTURA Y CONTENEDORES PRINCIPALES
+   ============================================================================ */
+.game-container {
+    background-color: #0c0a09;
+    box-shadow: inset 0 0 80px rgba(234, 88, 12, 0.02);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Animación sutil de pulso para elementos activos o seleccionados */
+.pulse-active {
+    animation: sub-pulse 2s infinite ease-in-out;
+}
+
+@keyframes sub-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.03); opacity: 0.95; }
+}
+
+/* ============================================================================
+   EFECTOS EN CUADRÍCULA DE PARCELAS (PLOTS GRID)
+   =========================================================================== */
+#plots-grid div {
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s ease;
+}
+
+#plots-grid div:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.5), 0 0 0 2px var(--accent-orange);
+}
+
+/* Asegurar que los emojis de los cultivos mantengan una apariencia limpia */
+#plots-grid div span {
+    user-select: none;
+    pointer-events: none;
+}
+
+/* ============================================================================
+   SISTEMA DE ANIMACIÓN DE ORO FLOTANTE (FLOATING GOLD EFFECT)
+   ============================================================================ */
+.floating-gold {
+    position: absolute;
+    color: var(--accent-gold);
+    font-weight: 900;
+    font-size: 0.875rem; /* text-sm */
+    z-index: 50;
+    pointer-events: none;
+    user-select: none;
+    font-family: 'Fira Code', monospace;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(245, 158, 11, 0.4);
+    animation: floatUpFade 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes floatUpFade {
+    0% {
+        opacity: 1;
+        transform: translateY(10px) scale(0.8);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-40px) scale(1.2);
+    }
+}
+
+/* ============================================================================
+   ESTILOS ADICIONALES PARA MODALES Y PANELES DE CUESTIONARIOS
+   ============================================================================ */
+pre code {
+    font-family: 'Fira Code', monospace;
+    display: block;
+    line-height: 1.5;
+}
+
+/* Efecto hover suave para la lista de desafíos laterales */
+#challenges-list button {
+    transition: all 0.2s ease-in-out;
+}
+
+#challenges-list button:not(:disabled):hover {
+    transform: translateX(4px);
+}
+
+/* Ajustes globales de sombras para la UI estilo pixel/mágica */
+.shadow-retro {
+    box-shadow: 0 4px 0 0 var(--border-color);
+}
+
+.shadow-retro-active {
+    box-shadow: 0 2px 0 0 var(--border-color);
+    transform: translateY(2px);
+}

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code & Crop - Python Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="/static/css/style.css?v={{ range(1, 99999) | random }}">
+</head>
+<body class="bg-[#14110f] text-gray-100 min-h-screen selection:bg-[#ea580c] selection:text-white">
+
+    <div class="min-h-screen flex flex-col lg:flex-row game-container">
+        
+        <aside class="w-full lg:w-80 bg-[#221a14] border-b-4 lg:border-b-0 lg:border-r-4 border-[#3d3025] p-5 flex flex-col gap-5 z-10 overflow-y-auto max-h-screen">
+            <div class="text-center lg:text-left">
+                <h1 class="pixel-font text-lg font-black tracking-wider text-[#ea580c] drop-shadow-md">CODE & CROP</h1>
+                <p class="text-[10px] font-mono uppercase text-emerald-400 tracking-widest mt-1">🐍 Python Only Simulator</p>
+            </div>
+
+            <div class="bg-[#14110f]/60 rounded-xl p-4 border border-[#3d3025]">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Nivel Usuario</span>
+                    <span id="user-level" class="pixel-font text-sm text-[#ea580c] font-black">1</span>
+                </div>
+                
+                <div class="w-full bg-stone-900 h-3.5 rounded-full overflow-hidden p-0.5 border border-stone-800">
+                    <div id="user-xp-bar" class="bg-gradient-to-r from-amber-500 to-[#ea580c] h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
+                </div>
+                <div class="flex justify-end mt-1">
+                    <span id="user-xp-text" class="text-[10px] font-mono font-bold text-emerald-400">0/300 XP</span>
+                </div>
+            </div>
+
+            <div class="bg-[#14110f]/60 rounded-xl p-4 border border-[#3d3025] flex items-center justify-between shadow-inner">
+                <div class="flex flex-col">
+                    <span class="text-[10px] font-mono uppercase tracking-wider text-gray-400">Balance Oro</span>
+                    <div class="flex items-center gap-1.5 mt-0.5">
+                        <span class="text-xl">🪙</span>
+                        <span id="player-gold" class="code-font text-lg font-black text-amber-400">100.0</span>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <span class="text-[10px] font-mono uppercase text-gray-500 block">Sincronía Pasiva</span>
+                    <span id="frogs-ratio" class="text-xs font-bold text-emerald-500 bg-emerald-950/40 border border-emerald-800/30 px-2 py-0.5 rounded-md mt-1 inline-block">0/4 Ranitas</span>
+                </div>
+            </div>
+
+            <div class="bg-[#14110f]/60 rounded-xl p-4 border border-[#3d3025]">
+                <label for="crop-selector" class="text-xs font-bold text-gray-400 uppercase tracking-wide block mb-2">🌱 Semilla Activa a Plantar</label>
+                <select id="crop-selector" class="w-full bg-stone-900 border border-[#3d3025] rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-[#ea580c] cursor-pointer">
+                    </select>
+            </div>
+
+            <div class="flex-1 flex flex-col gap-4">
+                <h2 class="text-xs font-black uppercase tracking-widest text-[#ea580c] border-b border-[#3d3025] pb-1">🛒 Tienda del Mercado</h2>
+                
+                <div class="bg-[#14110f]/40 p-3 rounded-xl border border-[#3d3025] flex flex-col justify-between gap-2">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xs font-bold text-white">Ranita Automatizadora</h3>
+                            <p class="text-[10px] text-gray-400 mt-0.5">Automatiza 1 Bloque completo (4 parcelas)</p>
+                        </div>
+                        <span class="text-xs font-mono font-bold text-amber-400">🪙 1,500</span>
+                    </div>
+                    <button onclick="buyAutomatorFrog()" class="w-full bg-amber-600 border-b-4 border-amber-800 text-white py-1.5 rounded-xl font-bold uppercase text-xs tracking-wider active:transform active:translate-y-[2px] active:border-b-0 transition-all cursor-pointer">Comprar Ranita</button>
+                </div>
+
+                <div class="bg-[#14110f]/40 p-3 rounded-xl border border-[#3d3025] flex flex-col gap-2">
+                    <h4 class="text-[10px] font-mono uppercase text-gray-400 tracking-wider">Licencias de Cultivos</h4>
+                    
+                    <div class="flex justify-between items-center border-b border-[#3d3025]/50 pb-2 pt-1">
+                        <div>
+                            <span class="text-xs font-bold block text-white">🌾 Trigo (Wheat)</span>
+                            <span class="text-[9px] text-gray-500 font-mono">Nivel Mín: 2 | Genera: 30 🪙</span>
+                        </div>
+                        <button id="buy-license-wheat" onclick="buyCropLicense('wheat')" class="bg-stone-800 border border-[#3d3025] text-amber-400 px-2 py-1 rounded-lg text-[10px] font-mono font-bold hover:border-amber-500 cursor-pointer">🪙 500</button>
+                    </div>
+
+                    <div class="flex justify-between items-center border-b border-[#3d3025]/50 pb-2 pt-1">
+                        <div>
+                            <span class="text-xs font-bold block text-white">🎃 Calabaza (Pumpkin)</span>
+                            <span class="text-[9px] text-gray-500 font-mono">Nivel Mín: 3 | Genera: 100 🪙</span>
+                        </div>
+                        <button id="buy-license-pumpkin" onclick="buyCropLicense('pumpkin')" class="bg-stone-800 border border-[#3d3025] text-amber-400 px-2 py-1 rounded-lg text-[10px] font-mono font-bold hover:border-amber-500 cursor-pointer">🪙 2,000</button>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-1">
+                        <div>
+                            <span class="text-xs font-bold block text-white">🍉 Sandía (Watermelon)</span>
+                            <span class="text-[9px] text-gray-500 font-mono">Nivel Mín: 4 | Genera: 350 🪙</span>
+                        </div>
+                        <button id="buy-license-watermelon" onclick="buyCropLicense('watermelon')" class="bg-stone-800 border border-[#3d3025] text-amber-400 px-2 py-1 rounded-lg text-[10px] font-mono font-bold hover:border-amber-500 cursor-pointer">🪙 6,000</button>
+                    </div>
+                </div>
+
+                <div class="bg-[#14110f]/40 p-3 rounded-xl border border-[#3d3025] flex flex-col gap-2">
+                    <h4 class="text-[10px] font-mono uppercase text-gray-400 tracking-wider">Accesorios para Ranitas</h4>
+                    
+                    <div class="flex justify-between items-center border-b border-[#3d3025]/50 pb-2 pt-1">
+                        <div>
+                            <span class="text-xs font-bold block text-white">🎩 Sombrero de Copa</span>
+                            <span class="text-[9px] text-emerald-400 font-mono">Multiplicador: x1.1</span>
+                        </div>
+                        <button id="buy-acc-top_hat" onclick="buyAccessory('top_hat')" class="bg-stone-800 border border-[#3d3025] text-amber-400 px-2 py-1 rounded-lg text-[10px] font-mono font-bold hover:border-amber-500 cursor-pointer">🪙 400</button>
+                    </div>
+
+                    <div class="flex justify-between items-center border-b border-[#3d3025]/50 pb-2 pt-1">
+                        <div>
+                            <span class="text-xs font-bold block text-white">😎 Gafas de Sol</span>
+                            <span class="text-[9px] text-emerald-400 font-mono">Multiplicador: x1.3</span>
+                        </div>
+                        <button id="buy-acc-sunglasses" onclick="buyAccessory('sunglasses')" class="bg-stone-800 border border-[#3d3025] text-amber-400 px-2 py-1 rounded-lg text-[10px] font-mono font-bold hover:border-amber-500 cursor-pointer">🪙 1,200</button>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-1">
+                        <div>
+                            <span class="text-xs font-bold block text-white">👑 Corona de Oro</span>
+                            <span class="text-[9px] text-emerald-400 font-mono">Multiplicador: x1.8</span>
+                        </div>
+                        <button id="buy-acc-gold_crown" onclick="buyAccessory('gold_crown')" class="bg-stone-800 border border-[#3d3025] text-amber-400 px-2 py-1 rounded-lg text-[10px] font-mono font-bold hover:border-amber-500 cursor-pointer">🪙 4,500</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-auto pt-4 border-t border-[#3d3025]/60 flex justify-between items-center">
+                <span class="text-xs font-mono text-stone-500">v2.0 Radical</span>
+                <a href="/logout" class="text-xs text-red-400 font-bold hover:underline uppercase tracking-wider">Cerrar Sesión</a>
+            </div>
+        </aside>
+
+        <main class="flex-1 p-6 flex flex-col justify-center items-center overflow-y-auto">
+            <div class="w-full max-w-5xl">
+                <div class="bg-[#221a14]/30 rounded-2xl border-4 border-[#3d3025] p-6 shadow-2xl relative min-h-[450px] flex items-center justify-center">
+                    <div id="plots-grid" class="grid grid-cols-4 gap-4 max-w-xl mx-auto p-4">
+                        </div>
+                </div>
+            </div>
+        </main>
+
+        <aside class="w-full lg:w-80 bg-[#221a14] border-t-4 lg:border-t-0 lg:border-l-4 border-[#3d3025] p-5 flex flex-col gap-4 max-h-screen overflow-y-auto z-10">
+            <div>
+                <h2 class="pixel-font text-xs font-black tracking-wider text-[#ea580c] uppercase">Cuestionarios</h2>
+                <p class="text-[10px] font-mono text-emerald-400 uppercase mt-0.5">🎓 45 Preguntas Reales Python</p>
+                <p class="text-[9px] text-gray-400 mt-1">Completa cada bloque de 3 pasos consecutivos para ganar <span class="text-amber-400 font-bold">+500 🪙</span> y <span class="text-emerald-400 font-bold">+100 XP</span>.</p>
+            </div>
+
+            <div id="challenges-list" class="flex-1 flex flex-col gap-2 pr-1">
+                </div>
+        </aside>
+
+    </div>
+
+    <div id="quiz-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 hidden animate__animated animate__fadeIn duration-200">
+        <div class="bg-[#221a14] w-full max-w-xl rounded-2xl border-4 border-[#ea580c] p-6 shadow-2xl flex flex-col justify-between max-h-[90vh] overflow-y-auto animate__animated animate__zoomIn duration-300">
+            
+            <div class="flex flex-col">
+                <div class="flex justify-between items-center border-b border-[#3d3025] pb-2 mb-4">
+                    <h3 id="quiz-title" class="text-sm font-black text-[#ea580c] font-mono tracking-wider uppercase">DESAFÍO PYTHON</h3>
+                    <span class="text-xs bg-[#ea580c]/20 text-[#ea580c] px-2 py-0.5 rounded-md font-mono font-bold">🐍 Python Core</span>
+                </div>
+                
+                <p id="quiz-question" class="text-sm font-extrabold mb-4 text-white leading-relaxed"></p>
+                
+                <pre id="quiz-code" class="bg-[#14110f] p-4 rounded-xl border border-[#3d3025] text-xs text-emerald-300 font-mono overflow-x-auto mb-5 max-h-48 shadow-inner hidden"></pre>
+                
+                <div id="quiz-options" class="grid grid-cols-1 gap-3 mb-4">
+                    </div>
+            </div>
+
+            <div class="flex gap-3 justify-end border-t border-[#3d3025] pt-4 mt-2">
+                <button id="btn-hint" class="bg-[#2563eb] border-b-4 border-[#1d4ed8] text-white px-4 py-2 rounded-xl font-bold uppercase text-xs tracking-wider active:transform active:translate-y-[2px] active:border-b-0 cursor-pointer transition-all hover:bg-blue-500">Pedir Pista</button>
+                <button onclick="closeQuizModal()" class="bg-stone-700 border-b-4 border-stone-900 text-white px-4 py-2 rounded-xl font-bold uppercase text-xs tracking-wider active:transform active:translate-y-[2px] active:border-b-0 cursor-pointer transition-all hover:bg-stone-600">Cancelar Desafío</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="/static/js/game.js?v={{ range(1, 99999) | random }}"></script>
+</body>
+</html>
