@@ -1,252 +1,168 @@
 import datetime
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash
+
 db = SQLAlchemy()
+
+# ============================================================================
+# MODELO DE USUARIO / AGRICULTOR DE ANURASH
+# ============================================================================
 class Usuario(db.Model):
     __tablename__ = 'usuarios'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
-    gold = db.Column(db.Float, default=100.0)
-    prestige_count = db.Column(db.Integer, default=0)
-    active_language = db.Column(db.String(20), default='Python') # 'Python', 'SQL', 'JavaScript'
-    total_gold_earned = db.Column(db.Float, default=0.0)
-    last_sync = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     
-    parcelas = db.relationship('Parcela', backref='dueno', lazy=True, cascade="all, delete-orphan")
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-        
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password_hash = db.Column(db.String(120), nullable=False)
+    
+    # Economía y Progreso
+    gold = db.Column(db.Float, default=100.0)
+    total_gold_earned = db.Column(db.Float, default=100.0)
+    level = db.Column(db.Integer, default=1)
+    xp = db.Column(db.Integer, default=0)
+    
+    # Mecánicas de la Granja
+    unlocked_crops = db.Column(db.String(255), default="carrot")  # Separados por comas: e.g., "carrot,wheat"
+    active_crop = db.Column(db.String(50), default="carrot")
+    equipped_accessory = db.Column(db.String(50), default="")     # top_hat, sunglasses, gold_crown
+    frogs_count = db.Column(db.Integer, default=0)                # Multiplicador de automatización por bloques
+    
+    # Auditoría e inventario histórico (Guardado modular de cuestionarios completados)
+    bought_accessories = db.Column(db.Text, default="")           # Almacena "q_1,q_2" para cuestionarios resueltos
+    last_sync = db.Column(db.DateTime, default=datetime.datetime.utcnow, nullable=False)
+    
+    # Relación inversa estricta de las 64 parcelas
+    plots = db.relationship('Parcela', backref='usuario', lazy=True, cascade="all, delete-orphan")
+
+
+# ============================================================================
+# MODELO DE PARCELA (ESTRUCTURA DE MAPA FISICO PERSISTENTE)
+# ============================================================================
 class Parcela(db.Model):
     __tablename__ = 'parcelas'
+    
     id = db.Column(db.Integer, primary_key=True)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
-    plot_index = db.Column(db.Integer, nullable=False, default=0)  # 0..63 grid index
-    posicion_x = db.Column(db.Integer, nullable=False)
-    posicion_y = db.Column(db.Integer, nullable=False)
-    cultivo = db.Column(db.String(20), default='vacio') # 'vacio', 'dirt', 'carrot', 'wheat', 'pumpkin'
-    status = db.Column(db.String(20), default='empty') # 'empty', 'growing', 'ready'
-    grow_progress = db.Column(db.Float, default=0.0) # 0.0 to 100.0
-    automatizada = db.Column(db.Boolean, default=False)
-    nivel_auto = db.Column(db.Integer, default=0) # 0: Manual, 1: Python, 2: SQL, 3: JS
-    last_updated = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    plot_index = db.Column(db.Integer, nullable=False)            # Índices fijos del 0 al 63
+    
+    cultivo = db.Column(db.String(50), default="vacio")           # vacio, dirt, carrot, wheat, pumpkin, watermelon
+    status = db.Column(db.String(50), default="idle")             # idle, growing, ready
+    grow_progress = db.Column(db.Float, default=0.0)              # De 0.0 a 100.0 %
+    automatizada = db.Column(db.Boolean, default=False)           # Calculado en base a bloques de ranitas
+
+
+# ============================================================================
+# MODELO DE CUESTIONARIOS CORE DE PYTHON
+# ============================================================================
 class Quiz(db.Model):
     __tablename__ = 'quizzes'
+    
     id = db.Column(db.Integer, primary_key=True)
-    language = db.Column(db.String(20), nullable=False) # 'Python', 'SQL', 'JavaScript'
-    difficulty = db.Column(db.String(20), default='easy')
+    quiz_group_id = db.Column(db.Integer, nullable=False)         # Identificador del bloque de desafío (1 al 15)
+    step = db.Column(db.Integer, nullable=False)                  # Pasos secuenciales indexados: 0, 1 o 2 (Paso 1, 2 y 3)
+    difficulty = db.Column(db.String(20), default="easy")
+    
     question = db.Column(db.Text, nullable=False)
-    code_snippet = db.Column(db.Text)
-    option_a = db.Column(db.String(100), nullable=False)
-    option_b = db.Column(db.String(100), nullable=False)
-    option_c = db.Column(db.String(100), nullable=False)
-    option_d = db.Column(db.String(100), nullable=False)
-    correct_option = db.Column(db.String(1), nullable=False) # 'A', 'B', 'C', 'D'
-    hint = db.Column(db.Text)
+    code_snippet = db.Column(db.Text, default="")                 # Bloques opcionales de sintaxis a evaluar
+    
+    option_a = db.Column(db.String(200), nullable=False)
+    option_b = db.Column(db.String(200), nullable=False)
+    option_c = db.Column(db.String(200), nullable=False)
+    option_d = db.Column(db.String(200), nullable=False)
+    
+    correct_option = db.Column(db.String(1), nullable=False)       # 'A', 'B', 'C' o 'D'
+    hint = db.Column(db.Text, default="")
+
+
+# ============================================================================
+# SIEMBRA AUTOMÁTICA DE CUESTIONARIOS REQUERIDOS (SEED DATA)
+# ============================================================================
 def seed_quizzes():
-    # Only seed if quizzes table is empty
+    """Inserta la base de cuestionarios de 3 pasos si la tabla se encuentra vacía."""
     if Quiz.query.first() is not None:
-        return
-    quizzes_data = [
-        # --- PYTHON QUIZZES ---
+        return  # Evitar duplicaciones si ya existen datos precargados
+
+    python_challenges = [
+        # --- DESAFÍO 1: FUNDAMENTOS Y OPERADORES ---
         {
-            "language": "Python",
-            "difficulty": "easy",
-            "question": "¿Cuál es la función en Python para generar una secuencia de números y repetir una acción en un bucle 'for'?",
-            "code_snippet": "for i in ______(5):\n    regar_cultivo(i)",
-            "option_a": "loop",
-            "option_b": "range",
-            "option_c": "sequence",
-            "option_d": "repeat",
-            "correct_option": "B",
-            "hint": "Genera números desde 0 hasta el límite indicado. Muy usada en bucles iterativos."
+            "group_id": 1, "step": 0,
+            "question": "¿Cuál es el resultado de evaluar la expresión 11 // 3 en Python?",
+            "code_snippet": "resultado = 11 // 3\nprint(resultado)",
+            "a": "3.666...", "b": "3", "c": "2", "d": "None", "correct": "B",
+            "hint": "El operador // ejecuta una división entera, truncando el residuo decimal."
         },
         {
-            "language": "Python",
-            "difficulty": "easy",
-            "question": "¿Cómo se define una condición para verificar si tenemos suficiente oro en Python?",
-            "code_snippet": "______ oro >= 100:\n    comprar_semillas()",
-            "option_a": "when",
-            "option_b": "case",
-            "option_c": "if",
-            "option_d": "check",
-            "correct_option": "C",
-            "hint": "Es la palabra clave para bifurcaciones lógicas básicas."
+            "group_id": 1, "step": 1,
+            "question": "¿Qué operador aritmético se utiliza para calcular la potencia de un número en Python?",
+            "code_snippet": "base = 2\nexponente = 3\n# ¿Qué operador va aquí para obtener 8?",
+            "a": "^", "b": "pow", "c": "**", "d": "exp", "correct": "C",
+            "hint": "En Python, elevar un número a una potencia requiere el uso de dos asteriscos consecutivos."
         },
         {
-            "language": "Python",
-            "difficulty": "medium",
-            "question": "¿Cómo se define una función para regar una parcela en Python?",
-            "code_snippet": "______ regar_parcela(id):\n    print('Regando...')",
-            "option_a": "func",
-            "option_b": "function",
-            "option_c": "def",
-            "option_d": "define",
-            "correct_option": "C",
-            "hint": "Abreviatura de 'define' en Python."
+            "group_id": 1, "step": 2,
+            "question": "¿De qué tipo de dato nativo será la variable resultante tras ejecutar la operación 10 / 2?",
+            "code_snippet": "x = 10 / 2\nprint(type(x))",
+            "a": "<class 'int'>", "b": "<class 'float'>", "c": "<class 'double'>", "d": "<class 'decimal'>", "correct": "B",
+            "hint": "El operador de división única / siempre produce un resultado de tipo float, incluso si el resultado es exacto."
+        },
+
+        # --- DESAFÍO 2: ESTRUCTURAS DE CONTROL ---
+        {
+            "group_id": 2, "step": 0,
+            "question": "¿Qué palabra clave se utiliza en Python para encadenar múltiples condiciones condicionales alternativas?",
+            "code_snippet": "if x > 0:\n    print('Positivo')\n# ¿Qué palabra va aquí?\n     print('Negativo')",
+            "a": "else if", "b": "elseif", "c": "elif", "d": "switch", "correct": "C",
+            "hint": "Python fusiona 'else' e 'if' en la estructura simplificada nativa 'elif'."
         },
         {
-            "language": "Python",
-            "difficulty": "medium",
-            "question": "¿Qué método se utiliza para añadir un nuevo vegetal a la lista de inventario en Python?",
-            "code_snippet": "inventario = ['zanahoria']\ninventario.______('trigo')",
-            "option_a": "add",
-            "option_b": "push",
-            "option_c": "append",
-            "option_d": "insert",
-            "correct_option": "C",
-            "hint": "Este método agrega un elemento al final de una lista existente."
+            "group_id": 2, "step": 1,
+            "question": "¿Cuántas veces se imprimirá la palabra 'Anurash' en la consola con el siguiente ciclo?",
+            "code_snippet": "for i in range(2, 5):\n    print('Anurash')",
+            "a": "5 veces", "b": "3 veces", "c": "2 veces", "d": "4 veces", "correct": "B",
+            "hint": "La función range(inicio, fin) es exclusiva en su límite superior. Evaluará los índices 2, 3 y 4."
         },
         {
-            "language": "Python",
-            "difficulty": "hard",
-            "question": "¿Cuál es la forma correcta de manejar un error al cosechar una planta inexistente?",
-            "code_snippet": "______:\n    cosechar(parcela)\nexcept Exception as e:\n    print('Error!')",
-            "option_a": "try",
-            "option_b": "catch",
-            "option_c": "attempt",
-            "option_d": "safe",
-            "correct_option": "A",
-            "hint": "En Python, los bloques de excepciones usan 'try' y 'except'."
-        },
-        # --- SQL QUIZZES ---
-        {
-            "language": "SQL",
-            "difficulty": "easy",
-            "question": "¿Qué consulta se usa para obtener todas las parcelas de la base de datos?",
-            "code_snippet": "______ * FROM parcelas;",
-            "option_a": "GET",
-            "option_b": "SELECT",
-            "option_c": "SHOW",
-            "option_d": "EXTRACT",
-            "correct_option": "B",
-            "hint": "Es la cláusula principal para realizar consultas en bases de datos relacionales."
-        },
-        {
-            "language": "SQL",
-            "difficulty": "easy",
-            "question": "¿Cómo filtramos las parcelas de la granja que están automatizadas?",
-            "code_snippet": "SELECT * FROM parcelas ______ automatizada = 1;",
-            "option_a": "HAVING",
-            "option_b": "WHEN",
-            "option_c": "WHERE",
-            "option_d": "FILTER",
-            "correct_option": "C",
-            "hint": "Se utiliza para filtrar registros basados en condiciones específicas."
-        },
-        {
-            "language": "SQL",
-            "difficulty": "medium",
-            "question": "¿Qué instrucción SQL se usa para cambiar el estado de una parcela a 'ready'?",
-            "code_snippet": "______ parcelas SET status = 'ready' WHERE id = 5;",
-            "option_a": "CHANGE",
-            "option_b": "SET",
-            "option_c": "UPDATE",
-            "option_d": "MODIFY",
-            "correct_option": "C",
-            "hint": "Modifica registros existentes en una tabla."
-        },
-        {
-            "language": "SQL",
-            "difficulty": "medium",
-            "question": "¿Qué función agregada calcula la suma total del oro de todos los usuarios?",
-            "code_snippet": "SELECT ______(gold) FROM usuarios;",
-            "option_a": "TOTAL",
-            "option_b": "ADD",
-            "option_c": "SUM",
-            "option_d": "COUNT",
-            "correct_option": "C",
-            "hint": "Suma los valores numéricos de una columna seleccionada."
-        },
-        {
-            "language": "SQL",
-            "difficulty": "hard",
-            "question": "¿Cómo eliminamos los registros de parcelas muertas o secas?",
-            "code_snippet": "______ FROM parcelas WHERE status = 'seca';",
-            "option_a": "REMOVE",
-            "option_b": "DROP",
-            "option_c": "DELETE",
-            "option_d": "CLEAR",
-            "correct_option": "C",
-            "hint": "Diferencia entre eliminar filas ('DELETE') y borrar la estructura de la tabla ('DROP')."
-        },
-        # --- JAVASCRIPT QUIZZES ---
-        {
-            "language": "JavaScript",
-            "difficulty": "easy",
-            "question": "¿Cómo declaramos una variable mutable para guardar el oro en JavaScript moderno?",
-            "code_snippet": "______ oro = 0;",
-            "option_a": "var",
-            "option_b": "let",
-            "option_c": "const",
-            "option_d": "int",
-            "correct_option": "B",
-            "hint": "Reemplazó a 'var' en ES6 para declarar variables con ámbito de bloque."
-        },
-        {
-            "language": "JavaScript",
-            "difficulty": "easy",
-            "question": "¿Qué función de ventana o temporizador ejecuta una función de riego repetidamente cada 2 segundos?",
-            "code_snippet": "______(regar, 2000);",
-            "option_a": "setTimeout",
-            "option_b": "setInterval",
-            "option_c": "runEvery",
-            "option_d": "waitAndRun",
-            "correct_option": "B",
-            "hint": "Ejecuta de forma periódica e indefinida una función cada intervalo de milisegundos."
-        },
-        {
-            "language": "JavaScript",
-            "difficulty": "medium",
-            "question": "¿Cuál es la sintaxis correcta para declarar una función flecha (arrow function) llamada regar?",
-            "code_snippet": "const regar = ______ {\n    console.log('Riego JS');\n};",
-            "option_a": "() ->",
-            "option_b": "function()",
-            "option_c": "() =>",
-            "option_d": "=> ()",
-            "correct_option": "C",
-            "hint": "Se introdujo en ES6 y utiliza el operador 'flecha gorda'."
-        },
-        {
-            "language": "JavaScript",
-            "difficulty": "medium",
-            "question": "¿Cómo seleccionamos el elemento HTML del contador de oro en el DOM?",
-            "code_snippet": "const el = document.______('#txt-oro');",
-            "option_a": "getElementById",
-            "option_b": "find",
-            "option_c": "querySelector",
-            "option_d": "getElement",
-            "correct_option": "C",
-            "hint": "Selecciona el primer elemento que coincide con un selector CSS."
-        },
-        {
-            "language": "JavaScript",
-            "difficulty": "hard",
-            "question": "¿Qué método de arreglos itera y transforma las parcelas en sus nuevos estados de crecimiento?",
-            "code_snippet": "const nuevosEstados = parcelas.______(p => p.grow());",
-            "option_a": "forEach",
-            "option_b": "map",
-            "option_c": "filter",
-            "option_d": "reduce",
-            "correct_option": "B",
-            "hint": "Crea un nuevo array con los resultados de la llamada a la función indicada aplicados a cada elemento."
+            "group_id": 2, "step": 2,
+            "question": "¿Qué hace la instrucción 'break' cuando se ejecuta dentro de un bucle while o for?",
+            "code_snippet": "while True:\n    if condicion:\n        break",
+            "a": "Pausa el bucle temporalmente", "b": "Salta a la siguiente iteración del ciclo", "c": "Finaliza y rompe inmediatamente el bucle", "d": "Reinicia el script", "correct": "C",
+            "hint": "La instrucción break interrumpe de forma absoluta el ciclo actual y transfiere el control a la línea posterior al bucle."
         }
     ]
-    for q in quizzes_data:
-        quiz = Quiz(
-            language=q["language"],
-            difficulty=q["difficulty"],
+
+    # Bucle expansivo para autogenerar datos simulados del resto de los 15 desafíos del plan
+    for g_id in range(3, 16):
+        python_challenges.append({
+            "group_id": g_id, "step": 0,
+            "question": f"¿[Módulo {g_id} - Paso 1] Qué retorna la función nativa len() si se le pasa una lista vacía?",
+            "code_snippet": "print(len([]))",
+            "a": "None", "b": "0", "c": "1", "d": "Raises Error", "correct": "B", "hint": "Una estructura sin elementos tiene longitud cero."
+        })
+        python_challenges.append({
+            "group_id": g_id, "step": 1,
+            "question": f"¿[Módulo {g_id} - Paso 2] Cómo se añade un elemento al final de una lista en Python?",
+            "code_snippet": "mi_lista = [1, 2]\n# ¿Qué método va aquí?",
+            "a": "add()", "b": "push()", "c": "append()", "d": "insert()", "correct": "C", "hint": "El método append añade un elemento al final del contenedor mutante."
+        })
+        python_challenges.append({
+            "group_id": g_id, "step": 2,
+            "question": f"¿[Módulo {g_id} - Paso 3] Cuál es la salida correcta de este condicional booleano de control?",
+            "code_snippet": "print(True and False)",
+            "a": "True", "b": "False", "c": "None", "d": "Error", "correct": "B", "hint": "El operador lógico 'and' requiere que ambas expresiones sean verdaderas."
+        })
+
+    # Inyección controlada por transacciones a la base de datos
+    for q in python_challenges:
+        nuevo_quiz = Quiz(
+            quiz_group_id=q["group_id"],
+            step=q["step"],
             question=q["question"],
             code_snippet=q["code_snippet"],
-            option_a=q["option_a"],
-            option_b=q["option_b"],
-            option_c=q["option_c"],
-            option_d=q["option_d"],
-            correct_option=q["correct_option"],
+            option_a=q["a"],
+            option_b=q["b"],
+            option_c=q["c"],
+            option_d=q["d"],
+            correct_option=q["correct"],
             hint=q["hint"]
         )
-        db.session.add(quiz)
-    
+        db.session.add(nuevo_quiz)
+        
     db.session.commit()

@@ -1,0 +1,353 @@
+PYTHON_QUIZ_BANCO = {
+    "Principiante": {
+        "Cuestionario_1": [
+            {
+                "pregunta": "¿Cuál es la salida correcta de este código?",
+                "codigo": "print(type(5.0))",
+                "opciones": ["A) <class 'int'>", "B) <class 'float'>", "C) <class 'str'>", "D) <class 'list'>"],
+                "correcta": "B",
+                "pista": "Cualquier número que contenga un punto decimal es considerado un 'float' en Python."
+            },
+            {
+                "pregunta": "¿Cómo se declara una variable de texto (string) válida?",
+                "codigo": "# Elige la sintaxis correcta",
+                "opciones": ["A) x = 'Hola'", "B) x = Hola", "C) string x = \"Hola\"", "D) x = [Hola]"],
+                "correcta": "A",
+                "pista": "Las cadenas de texto en Python se definen usando comillas simples o dobles, sin declarar el tipo de dato."
+            },
+            {
+                "pregunta": "¿Qué operador calcula el residuo de una división?",
+                "codigo": "residuo = 10 ? 3",
+                "opciones": ["A) /", "B) //", "C) %", "D) ^"],
+                "correcta": "C",
+                "pista": "El operador de módulo (%) nos devuelve el resto que queda tras dividir dos números enteros."
+            }
+        ],
+        "Cuestionario_2": [
+            {
+                "pregunta": "¿Cuál es el resultado de la siguiente evaluación lógica?",
+                "codigo": "x = True\ny = False\nprint(x and not y)",
+                "opciones": ["A) True", "B) False", "C) None", "D) SyntaxError"],
+                "correcta": "A",
+                "pista": "'not y' invierte el False a True. Luego, True 'and' True resulta en verdadero."
+            },
+            {
+                "pregunta": "¿Cómo agregas un elemento al final de una lista existente?",
+                "codigo": "mi_lista = [1, 2]",
+                "opciones": ["A) mi_lista.add(3)", "B) mi_lista.append(3)", "C) mi_lista.push(3)", "D) mi_lista.insert(3)"],
+                "correcta": "B",
+                "pista": "El método 'append' añade un único elemento al final de la colección modificando la lista original."
+            },
+            {
+                "pregunta": "¿Cuál es el valor final de la variable 'contador'?",
+                "codigo": "contador = 5\ncontador += 3",
+                "opciones": ["A) 5", "B) 3", "C) 8", "D) 15"],
+                "correcta": "C",
+                "pista": "El operador `+=` suma el valor de la derecha directamente a la variable actual y reasigna el resultado."
+            }
+        ],
+        "Cuestionario_3": [
+            {
+                "pregunta": "¿Cuántas veces se imprimirá la palabra 'Hola'?",
+                "codigo": "for i in range(0, 3):\n    print('Hola')",
+                "opciones": ["A) 2 veces", "B) 3 veces", "C) 4 veces", "D) Infinitas veces"],
+                "correcta": "B",
+                "pista": "`range(0, 3)` genera los índices 0, 1 y 2. El número de parada final nunca se incluye."
+            },
+            {
+                "pregunta": "¿Qué método se usa para convertir un texto a mayúsculas?",
+                "codigo": "texto = 'hola'\nprint(texto.____())",
+                "opciones": ["A) upper", "B) capitalize", "C) permanent", "D) toUpper"],
+                "correcta": "A",
+                "pista": "En las cadenas de Python, el método `.upper()` devuelve una copia del texto completamente en mayúsculas."
+            },
+            {
+                "pregunta": "¿Qué ocurre al intentar acceder a un índice que no existe en la lista?",
+                "codigo": "lista = [10, 20]\nprint(lista[2])",
+                "opciones": ["A) 20", "B) None", "C) IndexError", "D) ValueError"],
+                "correcta": "C",
+                "pista": "Python lanza un 'IndexError' cuando intentas buscar una posición fuera de los límites de una secuencia."
+            }
+        ],
+        "Cuestionario_4": [
+            {
+                "pregunta": "¿Cómo se define correctamente una función con un parámetro?",
+                "codigo": "# Selecciona la opción nativa",
+                "opciones": ["A) function saludar(nombre):", "B) def saludar[nombre]:", "C) def saludar(nombre):", "D) void saludar(nombre)"],
+                "correcta": "C",
+                "pista": "Se usa la palabra reservada 'def', seguida del nombre, sus parámetros en paréntesis y dos puntos."
+            },
+            {
+                "pregunta": "¿Qué devolverá esta función si no tiene una sentencia return explícita?",
+                "codigo": "def calcular():\n    pass\n\nprint(calcular())",
+                "opciones": ["A) 0", "B) None", "C) False", "D) Un error de sintaxis"],
+                "correcta": "B",
+                "pista": "Si una función finaliza su ejecución sin retornar un valor concreto, por defecto devuelve el objeto especial 'None'."
+            },
+            {
+                "pregunta": "¿Qué estructura de datos no permite elementos duplicados?",
+                "codigo": "mi_estructura = {1, 2, 2, 3}",
+                "opciones": ["A) Listas", "B) Diccionarios", "C) Tuplas", "D) Sets (Conjuntos)"],
+                "correcta": "D",
+                "pista": "Los conjuntos o 'sets' se definen con llaves `{}` y eliminan automáticamente cualquier valor repetido."
+            }
+        ],
+        "Cuestionario_5": [
+            {
+                "pregunta": "¿Cómo se accede al valor asignado a la clave 'edad'?",
+                "codigo": "usuario = {'nombre': 'Ana', 'edad': 25}",
+                "opciones": ["A) usuario(edad)", "B) usuario['edad']", "C) usuario.edad", "D) usuario[1]"],
+                "correcta": "B",
+                "pista": "Para consultar un diccionario en Python puro se utilizan los corchetes pasando la clave exacta como cadena."
+            },
+            {
+                "pregunta": "¿Qué bloque de control se ejecuta SIEMPRE en un manejo de excepciones?",
+                "codigo": "try:\n    # código\nexcept:\n    # manejo\n____:\n    print('Fin')",
+                "opciones": ["A) else", "B) finally", "C) catch", "D) always"],
+                "correcta": "B",
+                "pista": "El bloque 'finally' se ejecutará obligatoriamente, ocurra o no ocurra un error dentro del try."
+            },
+            {
+                "pregunta": "¿Cuál es la forma recomendada para abrir y cerrar un archivo de forma segura?",
+                "codigo": "# Elige la mejor práctica",
+                "opciones": ["A) open('datos.txt')", "B) with open('datos.txt') as f:", "C) file.open('datos.txt')", "D) read('datos.txt')"],
+                "correcta": "B",
+                "pista": "El administrador de contexto 'with' asegura que el archivo se cierre automáticamente incluso si ocurre un error."
+            }
+        ]
+    },
+    "Intermedio": {
+        "Cuestionario_1": [
+            {
+                "pregunta": "¿Cuál es la salida de la siguiente List Comprehension?",
+                "codigo": "resultado = [x*2 for x in range(3)]\nprint(resultado)",
+                "opciones": ["A) [0, 2, 4]", "B) [2, 4, 6]", "C) [0, 1, 2]", "D) [0, 2, 4, 6]"],
+                "correcta": "A",
+                "pista": "`range(3)` entrega 0, 1 y 2. La expresión multiplica cada número secuencialmente por 2."
+            },
+            {
+                "pregunta": "¿Qué tipo de datos genera la función incorporada `zip`?",
+                "codigo": "letras = ['a', 'b']\nnums = [1, 2]\nprint(list(zip(letras, nums)))",
+                "opciones": ["A) [['a', 1], ['b', 2]]", "B) [('a', 1), ('b', 2)]", "C) {'a': 1, 'b': 2}", "D) ('a', 1, 'b', 2)"],
+                "correcta": "B",
+                "pista": "`zip()` empareja los elementos de varios iterables creando tuplas indexadas por posición."
+            },
+            {
+                "pregunta": "¿Cómo se declara un parámetro opcional con un valor por defecto?",
+                "codigo": "# Selecciona la cabecera correcta",
+                "opciones": ["A) def f(x=10):", "B) def f(int x = 10):", "C) def f(optional x):", "D) def f(?x):"],
+                "correcta": "A",
+                "pista": "Basta con usar el operador `=` en la lista de argumentos para definir su valor por defecto."
+            }
+        ],
+        "Cuestionario_2": [
+            {
+                "pregunta": "¿Cuál es el resultado de realizar el siguiente corte (slicing)?",
+                "codigo": "num = [10, 20, 30, 40, 50]\nprint(num[1:4])",
+                "opciones": ["A) [20, 30, 40, 50]", "B) [10, 20, 30]", "C) [20, 30, 40]", "D) [20, 40]"],
+                "correcta": "C",
+                "pista": "El rebanado va desde el índice de inicio (inclusivo) hasta el índice final (exclusivo)."
+            },
+            {
+                "pregunta": "¿Qué palabra reservada convierte una función común en un generador?",
+                "codigo": "def mi_generador():\n    ____ 1",
+                "opciones": ["A) return", "B) send", "C) yield", "D) next"],
+                "correcta": "C",
+                "pista": "`yield` pausa la función guardando su estado y devuelve el valor al iterador externo."
+            },
+            {
+                "pregunta": "¿Cómo se hereda de una clase base en la programación orientada a objetos?",
+                "codigo": "class Hijo(____):",
+                "opciones": ["A) Padre", "B) class Padre", "C) extends Padre", "D) implements Padre"],
+                "correcta": "A",
+                "pista": "En Python, la herencia se establece colocando el nombre de la clase padre entre paréntesis al declarar la clase hija."
+            }
+        ],
+        "Cuestionario_3": [
+            {
+                "pregunta": "¿Qué método dunder (mágico) actúa como el constructor inicializador de una clase?",
+                "codigo": "class Auto:\n    def ____(self):\n        pass",
+                "opciones": ["A) __start__", "B) __init__", "C) __new__", "D) __construct__"],
+                "correcta": "B",
+                "pista": "El método `__init__` inicializa los atributos de una nueva instancia de clase recién creada."
+            },
+            {
+                "pregunta": "¿Cuál es el propósito del parámetro `self` dentro de los métodos?",
+                "codigo": "def arrancar(self):",
+                "opciones": ["A) Representa a la clase global", "B) Hace referencia a la instancia específica del objeto", "C) Es una variable del sistema", "D) Evita errores de indentación"],
+                "correcta": "B",
+                "pista": "`self` apunta al objeto concreto sobre el cual se está llamando el método para leer sus atributos individuales."
+            },
+            {
+                "pregunta": "¿Cuál es la salida al aplicar `sorted()` directamente sobre este diccionario?",
+                "codigo": "d = {'c': 3, 'a': 1, 'b': 2}\nprint(sorted(d))",
+                "opciones": ["A) ['a', 'b', 'c']", "B) [1, 2, 3]", "C) [('a', 1), ('b', 2), ('c', 3)]", "D) {'a': 1, 'b': 2, 'c': 3}"],
+                "correcta": "A",
+                "pista": "Por defecto, al iterar o procesar un diccionario se toman únicamente sus llaves ('keys'), ordenándolas alfabéticamente."
+            }
+        ],
+        "Cuestionario_4": [
+            {
+                "pregunta": "¿Qué salida produce combinar una función lambda con el mapeo map()?",
+                "codigo": "nums = [1, 2, 3]\nprint(list(map(lambda x: x ** 2, nums)))",
+                "opciones": ["A) [1, 4, 9]", "B) [2, 4, 6]", "C) [1, 2, 3]", "D) [1, 8, 27]"],
+                "correcta": "A",
+                "pista": "La función lambda eleva al cuadrado (`** 2`) cada elemento iterado de la lista original."
+            },
+            {
+                "pregunta": "¿Qué herramienta del módulo collections provee valores por defecto automáticos ante llaves faltantes?",
+                "codigo": "from collections import ____",
+                "opciones": ["A) DefaultDict", "B) defaultdict", "C) AutoDict", "D) safe_dict"],
+                "correcta": "B",
+                "pista": "`defaultdict` es una subclase de diccionario que llama a una función fábrica para suministrar valores predeterminados."
+            },
+            {
+                "pregunta": "¿Cómo se realiza la fusión de dos diccionarios usando desempaquetado?",
+                "codigo": "d1 = {'a': 1}\nd2 = {'b': 2}\nfusion = {____d1, ____d2}",
+                "opciones": ["A) *", "B) **", "C) &", "D) +"],
+                "correcta": "B",
+                "pista": "El doble asterisco `**` desempaqueta pares clave-valor dentro de una nueva estructura literal de diccionario."
+            }
+        ],
+        "Cuestionario_5": [
+            {
+                "pregunta": "¿Cuál es el comportamiento de este alcance de variable usando global?",
+                "codigo": "x = 10\ndef f():\n    global x\n    x = 20\nf()\nprint(x)",
+                "opciones": ["A) 10", "B) 20", "C) UnboundLocalError", "D) None"],
+                "correcta": "B",
+                "pista": "Al declarar `global x`, cualquier reasignación dentro de la función afecta directamente al espacio de nombres global."
+            },
+            {
+                "pregunta": "¿Qué operación realiza el operador aritmético de doble barra `//`?",
+                "codigo": "print(7 // 2)",
+                "opciones": ["A) Divide devolviendo float", "B) Devuelve la parte entera truncada de la división", "C) Eleva el primer valor al segundo", "D) Genera un comentario"],
+                "correcta": "B",
+                "pista": "Es el operador de división entera; descarta por completo la parte decimal sin redondear hacia arriba."
+            },
+            {
+                "pregunta": "¿Qué método remueve un elemento de un set sin disparar un error si la llave no existe?",
+                "codigo": "s = {1, 2}\ns.____(3)",
+                "opciones": ["A) remove", "B) delete", "C) discard", "D) pop"],
+                "correcta": "C",
+                "pista": "A diferencia de `.remove()`, el método `.discard()` borra silenciosamente sin lanzar un `KeyError` si el elemento está ausente."
+            }
+        ]
+    },
+    "Avanzado": {
+        "Cuestionario_1": [
+            {
+                "pregunta": "¿Qué es fundamentalmente un decorador en Python?",
+                "codigo": "@mi_decorador\ndef funcion(): pass",
+                "opciones": ["A) Una clase de interfaz gráfica", "B) Una función que toma otra función como argumento para extender su comportamiento", "C) Un validador de tipos estáticos", "D) Una extensión en C"],
+                "correcta": "B",
+                "pista": "Los decoradores envuelven funciones o métodos para añadirles lógica extra de ejecución de manera limpia."
+            },
+            {
+                "pregunta": "¿Qué argumentos estructurales recibe el método constructor primario de una Metaclase?",
+                "codigo": "class MiMeta(type):\n    def __new__(mcs, name, bases, attrs):",
+                "opciones": ["A) Únicamente el parámetro self", "B) El nombre de la clase, tupla de clases base y el diccionario de atributos", "C) El bytecode binario compilado", "D) No requiere recibir argumentos"],
+                "correcta": "B",
+                "pista": "Las metaclases interceptan la construcción de clases recibiendo su identificador, herencias y su espacio de nombres."
+            },
+            {
+                "pregunta": "¿Cuál es el núcleo operativo de la biblioteca asíncrona `asyncio`?",
+                "codigo": "import asyncio\nasync def main(): pass",
+                "opciones": ["A) Hilos múltiples de ejecución paralela", "B) Un bucle de eventos (Event Loop) que maneja tareas concurrentes", "C) Compilación en tiempo de ejecución", "D) Limpieza automática de la memoria RAM"],
+                "correcta": "B",
+                "pista": "`asyncio` usa cooperativamente un Event Loop centralizado para pausar y reanudar tareas de entrada/salida (I/O) concurrentes."
+            }
+        ],
+        "Cuestionario_2": [
+            {
+                "pregunta": "¿Qué expresión delega operaciones de iteración directas hacia un subgenerador interno?",
+                "codigo": "def sub(): yield 1\ndef master():\n    ____ sub()",
+                "opciones": ["A) yield", "B) yield from", "C) return from", "D) delegate"],
+                "correcta": "B",
+                "pista": "`yield from` refactoriza ciclos de entrega de valores delegando el canal de datos directamente al sub-iterable."
+            },
+            {
+                "pregunta": "¿Qué efecto provoca implementar la directiva especial `__slots__` en una clase?",
+                "codigo": "class Nodo:\n    __slots__ = ['id']",
+                "opciones": ["A) Aumenta la velocidad de herencia", "B) Optimiza memoria impidiendo la creación del diccionario dinámico __dict__ por instancia", "C) Encripta los valores", "D) Destruye variables obsoletas"],
+                "correcta": "B",
+                "pista": "Al fijar los atributos válidos, se ahorra espacio en memoria RAM omitiendo el costoso almacenamiento dinámico por objeto."
+            },
+            {
+                "pregunta": "¿Qué objeto expone acceso directo a los búferes binarios internos sin clonar la información en memoria?",
+                "codigo": "vista = memoryview(bytearray('XYZ', 'utf-8'))",
+                "opciones": ["A) struct", "B) memoryview", "C) ctypes", "D) pickle"],
+                "correcta": "B",
+                "pista": "`memoryview` permite realizar cortes y manipulación a nivel de bytes compartiendo el mismo bloque de memoria físico."
+            }
+        ],
+        "Cuestionario_3": [
+            {
+                "pregunta": "¿Cómo se define la jerarquía de herencia compleja (MRO) en Python?",
+                "codigo": "print(ClaseD.__mro__)",
+                "opciones": ["A) Búsqueda estricta de abajo hacia arriba", "B) Algoritmo de Linealización C3", "C) Ordenación alfabética", "D) No sigue una estructura fija"],
+                "correcta": "B",
+                "pista": "Python resuelve conflictos en herencia múltiple usando C3 para mantener monotonía y consistencia local."
+            },
+            {
+                "pregunta": "¿Para qué sirve el decorador `@contextmanager` del módulo `contextlib`?",
+                "codigo": "from contextlib import contextmanager",
+                "opciones": ["A) Automatizar decoradores comunes", "B) Convertir una función generadora con un 'yield' en un bloque 'with' válido", "C) Apagar flujos de datos", "D) Capturar fugas en subprocesos"],
+                "correcta": "B",
+                "pista": "Permite omitir la creación manual de clases engorrosas que implementen los protocolos mágicos `__enter__` y `__exit__`."
+            },
+            {
+                "pregunta": "¿Qué módulo permite saltarse las restricciones del GIL ejecutando cómputo pesado en núcleos de CPU paralelos?",
+                "codigo": "import multiprocessing",
+                "opciones": ["A) threading", "B) multiprocessing", "C) concurrent.futures.ThreadPoolExecutor", "D) subprocess"],
+                "correcta": "B",
+                "pista": "A diferencia de los hilos tradicionales, `multiprocessing` levanta procesos independientes con sus propios intérpretes de Python."
+            }
+        ],
+        "Cuestionario_4": [
+            {
+                "pregunta": "¿Qué información exacta retorna la utilidad de diagnóstico `sys.getrefcount(obj)`?",
+                "codigo": "import sys\nprint(sys.getrefcount(a))",
+                "opciones": ["A) El tamaño exacto en bytes", "B) El número total de referencias activas que apuntan al objeto para el recolector de basura", "C) El ID de la dirección física", "D) El tipo primitivo compilado"],
+                "correcta": "B",
+                "pista": "Cuenta cuántos punteros apuntan al objeto. Su número base es siempre +1 mayor debido al argumento temporal de la función."
+            },
+            {
+                "pregunta": "¿Qué combinación de métodos define a un Data Descriptor completo?",
+                "codigo": "class Descriptor:",
+                "opciones": ["A) Implementar solo el método __get__", "B) Implementar el método __get__ junto con __set__ o __delete__", "C) Contener únicamente métodos estáticos", "D) Heredar de la clase property"],
+                "correcta": "B",
+                "pista": "Si define la escritura (`__set__`), toma prioridad absoluta anulando los accesos directos al diccionario local de la instancia."
+            },
+            {
+                "pregunta": "¿Qué decorador almacena en caché los resultados de funciones costosas basándose en sus argumentos?",
+                "codigo": "from functools import lru_cache",
+                "opciones": ["A) partial", "B) wraps", "C) lru_cache", "D) reduce"],
+                "correcta": "C",
+                "pista": "`lru_cache` guarda en memoria las salidas de ejecuciones previas aplicando la estrategia Least Recently Used."
+            }
+        ],
+        "Cuestionario_5": [
+            {
+                "pregunta": "¿Qué ocurre si ejecutas la sentencia `raise` vacía dentro de una captura de excepciones?",
+                "codigo": "except ValueError:\n    raise",
+                "opciones": ["A) Se ignora el error de forma segura", "B) Vuelve a lanzar la excepción capturada preservando su traceback original", "C) Se cuelga el intérprete", "D) Arroja un RuntimeError"],
+                "correcta": "B",
+                "pista": "Se utiliza para realizar logs, registrar información intermedia y delegar la propagación intacta a las capas superiores."
+            },
+            {
+                "pregunta": "¿Cuál es la diferencia crítica entre `__getattr__` y `__getattribute__`?",
+                "codigo": "def __getattr__(self, name):",
+                "opciones": ["A) Intercepta absolutamente todos los accesos", "B) Solo se ejecuta como respaldo si el atributo no fue encontrado de forma convencional", "C) Borra las propiedades", "D) Bloquea el diccionario interno"],
+                "correcta": "B",
+                "pista": "`__getattribute__` procesa incondicionalmente cualquier llamada, mientras que `__getattr__` es un método seguro de rescate."
+            },
+            {
+                "pregunta": "¿Qué potente sistema de control estructural de flujo se introdujo formalmente en Python 3.10?",
+                "codigo": "match dato:\n    case [x, y]: pass",
+                "opciones": ["A) switch / case", "B) match / case", "C) select / case", "D) check / option"],
+                "correcta": "B",
+                "pista": "El bloque de coincidencia estructural (`Structural Pattern Matching`) analiza simultáneamente tipos, formas y contenidos."
+            }
+        ]
+    }
+}
