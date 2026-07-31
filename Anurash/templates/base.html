@@ -9,9 +9,10 @@
 </head>
 <body>
     <!-- Barra superior de navegación -->
-    <nav class="top-bar">
+    <nav class="top-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background-color: var(--fondo-paneles); border-bottom: 4px solid var(--agua-clara);">
+        
         <div class="vidas-container">
-            <!-- Usamos Jinja (Flask) para repetir las vidas según las que tenga el usuario -->
+            <!-- Vidas (Ranitas) -->
             {% for i in range(usuario.ranitas_actuales) %}
                 <img src="{{ url_for('static', filename='img/vida_llena.png') }}" class="icono-vida" alt="Vida llena">
             {% endfor %}
@@ -20,11 +21,57 @@
             {% endfor %}
         </div>
         
-        <div class="monedas-container">
-            <span class="texto-monedas">{{ usuario.monedas }}</span>
-            <img src="{{ url_for('static', filename='img/boton_normal.png') }}" class="icono-moneda" alt="Moneda">
+        <!-- Contenedor derecho: Mochila + Monedas -->
+        <div style="display: flex; gap: 20px; align-items: center;">
+            
+            <!-- LA MOCHILA MÁGICA -->
+            <div class="mochila-wrapper" style="position: relative;">
+                <!-- Botón de la mochila -->
+                <div id="btn-mochila" onclick="toggleMochila()" style="display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(0,0,0,0.3); padding: 5px 15px; border-radius: 20px; border: 2px solid var(--turquesa); transition: all 0.3s ease;">
+                    <span id="texto-mochila" style="color: var(--texto-claro); font-weight: bold; font-size: 14px;">Abrir Mochila</span>
+                    <span id="icono-mochila" style="font-size: 20px;">🎒</span>
+                </div>
+                
+                <!-- Panel desplegable -->
+                <div id="panel-mochila" style="display: none; position: absolute; top: 50px; right: 0; background: var(--fondo-paneles); border: 3px solid var(--turquesa); border-radius: 10px; padding: 15px; width: 220px; box-shadow: 0 10px 25px rgba(0,0,0,0.6); z-index: 100;">
+                    <div id="contenido-mochila" style="display: flex; flex-direction: column; gap: 10px;">
+                        <!-- JS inyectará los botones o el mensaje vacío aquí -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monedas -->
+            <div class="monedas-container" style="display: flex; align-items: center;">
+                <span class="texto-monedas" id="contador-monedas-navbar" style="font-size: 24px; font-weight: bold; margin-right: 10px;">{{ usuario.monedas }}</span>
+                <img src="{{ url_for('static', filename='img/boton_normal.png') }}" class="icono-moneda" alt="Moneda" style="width: 35px; height: 35px; image-rendering: pixelated;">
+            </div>
         </div>
     </nav>
+
+    <!-- Script global para la animación de la mochila -->
+    <script>
+        function toggleMochila() {
+            const panel = document.getElementById('panel-mochila');
+            const texto = document.getElementById('texto-mochila');
+            const btn = document.getElementById('btn-mochila');
+            
+            if (panel.style.display === 'none' || panel.style.display === '') {
+                // Abrir mochila
+                panel.style.display = 'block';
+                texto.textContent = 'Cerrar Mochila';
+                // Invertimos el orden: el icono pasa a la izquierda
+                btn.style.flexDirection = 'row-reverse'; 
+                btn.style.backgroundColor = 'rgba(72, 196, 183, 0.2)'; // Brillo turquesa
+            } else {
+                // Cerrar mochila
+                panel.style.display = 'none';
+                texto.textContent = 'Abrir Mochila';
+                // Regresa a la normalidad
+                btn.style.flexDirection = 'row';
+                btn.style.backgroundColor = 'rgba(0,0,0,0.3)';
+            }
+        }
+    </script>
 
     <!-- Aquí irá el contenido cambiante (el mapa, el quiz o el minijuego) -->
     <main class="contenedor-principal">

@@ -21,6 +21,19 @@ def mapa():
     """Ruta principal: Muestra el mapa (el estanque)."""
     return render_template('mapa.html', usuario=jugador)
 
+@app.route('/reclamar_recompensa', methods=['POST'])
+def reclamar_recompensa():
+    # Sumamos las 50 monedas usando la notación correcta
+    recompensa = 50
+    jugador.monedas += recompensa 
+    
+    return jsonify({
+        "status": "success",
+        "monedas_totales": jugador.monedas,
+        "mensaje": "¡50 monedas añadidas con éxito!"
+    })
+
+
 # Diccionario para inyectar descripciones didácticas automáticas a los quizes de la DB
 DESCRIPCIONES_QUIZ = {
     1: "Domina la sintaxis esencial, tipos de datos básicos y operadores matemáticos fundamentales en Python.",
@@ -131,13 +144,68 @@ def quiz(nivel_id):
 
 @app.route('/minijuego')
 def minijuego():
-    """Ruta del minijuego: Atrapa la flor."""
+    # Renderizamos la pantalla del minijuego de emergencia
     return render_template('minijuego.html', usuario=jugador)
+
+@app.route('/ganar_minijuego', methods=['POST'])
+def ganar_minijuego():
+    # Corregimos también la notación de las ranitas aquí
+    if jugador.ranitas_actuales == 0:
+        jugador.ranitas_actuales = 1
+        return jsonify({"status": "success", "mensaje": "¡Minijuego superado! Recuperas 1 vida."})
+    
+    return jsonify({"status": "info", "mensaje": "Ya tienes vidas suficientes."})
 
 @app.route('/tienda')
 def tienda():
-    """Ruta de la tienda: Donde gastaremos las monedas."""
+    # Mostramos la tienda pasando los datos del usuario para ver sus monedas actuales
     return render_template('tienda.html', usuario=jugador)
+
+@app.route('/comprar_item', methods=['POST'])
+def comprar_item():
+    # Extraemos los datos que nos envía el JavaScript de la tienda
+    datos = request.get_json()
+    tipo_item = datos.get('tipo')
+    precio = int(datos.get('precio'))
+    
+    # 1. Verificamos si el jugador tiene suficiente dinero usando notación de punto
+    if jugador.monedas >= precio:
+        
+        # 2. Lógica dependiendo de qué objeto compró
+        if tipo_item == 'vida':
+            if jugador.ranitas_actuales < 3:
+                jugador.monedas -= precio
+                jugador.ranitas_actuales += 1
+                mensaje = "¡Has recuperado una ranita! 🐸"
+            else:
+                return jsonify({"status": "error", "mensaje": "Ya tienes todas tus ranitas listas. No necesitas gastar en esto."})
+                
+        else:
+            # Lógica para Lupa o Escudo
+            jugador.monedas -= precio
+            
+            # Si el jugador aún no tiene un inventario, se lo creamos como un atributo
+            if not hasattr(jugador, 'inventario'):
+                jugador.inventario = []
+                
+            # Guardamos el ítem en su inventario
+            jugador.inventario.append(tipo_item)
+            
+            nombre = "Lupa de Pistas" if tipo_item == 'lupa' else "Escudo de Hoja"
+            mensaje = f"¡Has comprado {nombre} con éxito! ⛺"
+            
+        # 3. Devolvemos el éxito y los datos actualizados
+        return jsonify({
+            "status": "success",
+            "monedas_restantes": jugador.monedas,
+            "mensaje": mensaje
+        })
+        
+    # Si no le alcanza el dinero
+    return jsonify({
+        "status": "error",
+        "mensaje": "¡No tienes suficientes monedas para comprar este artículo!"
+    })
 
 # --- RUTAS DE API (BACK-END / LÓGICA OCULTA) ---
 
@@ -177,6 +245,18 @@ def restar_ranita():
         'success': True,
         'ranitas_actuales': jugador.ranitas_actuales
     })
+
+@app.route('/usar_item', methods=['POST'])
+def usar_item():
+    datos = request.get_json()
+    tipo_item = datos.get('tipo')
+    
+    # Verificamos que el jugador tenga el atributo y el ítem exista en su lista
+    if hasattr(jugador, 'inventario') and tipo_item in jugador.inventario:
+        jugador.inventario.remove(tipo_item)
+        return jsonify({"status": "success", "mensaje": f"{tipo_item} consumido."})
+        
+    return jsonify({"status": "error", "mensaje": "No posees este objeto."})
 
 # --- ARRANQUE DEL SERVIDOR ---
 if __name__ == '__main__':

@@ -1,38 +1,88 @@
-{% extends "base.html" %}
+{% extends "base.html" %} <!-- -->
 
-{% block content %}
-<div class="tienda-container">
+{% block content %} <!-- -->
+<div class="tienda-container"> <!--[cite: 15] -->
     
-    <div class="cabecera-mapa">
-        <h1 class="titulo-mapa">Tienda de Accesorios ⛺</h1>
-    </div>
+    <div class="cabecera-mapa"> <!--[cite: 15] -->
+        <h1 class="titulo-mapa">Tienda de Accesorios ⛺</h1> <!--[cite: 15] -->
+    </div> <!--[cite: 15] -->
 
-    <div class="items-grid">
+    <div class="items-grid"> <!--[cite: 15] -->
         
-        <!-- Ítem 1: La Lupa -->
+        <!-- Ítem NUEVO: Mosca Nutritiva (Vida Extra) -->
         <div class="item-tarjeta">
-            <img src="{{ url_for('static', filename='img/item_lupa.png') }}" alt="Lupa">
-            <h3>Lupa de Pistas</h3>
-            <p>Elimina una respuesta incorrecta en tu próximo Quiz.</p>
-            <button class="boton-opcion comprar-btn">
+            <img src="{{ url_for('static', filename='img/vida_llena.png') }}" alt="Mosca Nutritiva">
+            <h3>Mosca Nutritiva</h3>
+            <p>Recupera 1 ranita (vida) para seguir jugando.</p>
+            <button class="boton-opcion comprar-btn" onclick="comprarItem('vida', 50)">
                 50 <img src="{{ url_for('static', filename='img/moneda.png') }}" class="icono-moneda-peq">
             </button>
         </div>
 
-        <!-- Ítem 2: El Escudo -->
-        <div class="item-tarjeta">
-            <img src="{{ url_for('static', filename='img/item_escudo_hoja.png') }}" alt="Escudo Hoja">
-            <h3>Escudo de Hoja</h3>
-            <p>Te protege de perder una vida (ranita) si te equivocas.</p>
-            <button class="boton-opcion comprar-btn">
-                100 <img src="{{ url_for('static', filename='img/moneda.png') }}" class="icono-moneda-peq">
+        <!-- Ítem 1: La Lupa -->
+        <div class="item-tarjeta"> <!--[cite: 15] -->
+            <img src="{{ url_for('static', filename='img/item_lupa.png') }}" alt="Lupa"> <!--[cite: 15] -->
+            <h3>Lupa de Pistas</h3> <!--[cite: 15] -->
+            <p>Elimina una respuesta incorrecta en tu próximo Quiz.</p> <!--[cite: 15] -->
+            <!-- Le añadimos el evento onclick -->
+            <button class="boton-opcion comprar-btn" onclick="comprarItem('lupa', 50)">
+                50 <img src="{{ url_for('static', filename='img/moneda.png') }}" class="icono-moneda-peq"> <!--[cite: 15] -->
             </button>
         </div>
 
-    </div>
+        <!-- Ítem 2: El Escudo -->
+        <div class="item-tarjeta"> <!--[cite: 15] -->
+            <img src="{{ url_for('static', filename='img/item_escudo_hoja.png') }}" alt="Escudo Hoja"> <!--[cite: 15] -->
+            <h3>Escudo de Hoja</h3> <!--[cite: 15] -->
+            <p>Te protege de perder una vida (ranita) si te equivocas.</p> <!--[cite: 15] -->
+            <!-- Le añadimos el evento onclick -->
+            <button class="boton-opcion comprar-btn" onclick="comprarItem('escudo', 100)">
+                100 <img src="{{ url_for('static', filename='img/moneda.png') }}" class="icono-moneda-peq"> <!--[cite: 15] -->
+            </button>
+        </div>
+
+    </div> <!--[cite: 15] -->
     
     <!-- Botón para regresar -->
-    <a href="/" class="boton-opcion" style="margin-top: 40px; text-decoration: none;">Volver al Estanque</a>
+    <a href="/" class="boton-opcion" style="margin-top: 40px; text-decoration: none;">Volver al Estanque</a> <!--[cite: 15] -->
 
-</div>
+</div> <!--[cite: 15] -->
+
+<!-- LÓGICA DE COMPRA -->
+<script>
+    function comprarItem(tipoItem, precioItem) {
+        if (confirm(`¿Quieres gastar ${precioItem} monedas en este artículo?`)) {
+            
+            // ¡Cambiamos 'comprar_vida' por 'comprar_item'!
+            fetch("{{ url_for('comprar_item') }}", { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    tipo: tipoItem, 
+                    precio: precioItem 
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.mensaje);
+                    
+                    // Actualizamos las monedas en la barra superior al instante
+                    const contadorMonedas = document.getElementById('contador-monedas-navbar');
+                    if (contadorMonedas) {
+                        contadorMonedas.textContent = data.monedas_restantes;
+                    }
+
+                    // Solo recargamos si compramos una vida (para actualizar las ranitas visuales)
+                    if (tipoItem === 'vida') {
+                        window.location.reload();
+                    } 
+                } else {
+                    alert("Aviso: " + data.mensaje);
+                }
+            })
+            .catch(error => console.error('Error en la compra:', error));
+        }
+    }
+</script>
 {% endblock %}

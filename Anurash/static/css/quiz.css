@@ -1,0 +1,132 @@
+/* Estilos generales y fondo tipo aventura/mapa */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #2b3a42; /* Color de fondo oscuro/marino */
+    background-image: radial-gradient(circle, #3a4f59, #1c262b);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Contenedor principal tipo pergamino moderno */
+.quiz-container {
+    background: #f4ecd8; /* Color pergamino/papel */
+    width: 90%;
+    max-width: 600px;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4), inset 0 0 20px rgba(139, 115, 85, 0.2);
+    border: 3px solid #d4c3a3;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Encabezado (Progreso y Puntos) */
+.quiz-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.badge {
+    background: #8b7355;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+/* Área de la pregunta */
+.question-box {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#question-text {
+    color: #3e2723;
+    font-size: 1.6rem;
+    line-height: 1.4;
+    margin: 0;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Cuadrícula de Opciones */
+.options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Botones de las opciones */
+.option-btn {
+    background: #ffffff;
+    border: 2px solid #d4c3a3;
+    border-radius: 12px;
+    padding: 15px 20px;
+    font-size: 1.1rem;
+    color: #4a3b32;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    font-weight: 500;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.option-btn:hover:not(:disabled) {
+    background: #fff8e7;
+    border-color: #8b7355;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(139, 115, 85, 0.2);
+}
+
+.option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* Clases dinámicas para respuestas correctas/incorrectas */
+.option-btn.correct {
+    background: #d4edda !important;
+    border-color: #28a745 !important;
+    color: #155724 !important;
+    box-shadow: 0 0 15px rgba(40, 167, 69, 0.4) !important;
+}
+
+.option-btn.incorrect {
+    background: #f8d7da !important;
+    border-color: #dc3545 !important;
+    color: #721c24 !important;
+}
+
+/* Botón Siguiente */
+.quiz-footer {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.action-btn {
+    background: #e67e22;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.2rem;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(230, 126, 34, 0.4);
+}
+
+.action-btn:hover {
+    background: #d35400;
+    transform: scale(1.05);
+}
+
+.hidden {
+    display: none !important;
+}

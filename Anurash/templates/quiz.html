@@ -1,147 +1,370 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anurash - Desafío Python</title>
-    <!-- Asegúrate de que el nombre de tu archivo CSS coincida -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body class="page-quises">
-    <div class="quiz-container">
-        
-        <!-- BARRA SUPERIOR: Vidas y Nivel -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px dashed var(--border-color); padding-bottom: 15px;">
-            <h3 style="margin: 0; color: var(--primary);">Nivel {{ nivel }}</h3>
-            <div style="font-size: 1.2rem; font-weight: 600; color: #475569;">
-                Vidas: <span id="contador-vidas" style="color: #f43f5e; font-size: 1.5rem;">{{ usuario.ranitas_actuales }}</span> 🐸
-            </div>
-        </div>
+{% extends "base.html" %}
 
-        <!-- ÁREA DEL JUEGO DINÁMICA -->
-        <div id="juego-contenedor">
-            <div class="progress-wrapper">
-                <div class="progress-bar-container">
-                    <div class="progress-bar" id="barra-progreso" style="width: 0%;"></div>
-                </div>
-                <span class="progress-text" id="texto-progreso">Preparando preguntas...</span>
-            </div>
+{% block content %}
 
-            <h2 class="question-text" id="texto-pregunta">Cargando...</h2>
+<!-- ESTILOS MÁGICOS SOLO PARA ESTA PANTALLA -->
+<style>
+    /* 1. Ajustes para el tablón de madera */
+    .panel-pregunta {
+        /* Estiramos la madera para que cubra todo el texto sin importar qué tan largo sea */
+        background-size: 100% 100% !important; 
+        min-height: 160px !important;
+        /* Aumentamos el padding para que el texto no toque las hojas ni los bordes */
+        padding: 40px 60px !important; 
+    }
 
-            <div class="options-container" id="contenedor-opciones">
-                <!-- JavaScript inyectará las opciones aquí -->
-            </div>
-        </div>
-        
-        <!-- MENSAJE DE VICTORIA (Oculto inicialmente) -->
-        <div id="mensaje-final" style="display: none; text-align: center;">
-            <div style="font-size: 4rem; margin-bottom: 20px;">🏆</div>
-            <h2 class="main-title" style="font-size: 2.2rem;">¡Nivel Completado!</h2>
-            <p class="subtitle" style="margin-bottom: 30px;">Has superado esta prueba de Python con éxito.</p>
-            <a href="{{ url_for('mapa') }}" class="btn-submit">Volver al Mapa</a>
-        </div>
+    .panel-pregunta h2 {
+        font-size: 1.2rem !important; /* Reducimos un poco el tamaño de letra */
+        line-height: 1.5;
+        max-width: 100%;
+    }
 
+    /* 2. Estilos para la nueva pantalla de victoria llamativa */
+    .victoria-container {
+        background: linear-gradient(135deg, rgba(72, 196, 183, 0.2), rgba(26, 77, 92, 0.8));
+        border: 4px solid var(--turquesa);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 0 40px rgba(72, 196, 183, 0.6);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .brillo-victoria {
+        filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
+    }
+
+    @keyframes saltarVictoria {
+        0%, 100% { transform: translateY(0) scale(1); }
+        50% { transform: translateY(-20px) scale(1.1); }
+    }
+
+    .recompensa-box {
+        background: rgba(0,0,0,0.4);
+        border-radius: 15px;
+        padding: 15px 30px;
+        display: inline-block;
+        margin: 20px 0;
+        border: 2px dashed var(--agua-clara);
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    }
+</style>
+
+<!-- Forzamos el fondo transparente para anular el fondo blanco de tu CSS -->
+<div class="quiz-container" id="juego-contenedor" style="background: transparent; box-shadow: none; border: none;">
+    
+    <!-- Título del Nivel -->
+    <h1 class="titulo-mapa" style="margin-bottom: 20px; font-size: 28px;">Nivel {{ nivel }}</h1>
+
+    <!-- Barra de Progreso Mágica -->
+    <div style="width: 100%; max-width: 650px; text-align: center; color: var(--turquesa); font-size: 1.2rem; margin-bottom: 10px; font-weight: bold;" id="texto-progreso">
+        Cargando...
+    </div>
+    <div class="progreso-barra" style="max-width: 650px; margin-bottom: 30px;">
+        <div class="progreso-relleno" id="barra-progreso" style="width: 0%;"></div>
     </div>
 
-    <!-- LÓGICA DEL JUEGO -->
-    <script>
-        // tojson de Jinja permite pasar el diccionario de Python directamente a variables de JavaScript
-        const preguntas = JSON.parse('{{ datos | tojson | safe }}');
-        let indiceActual = 0;
-        let vidas = parseInt('{{ usuario.ranitas_actuales }}');
+    <!-- Sección de la Pregunta: Ranita + Tablón de Madera -->
+    <div class="pregunta-seccion">
+        <div class="personaje-container">
+            <img src="{{ url_for('static', filename='img/rana_pensativa.png') }}" id="rana-avatar" alt="Rana">
+        </div>
+        <div class="panel-pregunta">
+            <h2 id="texto-pregunta">Cargando...</h2>
+        </div>
+    </div>
 
-        const textoPregunta = document.getElementById('texto-pregunta');
-        const contenedorOpciones = document.getElementById('contenedor-opciones');
-        const textoProgreso = document.getElementById('texto-progreso');
-        const barraProgreso = document.getElementById('barra-progreso');
-        const contadorVidas = document.getElementById('contador-vidas');
+    <!-- Contenedor de Opciones -->
+    <div class="opciones-seccion" id="contenedor-opciones" style="max-width: 650px;">
+        <!-- JavaScript inyectará las opciones aquí -->
+    </div>
+
+    <!-- Botón Siguiente Pregunta -->
+    <div style="margin-top: 30px; text-align: center; width: 100%; max-width: 650px;">
+        <button id="btn-siguiente" class="boton-opcion" style="background-color: var(--turquesa); color: var(--agua-profunda); width: 100%; border-color: var(--texto-claro);">
+            Siguiente Pregunta
+        </button>
+        <p class="motivation-text" id="texto-motivacion" style="color: var(--texto-claro); margin-top: 15px; font-style: italic; font-size: 1.1rem;">
+            ¡Tú puedes! Demuestra lo que sabes.
+        </p>
+    </div>
+</div>
+
+<!-- NUEVA PANTALLA DE VICTORIA -->
+<div class="quiz-container victoria-container" id="mensaje-final" style="display: none; text-align: center;">
+    <img src="{{ url_for('static', filename='img/rana_victoria.png') }}" alt="Victoria" class="brillo-victoria" style="width: 150px; image-rendering: pixelated; margin-bottom: 20px;">
+    <h2 class="titulo-mapa" style="font-size: 3rem; margin-bottom: 5px; color: #00ff80; text-shadow: 3px 3px 6px rgba(0,0,0,0.8);">¡Nivel Superado!</h2>
+    <p style="color: var(--texto-claro); font-size: 1.3rem; margin-bottom: 15px;">¡Tu conocimiento de Python ha crecido enormemente!</p>
+    
+    <!-- Caja de Recompensas -->
+    <div class="recompensa-box">
+        <span style="color: #00ff80; font-size: 2rem; font-weight: bold; text-shadow: 1px 1px 2px black;">+50</span>
+        <img src="{{ url_for('static', filename='img/moneda.png') }}" alt="Monedas" style="width: 40px; vertical-align: middle; image-rendering: pixelated; margin-left: 10px;">
+        <p style="margin: 8px 0 0 0; font-size: 1rem; color: #A0C4C7; text-transform: uppercase; letter-spacing: 1px;">Monedas obtenidas</p>
+    </div>
+    
+    <br><br>
+    <!-- Botón dorado especial para volver al mapa -->
+    <a href="{{ url_for('mapa') }}" class="boton-opcion" style="text-decoration: none; display: inline-block; background-color: #FFD700; color: #1A4D5C; border-color: #DAA520; font-weight: bold; font-size: 1.3rem; padding: 15px 40px; box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);">
+        Volver al Estanque
+    </a>
+</div>
+
+<!-- LÓGICA DEL JUEGO -->
+<script>
+    const preguntas = JSON.parse('{{ datos | tojson | safe }}');
+    let indiceActual = 0;
+    let vidas = parseInt('{{ usuario.ranitas_actuales }}');
+
+    const textoPregunta = document.getElementById('texto-pregunta');
+    const contenedorOpciones = document.getElementById('contenedor-opciones');
+    const textoProgreso = document.getElementById('texto-progreso');
+    const barraProgreso = document.getElementById('barra-progreso');
+    const btnSiguiente = document.getElementById('btn-siguiente');
+    const textoMotivacion = document.getElementById('texto-motivacion');
+    const ranaAvatar = document.getElementById('rana-avatar');
+    const juegoContenedor = document.getElementById('juego-contenedor');
+    const mensajeFinal = document.getElementById('mensaje-final');
+
+    const mensajesMotivadores = [
+        "¡Excelente progreso! Continúa con ese gran entusiasmo.",
+        "Cada pregunta es una nueva oportunidad para aprender.",
+        "¡Vas por muy buen camino! Sigue respondiendo con confianza.",
+        "Tu mente se expande con cada desafío. ¡Sigue adelante!"
+    ];
+
+    function actualizarVidasVisuales(vidasRestantes) {
+        const contenedorVidas = document.querySelector('.vidas-container');
+        if (contenedorVidas) {
+            contenedorVidas.innerHTML = '';
+            for (let i = 0; i < vidasRestantes; i++) {
+                contenedorVidas.innerHTML += `<img src="{{ url_for('static', filename='img/vida_llena.png') }}" class="icono-vida" alt="Vida llena">`;
+            }
+            for (let i = 0; i < (3 - vidasRestantes); i++) {
+                contenedorVidas.innerHTML += `<img src="{{ url_for('static', filename='img/vida_vacia.png') }}" class="icono-vida" alt="Vida vacía">`;
+            }
+        }
+    }
+
+    function cargarPregunta() {
+        if (indiceActual >= preguntas.length) {
+            // Ocultar juego y mostrar victoria
+            juegoContenedor.style.display = 'none';
+            mensajeFinal.style.display = 'block';
+            
+            // --- NUEVA IMPLEMENTACIÓN: Guardar monedas ---
+            fetch("{{ url_for('reclamar_recompensa') }}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.mensaje);
+                // Si quieres actualizar el contador de monedas de la barra superior en tiempo real:
+                const contadorMonedas = document.getElementById('contador-monedas-navbar');
+                if (contadorMonedas) {
+                    contadorMonedas.textContent = data.monedas_totales;
+                }
+            })
+            .catch(error => console.error('Error al reclamar recompensa:', error));
+            // ---------------------------------------------
+            
+            return;
+        }
+
+        // ... (el resto del código de cargarPregunta se mantiene igual)
+
+        const preguntaActual = preguntas[indiceActual];
+        textoPregunta.textContent = preguntaActual.pregunta;
+        ranaAvatar.src = "{{ url_for('static', filename='img/rana_pensativa.png') }}";
         
-        const juegoContenedor = document.getElementById('juego-contenedor');
-        const mensajeFinal = document.getElementById('mensaje-final');
+        let porcentaje = Math.round((indiceActual / preguntas.length) * 100);
+        barraProgreso.style.width = porcentaje + '%';
+        textoProgreso.textContent = `Pregunta ${indiceActual + 1} de ${preguntas.length}`;
 
-        function cargarPregunta() {
-            // Comprobamos si ya no hay más preguntas
-            if (indiceActual >= preguntas.length) {
-                juegoContenedor.style.display = 'none';
-                mensajeFinal.style.display = 'block';
+        contenedorOpciones.innerHTML = '';
+        
+        preguntaActual.opciones.forEach((opcion) => {
+            const label = document.createElement('label');
+            label.className = 'boton-opcion'; 
+            label.style.display = 'flex';
+            label.style.alignItems = 'center';
+            label.style.gap = '15px';
+            
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'respuesta_usuario';
+            radio.value = opcion;
+            radio.style.transform = 'scale(1.5)';
+            
+            const span = document.createElement('span');
+            span.textContent = opcion;
+
+            label.appendChild(radio);
+            label.appendChild(span);
+            contenedorOpciones.appendChild(label);
+            
+            radio.addEventListener('change', () => {
+                btnSiguiente.style.opacity = '1';
+                btnSiguiente.style.cursor = 'pointer';
+                btnSiguiente.disabled = false;
+            });
+        });
+
+        textoMotivacion.textContent = mensajesMotivadores[indiceActual % mensajesMotivadores.length];
+        
+        btnSiguiente.style.opacity = '0.5';
+        btnSiguiente.style.cursor = 'not-allowed';
+        btnSiguiente.disabled = true;
+    }
+
+// Leemos el inventario que viene del backend (si no existe, usamos un arreglo vacío)
+    let inventario = JSON.parse('{{ usuario.inventario | default([]) | tojson | safe }}');
+    let escudoActivo = false;
+    function renderizarInventario() {
+            const contenedorItems = document.getElementById('contenido-mochila');
+            if (!contenedorItems) return; // Por si el contenedor no ha cargado
+            
+            contenedorItems.innerHTML = '';
+            
+            // Si el inventario está vacío
+            if (!inventario || inventario.length === 0) {
+                contenedorItems.innerHTML = '<p style="color: #A0C4C7; text-align: center; margin: 0; font-size: 0.9rem; font-style: italic;">No se han comprado objetos.</p>';
                 return;
             }
 
-            const preguntaActual = preguntas[indiceActual];
-            textoPregunta.textContent = preguntaActual.pregunta;
-            
-            // Actualizamos la barra visualmente
-            const porcentaje = (indiceActual / preguntas.length) * 100;
-            barraProgreso.style.width = porcentaje + '%';
-            textoProgreso.textContent = `Pregunta ${indiceActual + 1} de ${preguntas.length} completada`;
+            // Botón de Lupa
+            if (inventario.includes('lupa')) {
+                const btnLupa = document.createElement('button');
+                btnLupa.className = 'boton-opcion';
+                btnLupa.style.padding = '10px';
+                btnLupa.style.backgroundColor = '#1A4D5C';
+                btnLupa.style.border = '2px solid #5DD9C1';
+                btnLupa.style.width = '100%';
+                btnLupa.innerHTML = '🔍 Usar Lupa';
+                btnLupa.onclick = () => usarLupa(btnLupa);
+                contenedorItems.appendChild(btnLupa);
+            }
 
-            // Limpiamos las opciones anteriores
-            contenedorOpciones.innerHTML = '';
+            // Botón de Escudo
+            if (inventario.includes('escudo')) {
+                const btnEscudo = document.createElement('button');
+                btnEscudo.className = 'boton-opcion';
+                btnEscudo.style.padding = '10px';
+                btnEscudo.style.backgroundColor = '#1A4D5C';
+                btnEscudo.style.border = '2px solid #5DD9C1';
+                btnEscudo.style.width = '100%';
+                btnEscudo.innerHTML = '🛡️ Activar Escudo';
+                btnEscudo.onclick = () => usarEscudo(btnEscudo);
+                contenedorItems.appendChild(btnEscudo);
+            }
+        }
+    // Llamamos a la función al iniciar para que aparezcan si el jugador compró algo
+    renderizarInventario();
 
-            // Dibujamos los botones de las opciones
-            preguntaActual.opciones.forEach(opcion => {
-                const label = document.createElement('label');
-                label.className = 'option-label';
-                
-                const radio = document.createElement('input');
-                radio.type = 'radio';
-                radio.name = 'respuesta';
-                radio.value = opcion;
-                
-                const span = document.createElement('span');
-                span.textContent = opcion;
-
-                label.appendChild(radio);
-                label.appendChild(span);
-                
-                // Disparamos la validación en cuanto el usuario haga clic
-                radio.addEventListener('change', () => validarRespuesta(opcion, preguntaActual.respuesta_correcta));
-                
-                contenedorOpciones.appendChild(label);
+    function consumirItemBackend(tipo) {
+            fetch("{{ url_for('usar_item') }}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tipo: tipo })
             });
+            // Lo quitamos de la lista local
+            const index = inventario.indexOf(tipo);
+            if (index > -1) {
+                inventario.splice(index, 1);
+            }
         }
 
-        function validarRespuesta(seleccion, correcta) {
-            // Bloqueamos las opciones para que no haga múltiples clics
-            const radios = document.querySelectorAll('input[type="radio"]');
-            radios.forEach(r => r.disabled = true);
+        function usarLupa(boton) {
+            const preguntaActual = preguntas[indiceActual];
+            const opcionesElementos = document.querySelectorAll('input[name="respuesta_usuario"]');
+            
+            // Buscamos la primera respuesta que sea incorrecta y no esté deshabilitada ya
+            for (let radio of opcionesElementos) {
+                if (radio.value !== preguntaActual.respuesta_correcta && !radio.disabled) {
+                    radio.disabled = true;
+                    radio.parentElement.style.opacity = '0.3';
+                    radio.parentElement.style.textDecoration = 'line-through';
+                    break; 
+                }
+            }
+            
+            boton.remove();
+            consumirItemBackend('lupa');
+            renderizarInventario(); // Actualiza por si no quedan más ítems
+        }
 
-            if (seleccion === correcta) {
-                // Correcto: Esperamos un instante y pasamos a la siguiente
-                setTimeout(() => {
-                    indiceActual++;
-                    cargarPregunta();
-                }, 600);
-            } else {
-                // Incorrecto: Restamos vida comunicándonos con app.py sin recargar la página
+        function usarEscudo(boton) {
+            escudoActivo = true;
+            boton.remove();
+            consumirItemBackend('escudo');
+            renderizarInventario();
+            alert("¡Escudo de Hoja activado! 🛡️🍃 Estás protegido contra tu próximo error.");
+        }
+
+    btnSiguiente.addEventListener('click', () => {
+        const seleccionada = document.querySelector('input[name="respuesta_usuario"]:checked');
+        if (!seleccionada) return;
+
+        const respuestaSeleccionada = seleccionada.value;
+        const preguntaActual = preguntas[indiceActual];
+
+        if (respuestaSeleccionada === preguntaActual.respuesta_correcta) {
+            ranaAvatar.src = "{{ url_for('static', filename='img/rana_feliz.png') }}";
+            
+            setTimeout(() => {
+                indiceActual++;
+                cargarPregunta();
+            }, 800);
+
+        } else {
+                // RESPUESTA INCORRECTA
+                // --- NUEVA LÓGICA DEL ESCUDO ---
+                if (escudoActivo) {
+                    escudoActivo = false; // El escudo se rompe
+                    alert("¡Te equivocaste, pero el Escudo de Hoja te protegió! 🍃 No pierdes ranitas.");
+                    
+                    // Reiniciamos el estado para que vuelva a intentarlo
+                    seleccionada.checked = false;
+                    btnSiguiente.style.opacity = '0.5';
+                    btnSiguiente.style.cursor = 'not-allowed';
+                    btnSiguiente.disabled = true;
+                    return; // Detenemos la ejecución aquí para que no reste la vida
+                }
+
+                
+                // Si no hay escudo, la lógica sigue igual (se resta la ranita)
+                // ... (Después de que se usa el escudo) ...
+            
+                ranaAvatar.src = "{{ url_for('static', filename='img/rana_triste.png') }}";
                 fetch("{{ url_for('restar_ranita') }}", {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
+                    method: 'POST'
                 })
                 .then(response => response.json())
                 .then(data => {
                     vidas = data.ranitas_actuales;
-                    contadorVidas.textContent = vidas;
+                    actualizarVidasVisuales(vidas);
                     
                     if (vidas <= 0) {
-                        alert("¡Te quedaste sin ranitas! Redirigiendo al minijuego para que recuperes energía.");
-                        window.location.href = "{{ url_for('minijuego') }}";
+                        // NUEVO COMPORTAMIENTO: Game Over inmediato
+                        setTimeout(() => {
+                            alert("¡Oh no! Te has quedado sin vidas 🐸💔. La lección se cerrará. Necesitas jugar el minijuego de las flores de loto para recuperar energía y volver a intentarlo.");
+                            window.location.href = "{{ url_for('minijuego') }}";
+                        }, 300);
                     } else {
-                        // Limpiamos el error para que vuelva a intentarlo
-                        alert("Esa no es la respuesta. Perdiste una vida 🐸");
-                        radios.forEach(r => {
-                            r.disabled = false;
-                            r.checked = false;
-                        });
+                        // Aún le quedan vidas, le dejamos seguir intentando
+                        alert("Esa no es la respuesta correcta. Pierdes una vida 🐸. ¡Inténtalo de nuevo!");
+                        seleccionada.checked = false;
+                        btnSiguiente.style.opacity = '0.5';
+                        btnSiguiente.style.cursor = 'not-allowed';
+                        btnSiguiente.disabled = true;
+                        ranaAvatar.src = "{{ url_for('static', filename='img/rana_pensativa.png') }}";
                     }
                 })
-                .catch(error => console.error('Error de conexión:', error));
-            }
+                .catch(error => console.error('Error:', error));
         }
+    });
 
-        // Arrancamos el quiz
-        cargarPregunta();
-    </script>
-</body>
-</html>
+    cargarPregunta();
+</script>
+{% endblock %}

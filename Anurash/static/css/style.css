@@ -185,8 +185,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px; /* Reducimos el espacio entre los textos */
-    width: 420px; /* Un ancho ideal para que el texto no se salga */
+    gap: 20px;
+    width: 420px;
     height: 120px;
     background-image: url('../img/panel_fondo.png');
     background-size: contain;
@@ -409,4 +409,66 @@ body {
     align-items: center;
     justify-content: center;
     width: 100%;
+}
+
+/* Contenedor central de las opciones */
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 25px 0;
+}
+
+/* Diseño de cada opción tipo burbuja */
+.option-label {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1.1rem;
+    color: #334155;
+}
+
+.option-label:hover {
+    background-color: #f8fafc;
+    border-color: #94a3b8;
+}
+
+/* Ocultar el radio button feo predeterminado */
+.option-label input[type="radio"] {
+    margin-right: 15px;
+    transform: scale(1.2);
+    accent-color: #0ea5e9; /* Color azul al seleccionar */
+}
+
+/* Botón Siguiente Pregunta */
+.btn-submit {
+    background-color: #0ea5e9;
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    width: 100%;
+}
+
+.btn-submit:hover {
+    background-color: #0284c7;
+}
+
+/* Contenedor central del juego */
+.quiz-container {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 600px;
+    margin: 40px auto;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
 }
