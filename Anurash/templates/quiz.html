@@ -92,9 +92,17 @@
 
 <!-- NUEVA PANTALLA DE VICTORIA -->
 <div class="quiz-container victoria-container" id="mensaje-final" style="display: none; text-align: center;">
-    <img src="{{ url_for('static', filename='img/rana_victoria.png') }}" alt="Victoria" class="brillo-victoria" style="width: 150px; image-rendering: pixelated; margin-bottom: 20px;">
-    <h2 class="titulo-mapa" style="font-size: 3rem; margin-bottom: 5px; color: #00ff80; text-shadow: 3px 3px 6px rgba(0,0,0,0.8);">¡Nivel Superado!</h2>
-    <p style="color: var(--texto-claro); font-size: 1.3rem; margin-bottom: 15px;">¡Tu conocimiento de Python ha crecido enormemente!</p>
+    
+    {% if nivel == 3 %}
+        <!-- Mensaje especial para el último nivel (Nivel 3) -->
+        <img src="{{ url_for('static', filename='img/rana_dormida.png') }}" alt="Rana Dormida" class="brillo-victoria" style="width: 150px; image-rendering: pixelated; margin-bottom: 20px;">
+        <h2 class="titulo-mapa" style="font-size: 2.2rem; margin-bottom: 5px; color: #00ff80; text-shadow: 3px 3px 6px rgba(0,0,0,0.8);">¡Ya completó su estudio, puede descansar!</h2>
+    {% else %}
+        <!-- Mensaje normal para los demás niveles (Nivel 1 y 2) -->
+        <img src="{{ url_for('static', filename='img/rana_victoria.png') }}" alt="Victoria" class="brillo-victoria" style="width: 150px; image-rendering: pixelated; margin-bottom: 20px;">
+        <h2 class="titulo-mapa" style="font-size: 3rem; margin-bottom: 5px; color: #00ff80; text-shadow: 3px 3px 6px rgba(0,0,0,0.8);">¡Nivel Superado!</h2>
+        <p style="color: var(--texto-claro); font-size: 1.3rem; margin-bottom: 15px;">¡Tu conocimiento de Python ha crecido enormemente!</p>
+    {% endif %}
     
     <!-- Caja de Recompensas -->
     <div class="recompensa-box">
@@ -153,14 +161,16 @@
             mensajeFinal.style.display = 'block';
             
             // --- NUEVA IMPLEMENTACIÓN: Guardar monedas ---
+            // --- NUEVA IMPLEMENTACIÓN: Guardar monedas y avanzar de nivel ---
             fetch("{{ url_for('reclamar_recompensa') }}", {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 'Content-Type': 'application/json' },
+                // AQUÍ ESTÁ LA MAGIA: Enviamos el nivel que acabamos de jugar
+                body: JSON.stringify({ nivel_superado: parseInt('{{ nivel }}') }) 
             })
             .then(response => response.json())
             .then(data => {
                 console.log(data.mensaje);
-                // Si quieres actualizar el contador de monedas de la barra superior en tiempo real:
                 const contadorMonedas = document.getElementById('contador-monedas-navbar');
                 if (contadorMonedas) {
                     contadorMonedas.textContent = data.monedas_totales;
@@ -299,7 +309,7 @@
             boton.remove();
             consumirItemBackend('escudo');
             renderizarInventario();
-            alert("¡Escudo de Hoja activado! 🛡️🍃 Estás protegido contra tu próximo error.");
+            mostrarAlerta("¡Escudo de Hoja activado! 🛡️🍃 Estás protegido contra tu próximo error.", "#4CAF50", "#2E7D32");
         }
 
     btnSiguiente.addEventListener('click', () => {
@@ -321,21 +331,17 @@
                 // RESPUESTA INCORRECTA
                 // --- NUEVA LÓGICA DEL ESCUDO ---
                 if (escudoActivo) {
-                    escudoActivo = false; // El escudo se rompe
-                    alert("¡Te equivocaste, pero el Escudo de Hoja te protegió! 🍃 No pierdes ranitas.");
+                    escudoActivo = false;
+                    mostrarAlerta("¡Te equivocaste, pero el Escudo te protegió! 🍃 No pierdes vidas.", "#4CAF50", "#2E7D32");
                     
-                    // Reiniciamos el estado para que vuelva a intentarlo
                     seleccionada.checked = false;
                     btnSiguiente.style.opacity = '0.5';
                     btnSiguiente.style.cursor = 'not-allowed';
                     btnSiguiente.disabled = true;
-                    return; // Detenemos la ejecución aquí para que no reste la vida
+                    return; 
                 }
 
-                
-                // Si no hay escudo, la lógica sigue igual (se resta la ranita)
-                // ... (Después de que se usa el escudo) ...
-            
+                // Si se equivoca y NO hay escudo
                 ranaAvatar.src = "{{ url_for('static', filename='img/rana_triste.png') }}";
                 fetch("{{ url_for('restar_ranita') }}", {
                     method: 'POST'
@@ -346,14 +352,16 @@
                     actualizarVidasVisuales(vidas);
                     
                     if (vidas <= 0) {
-                        // NUEVO COMPORTAMIENTO: Game Over inmediato
+                        // GAME OVER: Mostramos la alerta fija y lo llevamos al mapa
+                        mostrarAlerta("¡Te has quedado sin vidas! 🐸💔 Necesitas jugar el minijuego para recuperarlas. Volviendo al estanque...", "#E53935", "#B71C1C", true);
+                        
                         setTimeout(() => {
-                            alert("¡Oh no! Te has quedado sin vidas 🐸💔. La lección se cerrará. Necesitas jugar el minijuego de las flores de loto para recuperar energía y volver a intentarlo.");
-                            window.location.href = "{{ url_for('minijuego') }}";
-                        }, 300);
+                            window.location.href = "{{ url_for('mapa') }}"; // AHORA REDIRIGE AL MAPA
+                        }, 3500); // 3.5 segundos para que alcance a leer
                     } else {
-                        // Aún le quedan vidas, le dejamos seguir intentando
-                        alert("Esa no es la respuesta correcta. Pierdes una vida 🐸. ¡Inténtalo de nuevo!");
+                        // AÚN QUEDAN VIDAS
+                        mostrarAlerta("Respuesta incorrecta. Pierdes una vida 🐸. ¡Tú puedes, inténtalo de nuevo!");
+                        
                         seleccionada.checked = false;
                         btnSiguiente.style.opacity = '0.5';
                         btnSiguiente.style.cursor = 'not-allowed';

@@ -4,10 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anurash</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/rana_feliz.png') }}" type="image/png">
     <!-- Conectamos nuestro archivo de estilos -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+    <!-- BANNER SUPERIOR DE ALERTAS (GLOBAL) -->
+    <div id="alerta-superior" style="display: none; background-color: #4CAF50; color: white; text-align: center; padding: 15px; font-size: 1.2rem; font-weight: bold; position: fixed; top: 0; left: 0; width: 100%; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.6); transition: opacity 0.5s; border-bottom: 4px solid #2E7D32;">
+        <span id="texto-alerta-superior"></span>
+    </div>
+
     <!-- Barra superior de navegación -->
     <nav class="top-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background-color: var(--fondo-paneles); border-bottom: 4px solid var(--agua-clara);">
         
@@ -23,13 +29,47 @@
         
         <!-- Contenedor derecho: Mochila + Monedas -->
         <div style="display: flex; gap: 20px; align-items: center;">
+
+
+            <!-- EL PERGAMINO DE SABIDURÍA -->
+            <div class="pergamino-wrapper" style="position: relative;">
+                <div id="btn-pergamino" onclick="togglePergamino()" style="display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(0,0,0,0.3); padding: 5px 15px; border-radius: 20px; border: 2px solid #FFD700; transition: all 0.3s ease;">
+                    <span id="texto-pergamino" style="color: #FFD700; font-weight: bold; font-size: 14px;">Sabiduría</span>
+                    <img id="icono-pergamino" src="{{ url_for('static', filename='img/icono_pergamino.png') }}" style="width: 40px; height: 40px; image-rendering: pixelated; vertical-align: middle;">
+                </div>
+                
+                <div id="panel-pergamino" style="display: none; position: absolute; top: 50px; right: 0; background: #FFF8DC; border: 3px solid #DAA520; border-radius: 5px; padding: 15px; width: 250px; box-shadow: 0 10px 25px rgba(0,0,0,0.6); z-index: 100; color: #5C4033; font-family: 'Courier New', monospace;">
+                    <h4 style="margin-top:0; border-bottom: 1px solid #DAA520; padding-bottom: 5px;">Apuntes del Nivel</h4>
+                    <div id="contenido-pergamino" style="font-size: 0.9rem;">
+                        {% if apuntes %}
+                            {{ apuntes | safe }}
+                        {% else %}
+                            <p><i>Selecciona un nivel en el estanque para ver sus apuntes mágicos.</i></p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Script del Pergamino -->
+            <script>
+                function togglePergamino() {
+                    const panel = document.getElementById('panel-pergamino');
+                    if (panel.style.display === 'none' || panel.style.display === '') {
+                        panel.style.display = 'block';
+                    } else {
+                        panel.style.display = 'none';
+                    }
+                }
+            </script>
+
+
             
             <!-- LA MOCHILA MÁGICA -->
             <div class="mochila-wrapper" style="position: relative;">
                 <!-- Botón de la mochila -->
                 <div id="btn-mochila" onclick="toggleMochila()" style="display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(0,0,0,0.3); padding: 5px 15px; border-radius: 20px; border: 2px solid var(--turquesa); transition: all 0.3s ease;">
                     <span id="texto-mochila" style="color: var(--texto-claro); font-weight: bold; font-size: 14px;">Abrir Mochila</span>
-                    <span id="icono-mochila" style="font-size: 20px;">🎒</span>
+                    <img id="icono-mochila" src="{{ url_for('static', filename='img/icono_mochila.png') }}" style="width: 40px; height: 40px; image-rendering: pixelated; vertical-align: middle;">
                 </div>
                 
                 <!-- Panel desplegable -->
@@ -46,6 +86,63 @@
                 <img src="{{ url_for('static', filename='img/boton_normal.png') }}" class="icono-moneda" alt="Moneda" style="width: 35px; height: 35px; image-rendering: pixelated;">
             </div>
         </div>
+        <!-- Script global para poblar la mochila fuera del Quiz -->
+        <script>
+            const inventarioGlobal = JSON.parse('{{ usuario.inventario | default([]) | tojson | safe }}');
+
+            function renderizarMochilaGlobal() {
+                const contenedor = document.getElementById('contenido-mochila');
+                if (!contenedor) return;
+
+                // Si estamos dentro de un quiz, dejamos que el script de quiz.html cree los botones clickeables
+                if (window.location.pathname.includes('/quiz')) return;
+
+                contenedor.innerHTML = '';
+
+                // Si está vacía
+                if (!inventarioGlobal || inventarioGlobal.length === 0) {
+                    contenedor.innerHTML = '<p style="color: #A0C4C7; text-align: center; margin: 0; font-size: 0.9rem; font-style: italic;">No se han comprado objetos.</p>';
+                    return;
+                }
+
+                // Si hay objetos, los mostramos como lista (sin botones de usar)
+                inventarioGlobal.forEach(item => {
+                    const divItem = document.createElement('div');
+                    divItem.style.padding = '10px';
+                    divItem.style.backgroundColor = '#1A4D5C';
+                    divItem.style.border = '2px solid #5DD9C1';
+                    divItem.style.borderRadius = '8px';
+                    divItem.style.color = '#E0F2F1';
+                    divItem.style.textAlign = 'center';
+                    divItem.style.fontWeight = 'bold';
+
+                    if (item === 'lupa') divItem.innerHTML = '🔍 Lupa de Pistas';
+                    if (item === 'escudo') divItem.innerHTML = '🛡️ Escudo de Hoja';
+
+                    contenedor.appendChild(divItem);
+                });
+            }
+
+            function mostrarAlerta(mensaje, colorFondo = "#E53935", bordeColor = "#B71C1C", esMortal = false) {
+                const alerta = document.getElementById('alerta-superior');
+                const texto = document.getElementById('texto-alerta-superior');
+
+                texto.textContent = mensaje;
+                alerta.style.backgroundColor = colorFondo;
+                alerta.style.borderBottom = `4px solid ${bordeColor}`;
+                alerta.style.display = 'block';
+                alerta.style.opacity = '1';
+
+                if (!esMortal) {
+                    setTimeout(() => {
+                        alerta.style.opacity = '0';
+                        setTimeout(() => alerta.style.display = 'none', 500);
+                    }, 3000);
+                }
+            }
+            
+            renderizarMochilaGlobal();
+        </script>
     </nav>
 
     <!-- Script global para la animación de la mochila -->

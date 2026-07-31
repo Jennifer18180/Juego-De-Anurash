@@ -1,10 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<!-- NUEVOS ESTILOS PARA ENSANCHAR EL TABLÓN -->
+<style>
+    .minijuego-hud {
+        /* Estiramos el tablón de madera para que abarque todo el texto */
+        background-size: 100% 100% !important;
+        
+        /* Le damos un ancho mínimo más grande (puedes subir este número si lo necesitas más ancho) */
+        min-width: 450px !important; 
+        
+        /* Ajustamos los bordes internos para que el texto no toque las hojas verdes */
+        padding: 30px 50px !important; 
+        
+        /* Organizamos el contenido internamente */
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 30px !important; 
+        margin: 0 auto 30px auto !important; 
+    }
+    
+    .minijuego-hud h2 {
+        margin: 0 !important;
+        font-size: 1.3rem !important;
+        /* Esto evita que el texto salte a la línea de abajo */
+        white-space: nowrap !important; 
+    }
+</style>
+
 <div class="minijuego-container">
     
     <!-- Panel de información (HUD) -->
-    <!-- En minijuego.html -->
     <div class="minijuego-hud">
         <h2>⏱️ Tiempo: <span id="tiempo-restante">30</span>s</h2>
         <h2>🌸 Flores: <span id="puntuacion">0</span> / 10</h2>

@@ -1,45 +1,161 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="mapa-container">
-    
+
+<style>
+    .fondo-estanque-dinamico {
+        background-image: url("{{ url_for('static', filename='img/fondo_estanque.png') }}");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        min-height: 100vh;
+        padding-bottom: 50px;
+    }
+</style>
+
+<div class="mapa-container fondo-estanque-dinamico">
     <div class="cabecera-mapa">
         <h1 class="titulo-mapa">Estanque de Aprendizaje</h1>
     </div>
 
-    <!-- El camino de niveles -->
-    <div class="ruta-niveles">
+    <div class="controles-superiores" style="display: flex; justify-content: center; gap: 15px; margin-bottom: 20px;">
+        <a href="/minijuego" class="boton-opcion" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
+            <img src="{{ url_for('static', filename='img/icono_flor.png') }}" style="width: 45px; height: 45px; image-rendering: pixelated; margin-right: 12px;"> Jugar por Vidas
+        </a>
+        <a href="/tienda" class="boton-opcion" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
+            <img src="{{ url_for('static', filename='img/icono_tienda.png') }}" style="width: 45px; height: 45px; image-rendering: pixelated; margin-right: 12px;"> Tienda Mágica
+        </a>
+    </div>
+
+    <div class="ruta-niveles" style="display: flex; flex-direction: column; gap: 30px; align-items: center; padding: 20px 0;">
         
-        <!-- Nivel 3: Bloqueado (Gris) -->
-        <!-- Usamos estilos en línea (align-self) para hacer el zig-zag -->
-        <div class="nivel-nodo bloqueado" style="align-self: flex-start;">
-            <span class="nivel-numero">3</span>
-            <span class="nivel-nombre">Bucles (For/While)</span>
+        <!-- FASE 1: PRINCIPIANTE -->
+        <div style="width: 100%; text-align: center; border-bottom: 2px dashed #A0C4C7; margin-bottom: 10px;">
+            <h2><img src="{{ url_for('static', filename='img/icono_fase1.png') }}" style="width: 55px; height: 55px; image-rendering: pixelated; vertical-align: middle; margin-right: 10px;"> Fase 1: Orilla Segura</h2>
         </div>
 
-        <!-- Nivel 2: Nivel Actual (Donde está tu ranita) -->
-        <a href="/quiz/2" class="nivel-nodo actual" style="align-self: flex-end;">
-            <!-- La ranita feliz sentada en el nenúfar -->
-            <img src="{{ url_for('static', filename='img/rana_feliz.png') }}" class="rana-avatar-mapa" alt="Tu Rana">
-            <span class="nivel-numero">2</span>
-            <span class="nivel-nombre">Variables</span>
+        <!-- Nivel 1 -->
+        <a {% if usuario.nivel_actual >= 1 %}href="/quiz/1"{% endif %} 
+           class="nivel-nodo {% if usuario.nivel_actual > 1 %}completado{% elif usuario.nivel_actual == 1 %}actual{% else %}bloqueado{% endif %}" 
+           style="align-self: flex-start;">
+            {% if usuario.nivel_actual == 1 %}
+                {% if usuario.cosmetico == 'sombrero' %}
+                    <img src="{{ url_for('static', filename='img/rana_sombrero.png') }}" class="rana-avatar-mapa">
+                {% elif usuario.cosmetico == 'collar' %}
+                    <img src="{{ url_for('static', filename='img/rana_collar.png') }}" class="rana-avatar-mapa">
+                {% else %}
+                    <img src="{{ url_for('static', filename='img/rana_feliz.png') }}" class="rana-avatar-mapa">
+                {% endif %}
+            {% endif %}
+            <span class="nivel-numero">1</span><span class="nivel-nombre">Print y Tipos</span>
         </a>
 
-        <!-- Nivel 1: Completado -->
-        <a href="/quiz/1" class="nivel-nodo completado" style="align-self: center;">
-            <span class="nivel-numero">1</span>
-            <span class="nivel-nombre">Conceptos Básicos</span>
+        <!-- Nivel 2 -->
+        <a {% if usuario.nivel_actual >= 2 %}href="/quiz/2"{% endif %} 
+           class="nivel-nodo {% if usuario.nivel_actual > 2 %}completado{% elif usuario.nivel_actual == 2 %}actual{% else %}bloqueado{% endif %}" 
+           style="align-self: center;">
+            {% if usuario.nivel_actual == 2 %}
+                {% if usuario.cosmetico == 'sombrero' %}
+                    <img src="{{ url_for('static', filename='img/rana_sombrero.png') }}" class="rana-avatar-mapa">
+                {% elif usuario.cosmetico == 'collar' %}
+                    <img src="{{ url_for('static', filename='img/rana_collar.png') }}" class="rana-avatar-mapa">
+                {% else %}
+                    <img src="{{ url_for('static', filename='img/rana_feliz.png') }}" class="rana-avatar-mapa">
+                {% endif %}
+            {% endif %}
+            <span class="nivel-numero">2</span><span class="nivel-nombre">Variables</span>
+        </a>
+
+        <!-- Nivel 3 -->
+        <a {% if usuario.nivel_actual >= 3 %}href="/quiz/3"{% endif %} 
+           class="nivel-nodo {% if usuario.nivel_actual > 3 %}completado{% elif usuario.nivel_actual == 3 %}actual{% else %}bloqueado{% endif %}" 
+           style="align-self: flex-end;">
+            {% if usuario.nivel_actual == 3 %}
+                {% if usuario.cosmetico == 'sombrero' %}
+                    <img src="{{ url_for('static', filename='img/rana_sombrero.png') }}" class="rana-avatar-mapa">
+                {% elif usuario.cosmetico == 'collar' %}
+                    <img src="{{ url_for('static', filename='img/rana_collar.png') }}" class="rana-avatar-mapa">
+                {% else %}
+                    <img src="{{ url_for('static', filename='img/rana_feliz.png') }}" class="rana-avatar-mapa">
+                {% endif %}
+            {% endif %}
+            <span class="nivel-numero">3</span><span class="nivel-nombre">Operadores y Lógica</span>
+        </a>
+
+        <!-- FASE 2: AVANZADO -->
+        <div style="width: 100%; text-align: center; border-bottom: 2px dashed #5DD9C1; margin: 20px 0 10px 0;">
+            <h2><img src="{{ url_for('static', filename='img/icono_fase2.png') }}" style="width: 55px; height: 55px; image-rendering: pixelated; vertical-align: middle; margin-right: 10px;"> Fase 2: Corriente Rápida</h2>
+        </div>
+
+        <!-- Nivel 4 -->
+        <a {% if usuario.nivel_actual >= 4 %}href="/quiz/4"{% endif %} 
+           class="nivel-nodo {% if usuario.nivel_actual > 4 %}completado{% elif usuario.nivel_actual == 4 %}actual{% else %}bloqueado{% endif %}" 
+           style="align-self: flex-start;">
+            {% if usuario.nivel_actual == 4 %}
+                {% if usuario.cosmetico == 'sombrero' %}
+                    <img src="{{ url_for('static', filename='img/rana_sombrero.png') }}" class="rana-avatar-mapa">
+                {% elif usuario.cosmetico == 'collar' %}
+                    <img src="{{ url_for('static', filename='img/rana_collar.png') }}" class="rana-avatar-mapa">
+                {% else %}
+                    <img src="{{ url_for('static', filename='img/rana_feliz.png') }}" class="rana-avatar-mapa">
+                {% endif %}
+            {% endif %}
+            <span class="nivel-numero">4</span><span class="nivel-nombre">Condicionales (If/Else)</span>
+        </a>
+
+        <!-- Nivel 5 -->
+        <a {% if usuario.nivel_actual >= 5 %}href="/quiz/5"{% endif %} 
+           class="nivel-nodo {% if usuario.nivel_actual > 5 %}completado{% elif usuario.nivel_actual == 5 %}actual{% else %}bloqueado{% endif %}" 
+           style="align-self: center;">
+            {% if usuario.nivel_actual == 5 %}
+                {% if usuario.cosmetico == 'sombrero' %}
+                    <img src="{{ url_for('static', filename='img/rana_sombrero.png') }}" class="rana-avatar-mapa">
+                {% elif usuario.cosmetico == 'collar' %}
+                    <img src="{{ url_for('static', filename='img/rana_collar.png') }}" class="rana-avatar-mapa">
+                {% else %}
+                    <img src="{{ url_for('static', filename='img/rana_feliz.png') }}" class="rana-avatar-mapa">
+                {% endif %}
+            {% endif %}
+            <span class="nivel-numero">5</span><span class="nivel-nombre">Bucles Avanzados</span>
+        </a>
+
+        <!-- FASE 3: DIFÍCIL -->
+        <div style="width: 100%; text-align: center; border-bottom: 2px dashed var(--turquesa); margin: 20px 0 10px 0;">
+            <h2><img src="{{ url_for('static', filename='img/icono_fase3.png') }}" style="width: 55px; height: 55px; image-rendering: pixelated; vertical-align: middle; margin-right: 10px;"> Fase 3: Aguas Profundas</h2>
+        </div>
+
+        <!-- Nivel 6 -->
+        <a {% if usuario.nivel_actual >= 6 %}href="/quiz/6"{% endif %} 
+           class="nivel-nodo {% if usuario.nivel_actual > 6 %}completado{% elif usuario.nivel_actual == 6 %}actual{% else %}bloqueado{% endif %}" 
+           style="align-self: flex-end;">
+            {% if usuario.nivel_actual == 6 %}
+                {% if usuario.cosmetico == 'sombrero' %}
+                    <img src="{{ url_for('static', filename='img/rana_sombrero.png') }}" class="rana-avatar-mapa">
+                {% elif usuario.cosmetico == 'collar' %}
+                    <img src="{{ url_for('static', filename='img/rana_collar.png') }}" class="rana-avatar-mapa">
+                {% else %}
+                    <img src="{{ url_for('static', filename='img/rana_feliz.png') }}" class="rana-avatar-mapa">
+                {% endif %}
+            {% endif %}
+            <span class="nivel-numero">6</span><span class="nivel-nombre">Listas y Colecciones</span>
+        </a>
+
+        <!-- Nivel 7 -->
+        <a {% if usuario.nivel_actual >= 7 %}href="/quiz/7"{% endif %} 
+           class="nivel-nodo {% if usuario.nivel_actual > 7 %}completado{% elif usuario.nivel_actual == 7 %}actual{% else %}bloqueado{% endif %}" 
+           style="align-self: flex-start;">
+            {% if usuario.nivel_actual == 7 %}
+                {% if usuario.cosmetico == 'sombrero' %}
+                    <img src="{{ url_for('static', filename='img/rana_sombrero.png') }}" class="rana-avatar-mapa">
+                {% elif usuario.cosmetico == 'collar' %}
+                    <img src="{{ url_for('static', filename='img/rana_collar.png') }}" class="rana-avatar-mapa">
+                {% else %}
+                    <img src="{{ url_for('static', filename='img/rana_feliz.png') }}" class="rana-avatar-mapa">
+                {% endif %}
+            {% endif %}
+            <span class="nivel-numero">7</span><span class="nivel-nombre">Funciones Mágicas</span>
         </a>
 
     </div>
-    
-    <!-- Botones extra para navegar -->
-    <div class="controles-inferiores">
-        <a href="/minijuego" class="boton-opcion" style="text-decoration: none;">🌸 Jugar por Vidas</a>
-        <!-- Este botón de tienda lo prepararemos más adelante -->
-        <!-- Cambia esta línea en mapa.html -->
-        <a href="/tienda" class="boton-opcion" style="text-decoration: none;">⛺ Tienda Mágica</a>
-    </div>
-
 </div>
 {% endblock %}
