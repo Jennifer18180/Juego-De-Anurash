@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anurash - Desafío Python</title>
+    <!-- Asegúrate de que el nombre de tu archivo CSS coincida -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="page-quises">
+    <div class="quiz-container">
+        
+        <!-- BARRA SUPERIOR: Vidas y Nivel -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px dashed var(--border-color); padding-bottom: 15px;">
+            <h3 style="margin: 0; color: var(--primary);">Nivel {{ nivel }}</h3>
+            <div style="font-size: 1.2rem; font-weight: 600; color: #475569;">
+                Vidas: <span id="contador-vidas" style="color: #f43f5e; font-size: 1.5rem;">{{ usuario.ranitas_actuales }}</span> 🐸
+            </div>
+        </div>
+
+        <!-- ÁREA DEL JUEGO DINÁMICA -->
+        <div id="juego-contenedor">
+            <div class="progress-wrapper">
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="barra-progreso" style="width: 0%;"></div>
+                </div>
+                <span class="progress-text" id="texto-progreso">Preparando preguntas...</span>
+            </div>
+
+            <h2 class="question-text" id="texto-pregunta">Cargando...</h2>
+
+            <div class="options-container" id="contenedor-opciones">
+                <!-- JavaScript inyectará las opciones aquí -->
+            </div>
+        </div>
+        
+        <!-- MENSAJE DE VICTORIA (Oculto inicialmente) -->
+        <div id="mensaje-final" style="display: none; text-align: center;">
+            <div style="font-size: 4rem; margin-bottom: 20px;">🏆</div>
+            <h2 class="main-title" style="font-size: 2.2rem;">¡Nivel Completado!</h2>
+            <p class="subtitle" style="margin-bottom: 30px;">Has superado esta prueba de Python con éxito.</p>
+            <a href="{{ url_for('mapa') }}" class="btn-submit">Volver al Mapa</a>
+        </div>
+
+    </div>
+
+    <!-- LÓGICA DEL JUEGO -->
+    <script>
+        // tojson de Jinja permite pasar el diccionario de Python directamente a variables de JavaScript
+        const preguntas = JSON.parse('{{ datos | tojson | safe }}');
+        let indiceActual = 0;
+        let vidas = parseInt('{{ usuario.ranitas_actuales }}');
+
+        const textoPregunta = document.getElementById('texto-pregunta');
+        const contenedorOpciones = document.getElementById('contenedor-opciones');
+        const textoProgreso = document.getElementById('texto-progreso');
+        const barraProgreso = document.getElementById('barra-progreso');
+        const contadorVidas = document.getElementById('contador-vidas');
+        
+        const juegoContenedor = document.getElementById('juego-contenedor');
+        const mensajeFinal = document.getElementById('mensaje-final');
+
+        function cargarPregunta() {
+            // Comprobamos si ya no hay más preguntas
+            if (indiceActual >= preguntas.length) {
+                juegoContenedor.style.display = 'none';
+                mensajeFinal.style.display = 'block';
+                return;
+            }
+
+            const preguntaActual = preguntas[indiceActual];
+            textoPregunta.textContent = preguntaActual.pregunta;
+            
+            // Actualizamos la barra visualmente
+            const porcentaje = (indiceActual / preguntas.length) * 100;
+            barraProgreso.style.width = porcentaje + '%';
+            textoProgreso.textContent = `Pregunta ${indiceActual + 1} de ${preguntas.length} completada`;
+
+            // Limpiamos las opciones anteriores
+            contenedorOpciones.innerHTML = '';
+
+            // Dibujamos los botones de las opciones
+            preguntaActual.opciones.forEach(opcion => {
+                const label = document.createElement('label');
+                label.className = 'option-label';
+                
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = 'respuesta';
+                radio.value = opcion;
+                
+                const span = document.createElement('span');
+                span.textContent = opcion;
+
+                label.appendChild(radio);
+                label.appendChild(span);
+                
+                // Disparamos la validación en cuanto el usuario haga clic
+                radio.addEventListener('change', () => validarRespuesta(opcion, preguntaActual.respuesta_correcta));
+                
+                contenedorOpciones.appendChild(label);
+            });
+        }
+
+        function validarRespuesta(seleccion, correcta) {
+            // Bloqueamos las opciones para que no haga múltiples clics
+            const radios = document.querySelectorAll('input[type="radio"]');
+            radios.forEach(r => r.disabled = true);
+
+            if (seleccion === correcta) {
+                // Correcto: Esperamos un instante y pasamos a la siguiente
+                setTimeout(() => {
+                    indiceActual++;
+                    cargarPregunta();
+                }, 600);
+            } else {
+                // Incorrecto: Restamos vida comunicándonos con app.py sin recargar la página
+                fetch("{{ url_for('restar_ranita') }}", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    vidas = data.ranitas_actuales;
+                    contadorVidas.textContent = vidas;
+                    
+                    if (vidas <= 0) {
+                        alert("¡Te quedaste sin ranitas! Redirigiendo al minijuego para que recuperes energía.");
+                        window.location.href = "{{ url_for('minijuego') }}";
+                    } else {
+                        // Limpiamos el error para que vuelva a intentarlo
+                        alert("Esa no es la respuesta. Perdiste una vida 🐸");
+                        radios.forEach(r => {
+                            r.disabled = false;
+                            r.checked = false;
+                        });
+                    }
+                })
+                .catch(error => console.error('Error de conexión:', error));
+            }
+        }
+
+        // Arrancamos el quiz
+        cargarPregunta();
+    </script>
+</body>
+</html>

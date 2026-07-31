@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anurash</title>
+    <!-- Conectamos nuestro archivo de estilos -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Barra superior de navegación -->
+    <nav class="top-bar">
+        <div class="vidas-container">
+            <!-- Usamos Jinja (Flask) para repetir las vidas según las que tenga el usuario -->
+            {% for i in range(usuario.ranitas_actuales) %}
+                <img src="{{ url_for('static', filename='img/vida_llena.png') }}" class="icono-vida" alt="Vida llena">
+            {% endfor %}
+            {% for i in range(3 - usuario.ranitas_actuales) %}
+                <img src="{{ url_for('static', filename='img/vida_vacia.png') }}" class="icono-vida" alt="Vida vacía">
+            {% endfor %}
+        </div>
+        
+        <div class="monedas-container">
+            <span class="texto-monedas">{{ usuario.monedas }}</span>
+            <img src="{{ url_for('static', filename='img/boton_normal.png') }}" class="icono-moneda" alt="Moneda">
+        </div>
+    </nav>
+
+    <!-- Aquí irá el contenido cambiante (el mapa, el quiz o el minijuego) -->
+    <main class="contenedor-principal">
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
+</html>

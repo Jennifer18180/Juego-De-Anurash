@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="minijuego-container">
+    
+    <!-- Panel de información (HUD) -->
+    <!-- En minijuego.html -->
+    <div class="minijuego-hud">
+        <h2>⏱️ Tiempo: <span id="tiempo-restante">30</span>s</h2>
+        <h2>🌸 Flores: <span id="puntuacion">0</span> / 10</h2>
+    </div>
+
+    <!-- El tablero 3x3 -->
+    <div class="estanque-grid">
+        <!-- Creamos 9 casillas. Cada una tiene el nenúfar de fondo y una flor oculta -->
+        {% for i in range(1, 10) %}
+        <div class="nenufar-casilla" id="casilla-{{ i }}">
+            <!-- Reutilizamos la clase flor-animada que creamos antes -->
+            <div class="flor-animada flor-oculta" onclick="atraparFlor(this)"></div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div id="mensaje-final" style="display: none;">
+        <h2 id="texto-resultado">¡Completado!</h2>
+        <a href="/" class="boton-opcion" style="text-decoration: none; display: inline-block; margin-top: 10px;">Volver al Mapa</a>
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/minijuego.js') }}"></script>
+{% endblock %}

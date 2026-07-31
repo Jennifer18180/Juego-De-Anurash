@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="tienda-container">
+    
+    <div class="cabecera-mapa">
+        <h1 class="titulo-mapa">Tienda de Accesorios ⛺</h1>
+    </div>
+
+    <div class="items-grid">
+        
+        <!-- Ítem 1: La Lupa -->
+        <div class="item-tarjeta">
+            <img src="{{ url_for('static', filename='img/item_lupa.png') }}" alt="Lupa">
+            <h3>Lupa de Pistas</h3>
+            <p>Elimina una respuesta incorrecta en tu próximo Quiz.</p>
+            <button class="boton-opcion comprar-btn">
+                50 <img src="{{ url_for('static', filename='img/moneda.png') }}" class="icono-moneda-peq">
+            </button>
+        </div>
+
+        <!-- Ítem 2: El Escudo -->
+        <div class="item-tarjeta">
+            <img src="{{ url_for('static', filename='img/item_escudo_hoja.png') }}" alt="Escudo Hoja">
+            <h3>Escudo de Hoja</h3>
+            <p>Te protege de perder una vida (ranita) si te equivocas.</p>
+            <button class="boton-opcion comprar-btn">
+                100 <img src="{{ url_for('static', filename='img/moneda.png') }}" class="icono-moneda-peq">
+            </button>
+        </div>
+
+    </div>
+    
+    <!-- Botón para regresar -->
+    <a href="/" class="boton-opcion" style="margin-top: 40px; text-decoration: none;">Volver al Estanque</a>
+
+</div>
+{% endblock %}
