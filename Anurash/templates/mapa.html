@@ -35,13 +35,13 @@
         </div>
 
         <!-- Nivel 1 -->
-        <a {% if usuario.nivel_actual >= 1 %}href="/quiz/1"{% endif %} 
-           class="nivel-nodo {% if usuario.nivel_actual > 1 %}completado{% elif usuario.nivel_actual == 1 %}actual{% else %}bloqueado{% endif %}" 
+        <a {% if jugador.nivel_actual >= 1 %}href="/quiz/1"{% endif %} 
+           class="nivel-nodo {% if jugador.nivel_actual > 1 %}completado{% elif jugador.nivel_actual == 1 %}actual{% else %}bloqueado{% endif %}" 
            style="align-self: flex-start;">
-            {% if usuario.nivel_actual == 1 %}
-                {% if usuario.cosmetico == 'sombrero' %}
+            {% if jugador.nivel_actual == 1 %}
+                {% if jugador.cosmetico == 'sombrero' %}
                     <img src="{{ url_for('static', filename='img/rana_sombrero.png') }}" class="rana-avatar-mapa">
-                {% elif usuario.cosmetico == 'collar' %}
+                {% elif jugador.cosmetico == 'collar' %}
                     <img src="{{ url_for('static', filename='img/rana_collar.png') }}" class="rana-avatar-mapa">
                 {% else %}
                     <img src="{{ url_for('static', filename='img/rana_feliz.png') }}" class="rana-avatar-mapa">
@@ -51,13 +51,13 @@
         </a>
 
         <!-- Nivel 2 -->
-        <a {% if usuario.nivel_actual >= 2 %}href="/quiz/2"{% endif %} 
-           class="nivel-nodo {% if usuario.nivel_actual > 2 %}completado{% elif usuario.nivel_actual == 2 %}actual{% else %}bloqueado{% endif %}" 
+        <a {% if jugador.nivel_actual >= 2 %}href="/quiz/2"{% endif %} 
+           class="nivel-nodo {% if jugador.nivel_actual > 2 %}completado{% elif jugador.nivel_actual == 2 %}actual{% else %}bloqueado{% endif %}" 
            style="align-self: center;">
-            {% if usuario.nivel_actual == 2 %}
-                {% if usuario.cosmetico == 'sombrero' %}
+            {% if jugador.nivel_actual == 2 %}
+                {% if jugador.cosmetico == 'sombrero' %}
                     <img src="{{ url_for('static', filename='img/rana_sombrero.png') }}" class="rana-avatar-mapa">
-                {% elif usuario.cosmetico == 'collar' %}
+                {% elif jugador.cosmetico == 'collar' %}
                     <img src="{{ url_for('static', filename='img/rana_collar.png') }}" class="rana-avatar-mapa">
                 {% else %}
                     <img src="{{ url_for('static', filename='img/rana_feliz.png') }}" class="rana-avatar-mapa">
@@ -67,13 +67,13 @@
         </a>
 
         <!-- Nivel 3 -->
-        <a {% if usuario.nivel_actual >= 3 %}href="/quiz/3"{% endif %} 
-           class="nivel-nodo {% if usuario.nivel_actual > 3 %}completado{% elif usuario.nivel_actual == 3 %}actual{% else %}bloqueado{% endif %}" 
+        <a {% if jugador.nivel_actual >= 3 %}href="/quiz/3"{% endif %} 
+           class="nivel-nodo {% if jugador.nivel_actual > 3 %}completado{% elif jugador.nivel_actual == 3 %}actual{% else %}bloqueado{% endif %}" 
            style="align-self: flex-end;">
-            {% if usuario.nivel_actual == 3 %}
-                {% if usuario.cosmetico == 'sombrero' %}
+            {% if jugador.nivel_actual == 3 %}
+                {% if jugador.cosmetico == 'sombrero' %}
                     <img src="{{ url_for('static', filename='img/rana_sombrero.png') }}" class="rana-avatar-mapa">
-                {% elif usuario.cosmetico == 'collar' %}
+                {% elif jugador.cosmetico == 'collar' %}
                     <img src="{{ url_for('static', filename='img/rana_collar.png') }}" class="rana-avatar-mapa">
                 {% else %}
                     <img src="{{ url_for('static', filename='img/rana_feliz.png') }}" class="rana-avatar-mapa">
@@ -88,13 +88,13 @@
         </div>
 
         <!-- Nivel 4 -->
-        <a {% if usuario.nivel_actual >= 4 %}href="/quiz/4"{% endif %} 
-           class="nivel-nodo {% if usuario.nivel_actual > 4 %}completado{% elif usuario.nivel_actual == 4 %}actual{% else %}bloqueado{% endif %}" 
+        <a {% if jugador.nivel_actual >= 4 %}href="/quiz/4"{% endif %} 
+           class="nivel-nodo {% if jugador.nivel_actual > 4 %}completado{% elif jugador.nivel_actual == 4 %}actual{% else %}bloqueado{% endif %}" 
            style="align-self: flex-start;">
-            {% if usuario.nivel_actual == 4 %}
-                {% if usuario.cosmetico == 'sombrero' %}
+            {% if jugador.nivel_actual == 4 %}
+                {% if jugador.cosmetico == 'sombrero' %}
                     <img src="{{ url_for('static', filename='img/rana_sombrero.png') }}" class="rana-avatar-mapa">
-                {% elif usuario.cosmetico == 'collar' %}
+                {% elif jugador.cosmetico == 'collar' %}
                     <img src="{{ url_for('static', filename='img/rana_collar.png') }}" class="rana-avatar-mapa">
                 {% else %}
                     <img src="{{ url_for('static', filename='img/rana_feliz.png') }}" class="rana-avatar-mapa">
@@ -104,13 +104,13 @@
         </a>
 
         <!-- Nivel 5 -->
-        <a {% if usuario.nivel_actual >= 5 %}href="/quiz/5"{% endif %} 
-           class="nivel-nodo {% if usuario.nivel_actual > 5 %}completado{% elif usuario.nivel_actual == 5 %}actual{% else %}bloqueado{% endif %}" 
+        <a {% if jugador.nivel_actual >= 5 %}href="/quiz/5"{% endif %} 
+           class="nivel-nodo {% if jugador.nivel_actual > 5 %}completado{% elif jugador.nivel_actual == 5 %}actual{% else %}bloqueado{% endif %}" 
            style="align-self: center;">
-            {% if usuario.nivel_actual == 5 %}
-                {% if usuario.cosmetico == 'sombrero' %}
+            {% if jugador.nivel_actual == 5 %}
+                {% if jugador.cosmetico == 'sombrero' %}
                     <img src="{{ url_for('static', filename='img/rana_sombrero.png') }}" class="rana-avatar-mapa">
-                {% elif usuario.cosmetico == 'collar' %}
+                {% elif jugador.cosmetico == 'collar' %}
                     <img src="{{ url_for('static', filename='img/rana_collar.png') }}" class="rana-avatar-mapa">
                 {% else %}
                     <img src="{{ url_for('static', filename='img/rana_feliz.png') }}" class="rana-avatar-mapa">
@@ -125,13 +125,13 @@
         </div>
 
         <!-- Nivel 6 -->
-        <a {% if usuario.nivel_actual >= 6 %}href="/quiz/6"{% endif %} 
-           class="nivel-nodo {% if usuario.nivel_actual > 6 %}completado{% elif usuario.nivel_actual == 6 %}actual{% else %}bloqueado{% endif %}" 
+        <a {% if jugador.nivel_actual >= 6 %}href="/quiz/6"{% endif %} 
+           class="nivel-nodo {% if jugador.nivel_actual > 6 %}completado{% elif jugador.nivel_actual == 6 %}actual{% else %}bloqueado{% endif %}" 
            style="align-self: flex-end;">
-            {% if usuario.nivel_actual == 6 %}
-                {% if usuario.cosmetico == 'sombrero' %}
+            {% if jugador.nivel_actual == 6 %}
+                {% if jugador.cosmetico == 'sombrero' %}
                     <img src="{{ url_for('static', filename='img/rana_sombrero.png') }}" class="rana-avatar-mapa">
-                {% elif usuario.cosmetico == 'collar' %}
+                {% elif jugador.cosmetico == 'collar' %}
                     <img src="{{ url_for('static', filename='img/rana_collar.png') }}" class="rana-avatar-mapa">
                 {% else %}
                     <img src="{{ url_for('static', filename='img/rana_feliz.png') }}" class="rana-avatar-mapa">
@@ -141,13 +141,13 @@
         </a>
 
         <!-- Nivel 7 -->
-        <a {% if usuario.nivel_actual >= 7 %}href="/quiz/7"{% endif %} 
-           class="nivel-nodo {% if usuario.nivel_actual > 7 %}completado{% elif usuario.nivel_actual == 7 %}actual{% else %}bloqueado{% endif %}" 
+        <a {% if jugador.nivel_actual >= 7 %}href="/quiz/7"{% endif %} 
+           class="nivel-nodo {% if jugador.nivel_actual > 7 %}completado{% elif jugador.nivel_actual == 7 %}actual{% else %}bloqueado{% endif %}" 
            style="align-self: flex-start;">
-            {% if usuario.nivel_actual == 7 %}
-                {% if usuario.cosmetico == 'sombrero' %}
+            {% if jugador.nivel_actual == 7 %}
+                {% if jugador.cosmetico == 'sombrero' %}
                     <img src="{{ url_for('static', filename='img/rana_sombrero.png') }}" class="rana-avatar-mapa">
-                {% elif usuario.cosmetico == 'collar' %}
+                {% elif jugador.cosmetico == 'collar' %}
                     <img src="{{ url_for('static', filename='img/rana_collar.png') }}" class="rana-avatar-mapa">
                 {% else %}
                     <img src="{{ url_for('static', filename='img/rana_feliz.png') }}" class="rana-avatar-mapa">

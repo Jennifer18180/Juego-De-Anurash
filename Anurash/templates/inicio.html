@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Anurash - Inicio</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at center, #2b5876 0%, #1a2a6c 50%, #11212b 100%);
+            color: white;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* Animación para que la rana flote */
+        @keyframes flotar {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .rana-inicio {
+            width: 180px;
+            image-rendering: pixelated;
+            animation: flotar 4s ease-in-out infinite;
+            filter: drop-shadow(0px 15px 15px rgba(0,0,0,0.6));
+            margin-bottom: 10px;
+        }
+
+        .titulo-juego {
+            font-size: 5rem;
+            color: #4CAF50;
+            text-shadow: 0px 0px 20px rgba(76, 175, 80, 0.8), 3px 3px 0px #000;
+            margin-bottom: 5px;
+            letter-spacing: 5px;
+        }
+
+        .descripcion {
+            font-size: 1.3rem;
+            max-width: 600px;
+            margin-bottom: 30px;
+            color: #A5D6A7;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        .formulario-inicio {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px dashed #4CAF50;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input-nombre {
+            padding: 15px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            border: 2px solid #4CAF50;
+            background-color: rgba(0,0,0,0.6);
+            color: white;
+            margin-bottom: 20px;
+            width: 250px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s;
+        }
+
+        .input-nombre:focus {
+            outline: none;
+            border-color: #5DD9C1;
+            box-shadow: 0 0 15px rgba(93, 217, 193, 0.5);
+        }
+
+        /* Efecto de latido para el botón */
+        @keyframes latido {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .boton-iniciar {
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0px 6px 0px #2E7D32;
+            transition: all 0.2s;
+            animation: latido 2s infinite;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+        .boton-iniciar:active {
+            box-shadow: 0px 0px 0px #2E7D32;
+            transform: translateY(6px);
+            animation: none;
+        }
+    </style>
+</head>
+<body>
+
+    <img src="{{ url_for('static', filename='img/rana_feliz.png') }}" class="rana-inicio" alt="Rana Feliz">
+
+    <h1 class="titulo-juego">ANURASH</h1>
+    <p class="descripcion">Sumérgete en el estanque del saber de Python</p>
+
+    <div class="formulario-inicio">
+        <form action="/inicio" method="POST">
+            <input type="text" name="nombre_jugador" class="input-nombre" placeholder="Tu nombre mágico..." required maxlength="12"><br>
+            <button type="submit" class="boton-iniciar">Empezar Aventura</button>
+        </form>
+    </div>
+
+</body>
+</html>

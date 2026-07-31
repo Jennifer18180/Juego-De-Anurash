@@ -2,24 +2,19 @@
 
 {% block content %}
 
-<!-- ESTILOS MÁGICOS SOLO PARA ESTA PANTALLA -->
 <style>
-    /* 1. Ajustes para el tablón de madera */
     .panel-pregunta {
-        /* Estiramos la madera para que cubra todo el texto sin importar qué tan largo sea */
         background-size: 100% 100% !important; 
         min-height: 160px !important;
-        /* Aumentamos el padding para que el texto no toque las hojas ni los bordes */
         padding: 40px 60px !important; 
     }
 
     .panel-pregunta h2 {
-        font-size: 1.2rem !important; /* Reducimos un poco el tamaño de letra */
+        font-size: 1.2rem !important;
         line-height: 1.5;
         max-width: 100%;
     }
 
-    /* 2. Estilos para la nueva pantalla de victoria llamativa */
     .victoria-container {
         background: linear-gradient(135deg, rgba(72, 196, 183, 0.2), rgba(26, 77, 92, 0.8));
         border: 4px solid var(--turquesa);
@@ -94,11 +89,9 @@
 <div class="quiz-container victoria-container" id="mensaje-final" style="display: none; text-align: center;">
     
     {% if nivel == 3 %}
-        <!-- Mensaje especial para el último nivel (Nivel 3) -->
         <img src="{{ url_for('static', filename='img/rana_dormida.png') }}" alt="Rana Dormida" class="brillo-victoria" style="width: 150px; image-rendering: pixelated; margin-bottom: 20px;">
         <h2 class="titulo-mapa" style="font-size: 2.2rem; margin-bottom: 5px; color: #00ff80; text-shadow: 3px 3px 6px rgba(0,0,0,0.8);">¡Ya completó su estudio, puede descansar!</h2>
     {% else %}
-        <!-- Mensaje normal para los demás niveles (Nivel 1 y 2) -->
         <img src="{{ url_for('static', filename='img/rana_victoria.png') }}" alt="Victoria" class="brillo-victoria" style="width: 150px; image-rendering: pixelated; margin-bottom: 20px;">
         <h2 class="titulo-mapa" style="font-size: 3rem; margin-bottom: 5px; color: #00ff80; text-shadow: 3px 3px 6px rgba(0,0,0,0.8);">¡Nivel Superado!</h2>
         <p style="color: var(--texto-claro); font-size: 1.3rem; margin-bottom: 15px;">¡Tu conocimiento de Python ha crecido enormemente!</p>
@@ -112,7 +105,6 @@
     </div>
     
     <br><br>
-    <!-- Botón dorado especial para volver al mapa -->
     <a href="{{ url_for('mapa') }}" class="boton-opcion" style="text-decoration: none; display: inline-block; background-color: #FFD700; color: #1A4D5C; border-color: #DAA520; font-weight: bold; font-size: 1.3rem; padding: 15px 40px; box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);">
         Volver al Estanque
     </a>
@@ -122,7 +114,7 @@
 <script>
     const preguntas = JSON.parse('{{ datos | tojson | safe }}');
     let indiceActual = 0;
-    let vidas = parseInt('{{ usuario.ranitas_actuales }}');
+    let vidas = parseInt('{{ jugador.ranitas_actuales }}');
 
     const textoPregunta = document.getElementById('texto-pregunta');
     const contenedorOpciones = document.getElementById('contenedor-opciones');
@@ -160,12 +152,9 @@
             juegoContenedor.style.display = 'none';
             mensajeFinal.style.display = 'block';
             
-            // --- NUEVA IMPLEMENTACIÓN: Guardar monedas ---
-            // --- NUEVA IMPLEMENTACIÓN: Guardar monedas y avanzar de nivel ---
             fetch("{{ url_for('reclamar_recompensa') }}", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                // AQUÍ ESTÁ LA MAGIA: Enviamos el nivel que acabamos de jugar
                 body: JSON.stringify({ nivel_superado: parseInt('{{ nivel }}') }) 
             })
             .then(response => response.json())
@@ -177,12 +166,10 @@
                 }
             })
             .catch(error => console.error('Error al reclamar recompensa:', error));
-            // ---------------------------------------------
             
             return;
         }
 
-        // ... (el resto del código de cargarPregunta se mantiene igual)
 
         const preguntaActual = preguntas[indiceActual];
         textoPregunta.textContent = preguntaActual.pregunta;
@@ -203,7 +190,7 @@
             
             const radio = document.createElement('input');
             radio.type = 'radio';
-            radio.name = 'respuesta_usuario';
+            radio.name = 'respuesta_jugador';
             radio.value = opcion;
             radio.style.transform = 'scale(1.5)';
             
@@ -229,7 +216,7 @@
     }
 
 // Leemos el inventario que viene del backend (si no existe, usamos un arreglo vacío)
-    let inventario = JSON.parse('{{ usuario.inventario | default([]) | tojson | safe }}');
+    let inventario = JSON.parse('{{ jugador.inventario | default([]) | tojson | safe }}');
     let escudoActivo = false;
     function renderizarInventario() {
             const contenedorItems = document.getElementById('contenido-mochila');
@@ -251,7 +238,7 @@
                 btnLupa.style.backgroundColor = '#1A4D5C';
                 btnLupa.style.border = '2px solid #5DD9C1';
                 btnLupa.style.width = '100%';
-                btnLupa.innerHTML = '🔍 Usar Lupa';
+                btnLupa.innerHTML = ' Usar Lupa';
                 btnLupa.onclick = () => usarLupa(btnLupa);
                 contenedorItems.appendChild(btnLupa);
             }
@@ -264,12 +251,11 @@
                 btnEscudo.style.backgroundColor = '#1A4D5C';
                 btnEscudo.style.border = '2px solid #5DD9C1';
                 btnEscudo.style.width = '100%';
-                btnEscudo.innerHTML = '🛡️ Activar Escudo';
+                btnEscudo.innerHTML = ' Activar Escudo';
                 btnEscudo.onclick = () => usarEscudo(btnEscudo);
                 contenedorItems.appendChild(btnEscudo);
             }
         }
-    // Llamamos a la función al iniciar para que aparezcan si el jugador compró algo
     renderizarInventario();
 
     function consumirItemBackend(tipo) {
@@ -287,7 +273,7 @@
 
         function usarLupa(boton) {
             const preguntaActual = preguntas[indiceActual];
-            const opcionesElementos = document.querySelectorAll('input[name="respuesta_usuario"]');
+            const opcionesElementos = document.querySelectorAll('input[name="respuesta_jugador"]');
             
             // Buscamos la primera respuesta que sea incorrecta y no esté deshabilitada ya
             for (let radio of opcionesElementos) {
@@ -301,7 +287,7 @@
             
             boton.remove();
             consumirItemBackend('lupa');
-            renderizarInventario(); // Actualiza por si no quedan más ítems
+            renderizarInventario();
         }
 
         function usarEscudo(boton) {
@@ -309,11 +295,11 @@
             boton.remove();
             consumirItemBackend('escudo');
             renderizarInventario();
-            mostrarAlerta("¡Escudo de Hoja activado! 🛡️🍃 Estás protegido contra tu próximo error.", "#4CAF50", "#2E7D32");
+            mostrarAlerta("¡Escudo de Hoja activado! Estás protegido contra tu próximo error.", "#4CAF50", "#2E7D32");
         }
 
     btnSiguiente.addEventListener('click', () => {
-        const seleccionada = document.querySelector('input[name="respuesta_usuario"]:checked');
+        const seleccionada = document.querySelector('input[name="respuesta_jugador"]:checked');
         if (!seleccionada) return;
 
         const respuestaSeleccionada = seleccionada.value;
@@ -328,11 +314,9 @@
             }, 800);
 
         } else {
-                // RESPUESTA INCORRECTA
-                // --- NUEVA LÓGICA DEL ESCUDO ---
                 if (escudoActivo) {
                     escudoActivo = false;
-                    mostrarAlerta("¡Te equivocaste, pero el Escudo te protegió! 🍃 No pierdes vidas.", "#4CAF50", "#2E7D32");
+                    mostrarAlerta("¡Te equivocaste, pero el Escudo te protegió! No pierdes vidas.", "#4CAF50", "#2E7D32");
                     
                     seleccionada.checked = false;
                     btnSiguiente.style.opacity = '0.5';
@@ -353,14 +337,14 @@
                     
                     if (vidas <= 0) {
                         // GAME OVER: Mostramos la alerta fija y lo llevamos al mapa
-                        mostrarAlerta("¡Te has quedado sin vidas! 🐸💔 Necesitas jugar el minijuego para recuperarlas. Volviendo al estanque...", "#E53935", "#B71C1C", true);
+                        mostrarAlerta("¡Te has quedado sin vidas! Necesitas jugar el minijuego para recuperarlas. Volviendo al estanque...", "#E53935", "#B71C1C", true);
                         
                         setTimeout(() => {
                             window.location.href = "{{ url_for('mapa') }}"; // AHORA REDIRIGE AL MAPA
                         }, 3500); // 3.5 segundos para que alcance a leer
                     } else {
                         // AÚN QUEDAN VIDAS
-                        mostrarAlerta("Respuesta incorrecta. Pierdes una vida 🐸. ¡Tú puedes, inténtalo de nuevo!");
+                        mostrarAlerta("Respuesta incorrecta. Pierdes una vida. ¡Tú puedes, inténtalo de nuevo!");
                         
                         seleccionada.checked = false;
                         btnSiguiente.style.opacity = '0.5';

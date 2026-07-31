@@ -15,7 +15,6 @@ const grid = document.querySelector('.estanque-grid');
 const todasLasFlores = document.querySelectorAll('.flor-animada');
 
 function iniciarJuego() {
-    // Iniciar temporizador de cuenta regresiva
     temporizadorId = setInterval(() => {
         tiempoRestante--;
         textoTiempo.textContent = tiempoRestante;
@@ -25,28 +24,23 @@ function iniciarJuego() {
         }
     }, 1000);
 
-    // Iniciar aparición de flores cada 800 milisegundos
     aparicionId = setInterval(mostrarFlorAleatoria, 800);
 }
 
 function mostrarFlorAleatoria() {
-    // Ocultar todas las flores primero
     todasLasFlores.forEach(flor => flor.classList.add('flor-oculta'));
     
-    // Elegir una casilla al azar (del 0 al 8)
     const indiceAleatorio = Math.floor(Math.random() * todasLasFlores.length);
     const florElegida = todasLasFlores[indiceAleatorio];
     
-    // Mostrar la flor elegida
     florElegida.classList.remove('flor-oculta');
 }
 
 function atraparFlor(florElement) {
-    // Si la flor está visible, la atrapamos
     if (!florElement.classList.contains('flor-oculta')) {
         puntuacion++;
         textoPuntuacion.textContent = puntuacion;
-        florElement.classList.add('flor-oculta'); // La ocultamos al tocarla
+        florElement.classList.add('flor-oculta');
         
         // Comprobar si ganamos
         if (puntuacion >= metaFlores) {
@@ -60,11 +54,11 @@ function terminarJuego(victoria) {
     clearInterval(aparicionId);
     
     todasLasFlores.forEach(flor => flor.classList.add('flor-oculta'));
-    grid.style.display = 'none'; // Ocultar el tablero
+    grid.style.display = 'none';
     mensajeFinal.style.display = 'block';
 
     if (victoria) {
-        textoResultado.textContent = "¡Conseguiste 10 flores! Ganaste una ranita 🐸";
+        textoResultado.textContent = "¡Conseguiste 10 flores! Ganaste una ranita";
         enviarVictoriaAlServidor();
     } else {
         textoResultado.textContent = "Se acabó el tiempo. ¡Inténtalo de nuevo!";
@@ -72,7 +66,6 @@ function terminarJuego(victoria) {
 }
 
 function enviarVictoriaAlServidor() {
-    // ¡Aquí nos comunicamos con Python (Flask)!
     fetch('/api/ganar_ranita', {
         method: 'POST',
         headers: {
@@ -83,12 +76,9 @@ function enviarVictoriaAlServidor() {
     .then(data => {
         console.log("Servidor responde:", data);
         if(data.success) {
-            // Actualizar visualmente la barra superior si quisiéramos, 
-            // aunque al volver al mapa (botón) se actualizará sola gracias a Jinja.
         }
     })
     .catch(error => console.error('Error al contactar con el servidor:', error));
 }
 
-// Iniciar el juego en cuanto cargue la página
 window.onload = iniciarJuego;

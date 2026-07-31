@@ -11,9 +11,8 @@ body {
     min-height: 100vh;
 }
 
-/* Contenedor principal tipo pergamino moderno */
 .quiz-container {
-    background: #f4ecd8; /* Color pergamino/papel */
+    background: #f4ecd8;
     width: 90%;
     max-width: 600px;
     border-radius: 20px;
@@ -24,7 +23,6 @@ body {
     overflow: hidden;
 }
 
-/* Encabezado (Progreso y Puntos) */
 .quiz-header {
     display: flex;
     justify-content: space-between;
@@ -41,7 +39,6 @@ body {
     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 
-/* Área de la pregunta */
 .question-box {
     text-align: center;
     margin-bottom: 30px;
@@ -55,14 +52,12 @@ body {
     text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
 }
 
-/* Cuadrícula de Opciones */
 .options-grid {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-/* Botones de las opciones */
 .option-btn {
     background: #ffffff;
     border: 2px solid #d4c3a3;
@@ -89,7 +84,6 @@ body {
     opacity: 0.8;
 }
 
-/* Clases dinámicas para respuestas correctas/incorrectas */
 .option-btn.correct {
     background: #d4edda !important;
     border-color: #28a745 !important;
@@ -103,7 +97,6 @@ body {
     color: #721c24 !important;
 }
 
-/* Botón Siguiente */
 .quiz-footer {
     margin-top: 30px;
     text-align: center;

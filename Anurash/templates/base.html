@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anurash</title>
     <link rel="icon" href="{{ url_for('static', filename='img/rana_feliz.png') }}" type="image/png">
-    <!-- Conectamos nuestro archivo de estilos -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -19,12 +18,17 @@
         
         <div class="vidas-container">
             <!-- Vidas (Ranitas) -->
-            {% for i in range(usuario.ranitas_actuales) %}
+            {% for i in range(jugador.ranitas_actuales) %}
                 <img src="{{ url_for('static', filename='img/vida_llena.png') }}" class="icono-vida" alt="Vida llena">
             {% endfor %}
-            {% for i in range(3 - usuario.ranitas_actuales) %}
+            {% for i in range(3 - jugador.ranitas_actuales) %}
                 <img src="{{ url_for('static', filename='img/vida_vacia.png') }}" class="icono-vida" alt="Vida vacía">
             {% endfor %}
+        </div>
+
+        <div class="contenedor-usuario" style="display: flex; align-items: center; background-color: rgba(15, 30, 40, 0.7); padding: 6px 18px; border: 2px solid #f1c40f; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); margin-left: 30px; margin-right: auto;">
+            <strong style="color: #ecf0f1; margin-right: 8px; letter-spacing: 1px;">Usuario:</strong>
+            <span style="color: #4ade80; font-weight: bold; text-shadow: 1px 1px 2px #000; letter-spacing: 1px;">{{ jugador.nombre }}</span>
         </div>
         
         <!-- Contenedor derecho: Mochila + Monedas -->
@@ -75,26 +79,24 @@
                 <!-- Panel desplegable -->
                 <div id="panel-mochila" style="display: none; position: absolute; top: 50px; right: 0; background: var(--fondo-paneles); border: 3px solid var(--turquesa); border-radius: 10px; padding: 15px; width: 220px; box-shadow: 0 10px 25px rgba(0,0,0,0.6); z-index: 100;">
                     <div id="contenido-mochila" style="display: flex; flex-direction: column; gap: 10px;">
-                        <!-- JS inyectará los botones o el mensaje vacío aquí -->
                     </div>
                 </div>
             </div>
 
             <!-- Monedas -->
             <div class="monedas-container" style="display: flex; align-items: center;">
-                <span class="texto-monedas" id="contador-monedas-navbar" style="font-size: 24px; font-weight: bold; margin-right: 10px;">{{ usuario.monedas }}</span>
+                <span class="texto-monedas" id="contador-monedas-navbar" style="font-size: 24px; font-weight: bold; margin-right: 10px;">{{ jugador.monedas }}</span>
                 <img src="{{ url_for('static', filename='img/boton_normal.png') }}" class="icono-moneda" alt="Moneda" style="width: 35px; height: 35px; image-rendering: pixelated;">
             </div>
         </div>
         <!-- Script global para poblar la mochila fuera del Quiz -->
         <script>
-            const inventarioGlobal = JSON.parse('{{ usuario.inventario | default([]) | tojson | safe }}');
+            const inventarioGlobal = JSON.parse('{{ jugador.inventario | default([]) | tojson | safe }}');
 
             function renderizarMochilaGlobal() {
                 const contenedor = document.getElementById('contenido-mochila');
                 if (!contenedor) return;
 
-                // Si estamos dentro de un quiz, dejamos que el script de quiz.html cree los botones clickeables
                 if (window.location.pathname.includes('/quiz')) return;
 
                 contenedor.innerHTML = '';
@@ -116,8 +118,8 @@
                     divItem.style.textAlign = 'center';
                     divItem.style.fontWeight = 'bold';
 
-                    if (item === 'lupa') divItem.innerHTML = '🔍 Lupa de Pistas';
-                    if (item === 'escudo') divItem.innerHTML = '🛡️ Escudo de Hoja';
+                    if (item === 'lupa') divItem.innerHTML = ' Lupa de Pistas';
+                    if (item === 'escudo') divItem.innerHTML = ' Escudo de Hoja';
 
                     contenedor.appendChild(divItem);
                 });
@@ -145,7 +147,6 @@
         </script>
     </nav>
 
-    <!-- Script global para la animación de la mochila -->
     <script>
         function toggleMochila() {
             const panel = document.getElementById('panel-mochila');

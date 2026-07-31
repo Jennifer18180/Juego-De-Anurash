@@ -2,26 +2,34 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, f
 
 app = Flask(__name__)
 
-# --- SIMULACIÓN DE BASE DE DATOS ---
-# Usamos esta clase para simular los datos de tu usuario. 
-class Usuario:
+class Jugador:
     def __init__(self):
-        self.ranitas_actuales = 1
-        self.monedas = 150
-        self.nivel_actual = 1
+        self.nombre = "Viajero"
+        self.ranitas_actuales = 3
+        self.monedas = 0
+        self.cosmetico = None
+        self.estrellas = {}
+        self.nivel_actual = 1 
         self.inventario = []
-        self.cosmetico= ''
 
-jugador = Usuario()
+jugador = Jugador()
 
-app.secret_key = 'mi_ranita_secreta_123'
-
-# --- RUTAS DE PANTALLAS (FRONT-END) ---
+app.secret_key = 'una_clave_super_secreta_para_anurash'
 
 @app.route('/')
+def index():
+    return render_template('inicio.html')
+
+@app.route('/inicio', methods=['POST'])
+def inicio():
+    nombre_ingresado = request.form.get('nombre_jugador')
+    if nombre_ingresado:
+        jugador.nombre = nombre_ingresado
+    return redirect(url_for('mapa'))
+
+@app.route('/mapa')
 def mapa():
-    """Ruta principal: Muestra el mapa (el estanque)."""
-    return render_template('mapa.html', usuario=jugador)
+    return render_template('mapa.html', jugador=jugador)
 
 @app.route('/reclamar_recompensa', methods=['POST'])
 def reclamar_recompensa():
@@ -45,7 +53,6 @@ DESCRIPCIONES_QUIZ = {
     3: "Pon a prueba tu experiencia con decoradores, asincronía, paralelismo y las últimas características del lenguaje."
 }
 
-# Nuestra "Base de datos" de preguntas por nivel
 niveles_python = {
     1: {
         "tema": "Print y Tipos de Datos",
@@ -200,6 +207,10 @@ niveles_python = {
 @app.route('/quiz/<int:nivel>')
 def quiz(nivel):
     #Verificar si el nivel existe en nuestra base de datos
+    if jugador.ranitas_actuales <= 0:
+        flash('¡No te quedan vidas! Descansa un poco en el estanque o ve a la tienda.', 'error')
+        return redirect(url_for('mapa'))
+    
     if nivel not in niveles_python:
         return redirect(url_for('mapa'))
     #Verificar si el usuario tiene este nivel desbloqueado
@@ -219,12 +230,12 @@ def quiz(nivel):
         tema=tema,
         datos=preguntas,
         apuntes=apuntes,
-        usuario=jugador
+        jugador=jugador
     )
 
 @app.route('/minijuego')
 def minijuego():
-    return render_template('minijuego.html', usuario=jugador)
+    return render_template('minijuego.html', jugador=jugador)
 
 @app.route('/ganar_minijuego', methods=['POST'])
 def ganar_minijuego():
@@ -236,7 +247,7 @@ def ganar_minijuego():
 
 @app.route('/tienda')
 def tienda():
-    return render_template('tienda.html', usuario=jugador)
+    return render_template('tienda.html', jugador=jugador)
 
 @app.route('/comprar_item', methods=['POST'])
 def comprar_item():
@@ -246,7 +257,6 @@ def comprar_item():
     
     if jugador.monedas >= precio:
         
-        # 2. Lógica dependiendo de qué objeto compró
         if tipo_item == 'vida':
             if jugador.ranitas_actuales < 3:
                 jugador.monedas -= precio
@@ -357,19 +367,17 @@ def comprar_cosmetico(tipo):
 
 @app.route('/desequipar', methods=['POST'])
 def desequipar():
-    # Diccionario con los precios para saber cuánto devolver
     precios = {
         'sombrero': 100,
         'collar': 150
     }
     
-    # Verificamos si el jugador tiene un cosmético equipado y si está en nuestra lista
     if jugador.cosmetico and jugador.cosmetico in precios:
         reembolso = precios[jugador.cosmetico]
-        jugador.monedas += reembolso  # Le sumamos las monedas de vuelta
+        jugador.monedas += reembolso 
         
-        item_devuelto = jugador.cosmetico # Guardamos el nombre para el mensaje
-        jugador.cosmetico = None          # Desequipamos el ítem
+        item_devuelto = jugador.cosmetico
+        jugador.cosmetico = None
         
         flash(f'¡Te has quitado el {item_devuelto} y recuperaste {reembolso} monedas!', 'success')
     else:
